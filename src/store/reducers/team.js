@@ -5,9 +5,14 @@ const initialState = {
 };
 
 const addMember = (state, action) => {
+  const teamMembers = state.teamMembers
+    .filter((employee) => employee !== action.username)
+    .map((employee) => {
+      return employee;
+    });
   return {
     ...state,
-    teamMembers: [...state.teamMembers, action.username],
+    teamMembers: [...teamMembers, action.username],
   };
 };
 
