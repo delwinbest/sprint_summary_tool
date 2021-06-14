@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch } from "react-redux";
+import * as actionTypes from "./store/actions/actionTypes";
 
 function App() {
+  const dispatch = useDispatch();
+
+  const addMemberHandler = (username) => {
+    dispatch({ type: actionTypes.TEAM_ADD_MEMBER, username: "DDDDD" });
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <header>Learn React</header>
+      <body>
+        <button onClick={addMemberHandler}>Add User</button>
+      </body>
     </div>
   );
 }
