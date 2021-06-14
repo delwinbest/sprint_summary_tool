@@ -1,0 +1,20 @@
+.header {
+  height: 7rem;
+  background-color: white;
+  border-bottom: var(--color-grey-light-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.4rem;
+  border-bottom: 1px solid var(--color-grey-light-4);
+}
+
+.maincontent {
+  display: grid;
+  height: 80vh;
+  grid-template-columns:
+    [sidebar-start] minmax(10rem, min-content)
+    [sidebar-end mainview-start] minmax(auto, 1fr)
+    [mainview-end];
+  grid-template-rows: minmax(auto, max-content);
+}
