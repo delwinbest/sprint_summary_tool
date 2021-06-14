@@ -10,9 +10,7 @@ function App() {
   return (
     <div>
       <header>Learn React</header>
-      <body>
-        <button onClick={addMemberHandler}>Add User</button>
-      </body>
+      <button onClick={addMemberHandler}>Add User</button>
     </div>
   );
 }

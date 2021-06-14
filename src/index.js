@@ -6,7 +6,9 @@ import reportWebVitals from "./reportWebVitals";
 
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
+import PouchDBStorage from "redux-persist-pouchdb";
+
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 
@@ -22,13 +24,26 @@ const composeEnhancers =
       })
     : null || compose;
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
+const storage = new PouchDBStorage(
+  "http://" + process.env.REACT_APP_COUCHDB_HOSTNAME + ":5984/smt_db",
+  {
+    auth: {
+      username: process.env.REACT_APP_COUCHDB_USER,
+      password: process.env.REACT_APP_COUCHDB_PASSWORD,
+    },
+  }
+);
+
 const rootReducer = combineReducers({
   team: teamReducer,
 });
+
+const persistConfig = {
+  key: "root",
+  storage,
+  stateReconciler: autoMergeLevel2,
+};
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
