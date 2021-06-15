@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { Button, Modal, Col, Form } from "react-bootstrap";
+import { Button, Modal, Col, Row, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
 
@@ -15,6 +13,7 @@ const AddSprintModal = (props) => {
       .string()
       .min(3, "Should be 3 or more chars")
       .required("Please enter a sprint name"),
+    sprintStartDate: yup.date().required("Please enter valid date"),
   });
 
   const [startDate, setStartDate] = useState(new Date());
@@ -29,6 +28,7 @@ const AddSprintModal = (props) => {
           onSubmit={console.log}
           initialValues={{
             sprintName: "",
+            sprintStartDate: "",
           }}
         >
           {({
@@ -41,27 +41,53 @@ const AddSprintModal = (props) => {
             errors,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Form.Row>
-                <Form.Group as={Col} md="9" controlId="validationFormik101">
-                  <Form.Control
-                    type="text"
-                    name="sprintName"
-                    placeholder="Please enter sprint name"
-                    value={values.sprintName}
-                    onChange={handleChange}
-                    isInvalid={!!errors.sprintName}
-                  />
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {errors.sprintName}
-                  </Form.Control.Feedback>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                  />
+              <Form.Row lg="2">
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="validationFormik101"
+                >
+                  <Form.Label column sm="2">
+                    Sprint Name
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="text"
+                      name="sprintName"
+                      placeholder="Please enter sprint name"
+                      value={values.sprintName}
+                      onChange={handleChange}
+                      isInvalid={!!errors.sprintName}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {errors.sprintName}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group
+                  as={Row}
+                  className="mb-3"
+                  controlId="validationFormik102"
+                >
+                  <Form.Label column sm="2">
+                    Start Date
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="date"
+                      name="sprintStartDate"
+                      onChange={handleChange}
+                      isInvalid={!!errors.sprintStartDate}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {errors.sprintStartDate}
+                    </Form.Control.Feedback>
+                  </Col>
                 </Form.Group>
               </Form.Row>
               <br />
-              <Button type="submit" style={{ justifySelf: "flex-end" }} block>
+              <Button type="submit" block>
                 Add
               </Button>
             </Form>
