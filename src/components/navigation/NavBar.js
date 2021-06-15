@@ -20,7 +20,7 @@ const NavBar = () => {
 
   const teamList = team.teamMembers.map((employee) => {
     return (
-      <NavDropdown.Item>
+      <NavDropdown.Item key={employee}>
         <Badge variant="danger" onClick={() => removeMemberHandler(employee)}>
           -
         </Badge>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Container,
   Table,
@@ -8,6 +8,7 @@ import {
   Dropdown,
   ButtonGroup,
   DropdownButton,
+  Button,
 } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
 import AddSprintModal from "../AddSprintModal/AddSprintModal";
@@ -15,12 +16,17 @@ import AddSprintModal from "../AddSprintModal/AddSprintModal";
 const SprintTable = () => {
   const sprints = useSelector((state) => state.sprints);
 
-  const [selectedYear, setSelectedYear] = useState("2020");
+  const [selectedYear, setSelectedYear] = useState("2021");
   const [selectedSprint, setSelectedSprint] = useState("W01");
+
+  const [showSprintAddModal, setSprintAddModal] = useState(false);
+  const handleSprintAddModalClose = () => setSprintAddModal(false);
+  const handleSprintAddModalShow = () => setSprintAddModal(true);
 
   const sprintYears = Object.keys(sprints).map((year) => {
     return (
       <Dropdown.Item
+        key={year}
         eventKey={year}
         onClick={() => setSelectedYear(year)}
         active={year === selectedYear ? true : false}
@@ -32,6 +38,7 @@ const SprintTable = () => {
   const sprintWeeks = Object.keys(sprints[selectedYear]).map((week) => {
     return (
       <Dropdown.Item
+        key={week}
         eventKey={week}
         onClick={() => setSelectedSprint(week)}
         active={week === selectedSprint ? true : false}
@@ -40,6 +47,24 @@ const SprintTable = () => {
       </Dropdown.Item>
     );
   });
+
+  const addSprintButton = (
+    <div
+      className=""
+      style={{
+        paddingLeft: "1rem",
+        paddingRight: "1rem",
+      }}
+    >
+      <Button
+        variant="outline-success"
+        block
+        onClick={handleSprintAddModalShow}
+      >
+        Add Sprint
+      </Button>
+    </div>
+  );
   const yearDropdown = ["Info"].map((variant) => (
     <DropdownButton
       as={ButtonGroup}
@@ -50,6 +75,7 @@ const SprintTable = () => {
       style={{ paddingLeft: "0.2rem", paddingBottom: "0.2rem" }}
     >
       {sprintYears}
+      {addSprintButton}
     </DropdownButton>
   ));
 
@@ -60,20 +86,28 @@ const SprintTable = () => {
       id={`dropdown-variants-Info`}
       variant={"info"}
       title={"Sprint"}
-      style={{ paddingLeft: "0.2rem", paddingBottom: "0.2rem" }}
+      style={{
+        paddingLeft: "0.2rem",
+        paddingBottom: "0.2rem",
+      }}
     >
       {sprintWeeks}
+      {addSprintButton}
     </DropdownButton>
   ));
 
   return (
     <Container>
-      <AddSprintModal />
+      <AddSprintModal
+        closeModalHandler={handleSprintAddModalClose}
+        showModal={showSprintAddModal}
+      />
       <Row>
         <Col>
           {yearDropdown}
           {sprintDropdown}
         </Col>
+
         <Col></Col>
       </Row>
       <Row>
@@ -99,11 +133,6 @@ const SprintTable = () => {
                 <td>grattanj</td>
                 <td>10</td>
               </tr>
-              <tr>
-                <td>(days)</td>
-                <td>kitsune</td>
-                <td>10</td>
-              </tr>
             </tbody>
           </Table>
         </Col>
@@ -117,21 +146,16 @@ const SprintTable = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr key="dbest">
                 <td>(days)</td>
                 <td>dbest</td>
                 <td>
                   <NumericInput min={0} max={14} value={10} />
                 </td>
               </tr>
-              <tr>
+              <tr key="grattanj">
                 <td>(days)</td>
                 <td>grattanj</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>(days)</td>
-                <td>kitsune</td>
                 <td>10</td>
               </tr>
             </tbody>

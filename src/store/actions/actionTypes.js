@@ -1,2 +1,4 @@
 export const TEAM_ADD_MEMBER = "TEAM_ADD_MEMBER";
 export const TEAM_REMOVE_MEMBER = "TEAM_REMOVE_MEMBER";
+
+export const SPRINT_ADD = "SPRINT_ADD";
