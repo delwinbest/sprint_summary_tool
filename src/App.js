@@ -2,12 +2,14 @@ import React from "react";
 import { Container } from "react-bootstrap";
 
 import NavBar from "./components/navigation/NavBar";
+import SprintTable from "./components/SprintTable/SprintTable";
 
 function App() {
   return (
     <Container>
       <NavBar />
       <br />
+      <SprintTable />
     </Container>
   );
 }

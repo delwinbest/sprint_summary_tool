@@ -9,6 +9,7 @@ import AddUserModal from "../Users/AddUserModal";
 const NavBar = () => {
   const team = useSelector((state) => state.team);
   const dispatch = useDispatch();
+
   const [showModal, setShowModal] = useState(false);
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
