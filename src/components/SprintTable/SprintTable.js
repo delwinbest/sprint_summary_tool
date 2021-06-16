@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Container,
   Table,
@@ -12,9 +12,12 @@ import {
 } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
 import AddSprintModal from "../AddSprintModal/AddSprintModal";
+import * as actionTypes from "../../store/actions/actionTypes";
 
 const SprintTable = () => {
+  const dispatch = useDispatch();
   const sprints = useSelector((state) => state.sprints);
+  const team = useSelector((state) => state.team);
 
   const [selectedYear, setSelectedYear] = useState("2021");
   const [selectedSprint, setSelectedSprint] = useState("W01");
@@ -22,6 +25,15 @@ const SprintTable = () => {
   const [showSprintAddModal, setSprintAddModal] = useState(false);
   const handleSprintAddModalClose = () => setSprintAddModal(false);
   const handleSprintAddModalShow = () => setSprintAddModal(true);
+
+  useEffect(() => {
+    const year = Object.keys(sprints).pop();
+    const week = Object.keys(sprints[year]).pop();
+    setSelectedYear(year);
+    setSelectedSprint(week);
+    return () => {};
+    // eslint-disable-next-line
+  }, []);
 
   const sprintYears = Object.keys(sprints).map((year) => {
     return (
@@ -96,6 +108,20 @@ const SprintTable = () => {
     </DropdownButton>
   ));
 
+  const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
+    (member) => {
+      return (
+        <tr key={member}>
+          <td>(days)</td>
+          <td>{member}</td>
+          <td>
+            <NumericInput min={0} max={14} value={10} />
+          </td>
+        </tr>
+      );
+    }
+  );
+
   return (
     <Container>
       <AddSprintModal
@@ -103,12 +129,17 @@ const SprintTable = () => {
         showModal={showSprintAddModal}
       />
       <Row>
-        <Col>
+        <Col row>
           {yearDropdown}
           {sprintDropdown}
+          &nbsp;&nbsp;
+          <div style={{ display: "inline-block" }}>
+            <h4>
+              {selectedYear} / {selectedSprint} -{" "}
+              {sprints[selectedYear][selectedSprint].name}
+            </h4>
+          </div>
         </Col>
-
-        <Col></Col>
       </Row>
       <Row>
         <Col>
@@ -120,7 +151,18 @@ const SprintTable = () => {
                   <Row className="justify-content-md-center">
                     <Col>Alias</Col>
                     <Col>
-                      <Button variant="outline-success" size="sm">
+                      <Button
+                        variant="outline-success"
+                        size="sm"
+                        onClick={() => {
+                          dispatch({
+                            type: actionTypes.SPRINT_ADD_MEMBERS,
+                            year: selectedYear,
+                            weekNum: selectedSprint,
+                            members: team.teamMembers,
+                          });
+                        }}
+                      >
                         Add All
                       </Button>
                     </Col>
@@ -129,45 +171,7 @@ const SprintTable = () => {
                 <th>Day Capa.</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>(days)</td>
-                <td>dbest</td>
-                <td>
-                  <NumericInput min={0} max={14} value={10} />
-                </td>
-              </tr>
-              <tr>
-                <td>(days)</td>
-                <td>grattanj</td>
-                <td>10</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-        <Col>
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr>
-                <th>Unit</th>
-                <th>Alias</th>
-                <th>Day Capa.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr key="dbest">
-                <td>(days)</td>
-                <td>dbest</td>
-                <td>
-                  <NumericInput min={0} max={14} value={10} />
-                </td>
-              </tr>
-              <tr key="grattanj">
-                <td>(days)</td>
-                <td>grattanj</td>
-                <td>10</td>
-              </tr>
-            </tbody>
+            <tbody>{sprintMemberRows}</tbody>
           </Table>
         </Col>
       </Row>

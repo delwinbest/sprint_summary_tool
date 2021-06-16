@@ -16,3 +16,12 @@ export const addSprint = (
     sprintDurationDays: sprintDurationDays,
   };
 };
+
+export const addSprintMembers = (year, weekNum, members) => {
+  return {
+    type: actionTypes.SPRINT_ADD_MEMBERS,
+    year: year,
+    weekNum: weekNum,
+    members: members,
+  };
+};
