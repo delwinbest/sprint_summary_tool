@@ -116,7 +116,16 @@ const SprintTable = () => {
             <thead>
               <tr>
                 <th>Unit</th>
-                <th>Alias [Add Team Button]</th>
+                <th>
+                  <Row className="justify-content-md-center">
+                    <Col>Alias</Col>
+                    <Col>
+                      <Button variant="outline-success" size="sm">
+                        Add All
+                      </Button>
+                    </Col>
+                  </Row>
+                </th>
                 <th>Day Capa.</th>
               </tr>
             </thead>
@@ -141,7 +150,7 @@ const SprintTable = () => {
             <thead>
               <tr>
                 <th>Unit</th>
-                <th>Alias [Add Team Button]</th>
+                <th>Alias</th>
                 <th>Day Capa.</th>
               </tr>
             </thead>
