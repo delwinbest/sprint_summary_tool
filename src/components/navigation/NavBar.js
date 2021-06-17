@@ -8,6 +8,7 @@ import AddUserModal from "../Users/AddUserModal";
 
 const NavBar = () => {
   const team = useSelector((state) => state.team);
+  const projects = useSelector((state) => state.projects);
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +30,34 @@ const NavBar = () => {
     );
   });
 
+  const nonProjectList = Object.keys(projects).map((project) => {
+    if (projects[project].type.startsWith("NON_PROJECT")) {
+      return (
+        <NavDropdown.Item key={project}>
+          <Badge variant="danger" onClick={() => removeMemberHandler(project)}>
+            -
+          </Badge>
+          <span style={{ paddingLeft: "1rem" }}>{project}</span>
+        </NavDropdown.Item>
+      );
+    }
+    return null;
+  });
+
+  const projectList = Object.keys(projects).map((project) => {
+    console.log(projects[project].type);
+    if (projects[project].type.startsWith("PROJECT")) {
+      return (
+        <NavDropdown.Item key={project}>
+          <Badge variant="danger" onClick={() => removeMemberHandler(project)}>
+            -
+          </Badge>
+          <span style={{ paddingLeft: "1rem" }}>{project}</span>
+        </NavDropdown.Item>
+      );
+    }
+    return null;
+  });
   return (
     <React.Fragment>
       <Navbar bg="dark" variant="dark">
@@ -38,7 +67,25 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+            <NavDropdown title="Projects" id="basic-nav-dropdown">
+              {projectList}
+              <NavDropdown.Divider />
+              <NavDropdown.Item>
+                <Button variant="outline-success" onClick={handleModalShow}>
+                  Create New
+                </Button>
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Non Projects" id="basic-nav-dropdown">
+              {nonProjectList}
+              <NavDropdown.Divider />
+              <NavDropdown.Item>
+                <Button variant="outline-success" onClick={handleModalShow}>
+                  Create New
+                </Button>
+              </NavDropdown.Item>
+            </NavDropdown>
+
             <NavDropdown title="Team Members" id="basic-nav-dropdown">
               {teamList}
               <NavDropdown.Divider />

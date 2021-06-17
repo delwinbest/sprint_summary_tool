@@ -15,6 +15,7 @@ import thunk from "redux-thunk";
 
 import teamReducer from "./store/reducers/team";
 import sprintsReducer from "./store/reducers/sprints";
+import projectsReducer from "./store/reducers/projects";
 import { PersistGate } from "redux-persist/integration/react";
 
 const composeEnhancers =
@@ -39,6 +40,7 @@ const storage = new PouchDBStorage(
 const rootReducer = combineReducers({
   team: teamReducer,
   sprints: sprintsReducer,
+  projects: projectsReducer,
 });
 
 const persistConfig = {

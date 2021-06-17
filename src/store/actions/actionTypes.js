@@ -3,3 +3,5 @@ export const TEAM_REMOVE_MEMBER = "TEAM_REMOVE_MEMBER";
 
 export const SPRINT_ADD = "SPRINT_ADD";
 export const SPRINT_ADD_MEMBERS = "SPRINT_ADD_MEMBERS";
+
+export const PROJECT_ADD = "PROJECT_ADD";
