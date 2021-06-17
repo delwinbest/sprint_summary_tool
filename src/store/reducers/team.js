@@ -1,7 +1,21 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  teamMembers: ["dbest", "grattanj"],
+  teamMembers: [
+    "cherylcf",
+    "dongheng",
+    "grattanj",
+    "hirotaka",
+    "hmatsuki",
+    "kensugim",
+    "menoni",
+    "moritato",
+    "ncclair",
+    "nystromk",
+    "sirinthr",
+    "stihahi",
+    "yungyin",
+  ],
 };
 
 const addMember = (state, action) => {

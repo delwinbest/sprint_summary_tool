@@ -109,7 +109,12 @@ const SprintTable = () => {
   ));
 
   const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
-    (member) => {
+    (member, index) => {
+      let altStyle = {};
+      if (index % 2 === 1) {
+        altStyle = { backgroundColor: "#FBFCFC", color: "#454d55" };
+      }
+
       return (
         <tr key={member}>
           <td>(days)</td>
@@ -117,6 +122,9 @@ const SprintTable = () => {
           <td>
             <NumericInput min={0} max={14} value={10} />
           </td>
+          {/* Holiday Section */}
+          <td style={altStyle}>{index}</td>
+          <td style={altStyle}>{index}</td>
         </tr>
       );
     }
@@ -169,6 +177,13 @@ const SprintTable = () => {
                   </Row>
                 </th>
                 <th>Day Capa.</th>
+                {/* 1px solid #dee2e6 */}
+                <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
+                  OOTO
+                </th>
+                <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
+                  Holidays
+                </th>
               </tr>
             </thead>
             <tbody>{sprintMemberRows}</tbody>
