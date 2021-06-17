@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
 
 import AddUserModal from "../Users/AddUserModal";
+import AddProjectModal from "../AddProjectModal/AddProjectModal";
 
 const NavBar = () => {
   const team = useSelector((state) => state.team);
@@ -14,6 +15,10 @@ const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
+
+  const [showAddProjectModal, setShowAddProjectModal] = useState(false);
+  const handleAddProjectModalClose = () => setShowAddProjectModal(false);
+  const handleAddProjectModalShow = () => setShowAddProjectModal(true);
 
   const removeMemberHandler = (username) => {
     dispatch({ type: actionTypes.TEAM_REMOVE_MEMBER, username: username });
@@ -45,7 +50,6 @@ const NavBar = () => {
   });
 
   const projectList = Object.keys(projects).map((project) => {
-    console.log(projects[project].type);
     if (projects[project].type.startsWith("PROJECT")) {
       return (
         <NavDropdown.Item key={project}>
@@ -71,7 +75,10 @@ const NavBar = () => {
               {projectList}
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Button variant="outline-success" onClick={handleModalShow}>
+                <Button
+                  variant="outline-success"
+                  onClick={handleAddProjectModalShow}
+                >
                   Create New
                 </Button>
               </NavDropdown.Item>
@@ -80,7 +87,10 @@ const NavBar = () => {
               {nonProjectList}
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Button variant="outline-success" onClick={handleModalShow}>
+                <Button
+                  variant="outline-success"
+                  onClick={handleAddProjectModalShow}
+                >
                   Create New
                 </Button>
               </NavDropdown.Item>
@@ -99,6 +109,10 @@ const NavBar = () => {
         </Navbar.Collapse>
       </Navbar>
 
+      <AddProjectModal
+        closeModalHandler={handleAddProjectModalClose}
+        showModal={showAddProjectModal}
+      />
       <AddUserModal
         closeModalHandler={handleModalClose}
         showModal={showModal}

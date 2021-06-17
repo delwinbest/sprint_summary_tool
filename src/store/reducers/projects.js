@@ -32,8 +32,8 @@ const addProject = (state, action) => {
   return {
     ...state,
     [action.projectName]: {
-      active: true,
-      ...action.projectDetail,
+      active: action.active,
+      type: action.projectType,
     },
   };
 };

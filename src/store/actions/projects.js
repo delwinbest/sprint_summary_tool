@@ -1,9 +1,10 @@
 import * as actionTypes from "./actionTypes";
 
-export const addProject = (projectName, projectDetail) => {
+export const addProject = (projectName, active, projectType) => {
   return {
     type: actionTypes.PROJECT_ADD,
     projectName: projectName,
-    projectDetail: projectDetail,
+    active: active,
+    projectType: projectType,
   };
 };
