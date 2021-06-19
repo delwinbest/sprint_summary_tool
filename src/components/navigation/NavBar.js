@@ -20,6 +20,10 @@ const NavBar = () => {
   const handleAddProjectModalClose = () => setShowAddProjectModal(false);
   const handleAddProjectModalShow = () => setShowAddProjectModal(true);
 
+  const [showAddNonProjectModal, setShowAddNonProjectModal] = useState(false);
+  const handleAddNonProjectModalClose = () => setShowAddNonProjectModal(false);
+  const handleAddNonProjectModalShow = () => setShowAddNonProjectModal(true);
+
   const removeMemberHandler = (username) => {
     dispatch({ type: actionTypes.TEAM_REMOVE_MEMBER, username: username });
   };
@@ -89,7 +93,7 @@ const NavBar = () => {
               <NavDropdown.Item>
                 <Button
                   variant="outline-success"
-                  onClick={handleAddProjectModalShow}
+                  onClick={handleAddNonProjectModalShow}
                 >
                   Create New
                 </Button>
@@ -110,8 +114,14 @@ const NavBar = () => {
       </Navbar>
 
       <AddProjectModal
+        classification="PROJECT"
         closeModalHandler={handleAddProjectModalClose}
         showModal={showAddProjectModal}
+      />
+      <AddProjectModal
+        classification="NON_PROJECT"
+        closeModalHandler={handleAddNonProjectModalClose}
+        showModal={showAddNonProjectModal}
       />
       <AddUserModal
         closeModalHandler={handleModalClose}

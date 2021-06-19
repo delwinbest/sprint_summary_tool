@@ -2,7 +2,6 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Button, Modal, Col, Row, Form } from "react-bootstrap";
-import { FloatingLabel } from "bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
 
@@ -14,10 +13,10 @@ const AddProjectModal = (props) => {
       .string()
       .min(3, "Should be 3 or more chars")
       .required("Please enter a project name"),
-    projectType: yup.string().required("Please enter a project type"),
   });
 
   const onSubmitHandler = (event) => {
+    console.log(event);
     dispatch({
       type: actionTypes.PROJECT_ADD,
       projectName: event.projectName,
@@ -27,41 +26,34 @@ const AddProjectModal = (props) => {
     props.closeModalHandler();
   };
   const toTitles = (s) => {
-    const title = s.replace("NON_PROJECT_", "");
+    const title = s.replace(props.classification + "_", "");
     return title.replace(/\w\S*/g, function (t) {
       return t.charAt(0).toUpperCase() + t.substr(1).toLowerCase();
     });
   };
   let projectTypes = {};
-  projectTypes = Object.keys(projects).map((project) => {
-    const REMOVE = "NON_PROJECT_";
-    console.log(projects[project].type);
-    if (projectTypes[projects[project].type]) {
-      return null;
-    } else {
-      return {
-        name: projects[project].type,
+  Object.keys(projects)
+    .filter((project) =>
+      projects[project].type.startsWith(props.classification)
+    )
+    .forEach((project) => {
+      projectTypes[projects[project].type] = {
         label: toTitles(projects[project].type),
       };
-    }
+    });
+
+  const projectTypeSelector = Object.keys(projectTypes).map((projectype) => {
+    return (
+      <option value={projectype} label={projectTypes[projectype].label}>
+        {projectTypes[projectype].label}
+      </option>
+    );
   });
 
-  console.log(projectTypes);
-  const projectTypeSelector = (
-    <Col>
-      <Form.Check
-        type="radio"
-        label="second radio"
-        name="formHorizontalRadios"
-        id="formHorizontalRadios2"
-      />
-    </Col>
-  );
-
   return (
-    <Modal show={true} onHide={props.closeModalHandler}>
+    <Modal show={props.showModal} onHide={props.closeModalHandler}>
       <Modal.Header closeButton>
-        <Modal.Title>Add New Project</Modal.Title>
+        <Modal.Title>Add New {props.classification}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -69,7 +61,7 @@ const AddProjectModal = (props) => {
           onSubmit={onSubmitHandler}
           initialValues={{
             projectName: "",
-            projectType: "",
+            projectType: Object.keys(projectTypes)[0],
           }}
         >
           {({
@@ -100,11 +92,23 @@ const AddProjectModal = (props) => {
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <fieldset>
-                <Form.Group as={Row} className="mb-1">
-                  {projectTypeSelector}
-                </Form.Group>
-              </fieldset>
+              <Form.Group as={Row}>
+                <Form.Label column sm="4">
+                  Project Type
+                </Form.Label>
+                <div className="col-sm-8">
+                  <select
+                    className="form-control"
+                    name="projectType"
+                    value={values.projectType}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    style={{ display: "block" }}
+                  >
+                    {projectTypeSelector}
+                  </select>
+                </div>
+              </Form.Group>
               <br />
               <Button type="submit" block>
                 Add
