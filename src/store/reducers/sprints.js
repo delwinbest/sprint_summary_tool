@@ -7,6 +7,7 @@ const initialState = {
       members: [],
       startDate: "2021-01-01",
       sprintDurationDays: 10,
+      projects: [],
     },
   },
 };
@@ -39,12 +40,28 @@ const addSprintMembers = (state, action) => {
   };
 };
 
+const addSprintProjects = (state, action) => {
+  console.log(action);
+  return {
+    ...state,
+    [action.year]: {
+      ...state[action.year],
+      [action.weekNum]: {
+        ...state[action.year][action.weekNum],
+        projects: action.projects.sort(),
+      },
+    },
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SPRINT_ADD:
       return addSprint(state, action);
     case actionTypes.SPRINT_ADD_MEMBERS:
       return addSprintMembers(state, action);
+    case actionTypes.SPRINT_ADD_PROJECTS:
+      return addSprintProjects(state, action);
     default:
       return state;
   }

@@ -18,6 +18,7 @@ const SprintTable = () => {
   const dispatch = useDispatch();
   const sprints = useSelector((state) => state.sprints);
   const team = useSelector((state) => state.team);
+  const projects = useSelector((state) => state.projects);
 
   const [selectedYear, setSelectedYear] = useState("2021");
   const [selectedSprint, setSelectedSprint] = useState("W01");
@@ -59,6 +60,16 @@ const SprintTable = () => {
       </Dropdown.Item>
     );
   });
+
+  const handleSprintAddProjects = () => {
+    console.log(Object.keys(projects));
+    dispatch({
+      type: actionTypes.SPRINT_ADD_PROJECTS,
+      year: selectedYear,
+      weekNum: selectedSprint,
+      projects: Object.keys(projects),
+    });
+  };
 
   const addSprintButton = (
     <div
@@ -110,25 +121,85 @@ const SprintTable = () => {
 
   const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
     (member, index) => {
-      let altStyle = {};
+      let altStyle = {
+        textAlign: "center",
+      };
       if (index % 2 === 1) {
-        altStyle = { backgroundColor: "#FBFCFC", color: "#454d55" };
+        altStyle = {
+          backgroundColor: "#FBFCFC",
+          color: "#454d55",
+          textAlign: "center",
+        };
       }
 
       return (
         <tr key={member}>
           <td>(days)</td>
-          <td>{member}</td>
+          <td
+            style={{
+              textAlign: "center",
+            }}
+          >
+            {member}
+          </td>
           <td>
-            <NumericInput min={0} max={14} value={10} />
+            <NumericInput
+              min={0}
+              max={14}
+              value={10}
+              style={{ input: { width: "3rem" } }}
+            />
           </td>
           {/* Holiday Section */}
-          <td style={altStyle}>{index}</td>
-          <td style={altStyle}>{index}</td>
+          <td style={altStyle}>...</td>
+          <td style={altStyle}>...</td>
+          {/* NonProject Section */}
+          {sprints[selectedYear][selectedSprint].projects
+            .filter(
+              (project) =>
+                projects[project].type.startsWith("NON_PROJECT") &&
+                projects[project].active
+            )
+            .map((project) => {
+              return <td>{project}</td>;
+            })}
+          {/* Project Section */}
+          {sprints[selectedYear][selectedSprint].projects
+            .filter(
+              (project) =>
+                projects[project].type.startsWith("PROJECT") &&
+                projects[project].active
+            )
+            .map((project) => {
+              return <td style={altStyle}>{project}</td>;
+            })}
         </tr>
       );
     }
   );
+
+  const nonProjectTableHeaders = sprints[selectedYear][selectedSprint].projects
+    .filter(
+      (project) =>
+        projects[project].type.startsWith("NON_PROJECT") &&
+        projects[project].active
+    )
+    .map((project) => {
+      return <th>{project}</th>;
+    });
+
+  const projectTableHeaders = sprints[selectedYear][selectedSprint].projects
+    .filter(
+      (project) =>
+        projects[project].type.startsWith("PROJECT") && projects[project].active
+    )
+    .map((project) => {
+      return (
+        <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
+          {project}
+        </th>
+      );
+    });
 
   return (
     <Container>
@@ -137,7 +208,7 @@ const SprintTable = () => {
         showModal={showSprintAddModal}
       />
       <Row>
-        <Col row>
+        <Col as={Row}>
           {yearDropdown}
           {sprintDropdown}
           &nbsp;&nbsp;
@@ -148,6 +219,11 @@ const SprintTable = () => {
             </h4>
           </div>
         </Col>
+        <Col>
+          <Button variant="success" onClick={handleSprintAddProjects}>
+            Add Active Projects
+          </Button>{" "}
+        </Col>
       </Row>
       <Row>
         <Col>
@@ -155,9 +231,8 @@ const SprintTable = () => {
             <thead>
               <tr>
                 <th>Unit</th>
-                <th>
+                <th style={{ textAlign: "center" }}>
                   <Row className="justify-content-md-center">
-                    <Col>Alias</Col>
                     <Col>
                       <Button
                         variant="outline-success"
@@ -170,10 +245,12 @@ const SprintTable = () => {
                             members: team.teamMembers,
                           });
                         }}
+                        style={{ fontSize: "0.5rem" }}
                       >
                         Add All
                       </Button>
                     </Col>
+                    <Col>Alias</Col>
                   </Row>
                 </th>
                 <th>Day Capa.</th>
@@ -184,6 +261,8 @@ const SprintTable = () => {
                 <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
                   Holidays
                 </th>
+                {nonProjectTableHeaders}
+                {projectTableHeaders}
               </tr>
             </thead>
             <tbody>{sprintMemberRows}</tbody>
