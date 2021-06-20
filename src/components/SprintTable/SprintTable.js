@@ -9,10 +9,12 @@ import {
   ButtonGroup,
   DropdownButton,
   Button,
+  OverlayTrigger,
 } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
 import AddSprintModal from "../AddSprintModal/AddSprintModal";
 import * as actionTypes from "../../store/actions/actionTypes";
+import * as popover from "../Popovers/popoverSprintTable";
 
 const SprintTable = () => {
   const dispatch = useDispatch();
@@ -62,12 +64,29 @@ const SprintTable = () => {
   });
 
   const handleSprintAddProjects = () => {
-    console.log(Object.keys(projects));
     dispatch({
       type: actionTypes.SPRINT_ADD_PROJECTS,
       year: selectedYear,
       weekNum: selectedSprint,
       projects: Object.keys(projects),
+    });
+  };
+
+  const handleSprintAddTeam = () => {
+    const capacity = sprints[selectedYear][selectedSprint].capacity;
+    team.teamMembers.forEach((member) => {
+      if (
+        sprints[selectedYear][selectedSprint].capacity[member] === undefined
+      ) {
+        capacity[member] = {};
+      }
+    });
+    dispatch({
+      type: actionTypes.SPRINT_ADD_MEMBERS,
+      year: selectedYear,
+      weekNum: selectedSprint,
+      members: team.teamMembers,
+      capacity: capacity,
     });
   };
 
@@ -121,27 +140,24 @@ const SprintTable = () => {
 
   const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
     (member, index) => {
-      let altStyle = {
-        textAlign: "center",
-      };
+      let altStyle = {};
       if (index % 2 === 1) {
         altStyle = {
           backgroundColor: "#FBFCFC",
           color: "#454d55",
-          textAlign: "center",
         };
+      }
+
+      function getPropertySafely(object, defaultVal) {
+        if (object !== undefined) return object;
+
+        return defaultVal;
       }
 
       return (
         <tr key={member}>
           <td>(days)</td>
-          <td
-            style={{
-              textAlign: "center",
-            }}
-          >
-            {member}
-          </td>
+          <td>{member}</td>
           <td>
             <NumericInput
               min={0}
@@ -151,8 +167,18 @@ const SprintTable = () => {
             />
           </td>
           {/* Holiday Section */}
-          <td style={altStyle}>...</td>
-          <td style={altStyle}>...</td>
+          <td style={altStyle}>
+            {getPropertySafely(
+              sprints[selectedYear][selectedSprint].capacity[member].OOTO,
+              "..."
+            )}
+          </td>
+          <td style={altStyle}>
+            {getPropertySafely(
+              sprints[selectedYear][selectedSprint].capacity[member].Holidays,
+              "..."
+            )}
+          </td>
           {/* NonProject Section */}
           {sprints[selectedYear][selectedSprint].projects
             .filter(
@@ -161,7 +187,16 @@ const SprintTable = () => {
                 projects[project].active
             )
             .map((project) => {
-              return <td>{project}</td>;
+              return (
+                <td>
+                  {getPropertySafely(
+                    sprints[selectedYear][selectedSprint].capacity[member][
+                      project
+                    ],
+                    "..."
+                  )}
+                </td>
+              );
             })}
           {/* Project Section */}
           {sprints[selectedYear][selectedSprint].projects
@@ -171,7 +206,16 @@ const SprintTable = () => {
                 projects[project].active
             )
             .map((project) => {
-              return <td style={altStyle}>{project}</td>;
+              return (
+                <td style={altStyle}>
+                  {getPropertySafely(
+                    sprints[selectedYear][selectedSprint].capacity[member][
+                      project
+                    ],
+                    "..."
+                  )}
+                </td>
+              );
             })}
         </tr>
       );
@@ -220,6 +264,16 @@ const SprintTable = () => {
           </div>
         </Col>
         <Col>
+          <OverlayTrigger
+            overlay={popover.addTeam}
+            delay={{ show: 250, hide: 400 }}
+          >
+            <span className="d-inline-block" style={{ paddingRight: ".2rem" }}>
+              <Button variant="success" onClick={handleSprintAddTeam}>
+                Add Team to Sprint
+              </Button>
+            </span>
+          </OverlayTrigger>
           <Button variant="success" onClick={handleSprintAddProjects}>
             Add Active Projects
           </Button>{" "}
@@ -237,14 +291,7 @@ const SprintTable = () => {
                       <Button
                         variant="outline-success"
                         size="sm"
-                        onClick={() => {
-                          dispatch({
-                            type: actionTypes.SPRINT_ADD_MEMBERS,
-                            year: selectedYear,
-                            weekNum: selectedSprint,
-                            members: team.teamMembers,
-                          });
-                        }}
+                        onClick={handleSprintAddTeam}
                         style={{ fontSize: "0.5rem" }}
                       >
                         Add All
@@ -254,7 +301,6 @@ const SprintTable = () => {
                   </Row>
                 </th>
                 <th>Day Capa.</th>
-                {/* 1px solid #dee2e6 */}
                 <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
                   OOTO
                 </th>

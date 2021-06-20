@@ -8,6 +8,9 @@ const initialState = {
       startDate: "2021-01-01",
       sprintDurationDays: 10,
       projects: [],
+      capacity: {
+        grattanj: { OOTO: 1, MAPPS: 5 },
+      },
     },
   },
 };
@@ -35,13 +38,13 @@ const addSprintMembers = (state, action) => {
       [action.weekNum]: {
         ...state[action.year][action.weekNum],
         members: action.members.sort(),
+        capacity: action.capacity,
       },
     },
   };
 };
 
 const addSprintProjects = (state, action) => {
-  console.log(action);
   return {
     ...state,
     [action.year]: {
