@@ -27,15 +27,17 @@ const composeEnhancers =
       })
     : null || compose;
 
-const storage = new PouchDBStorage(
-  "http://" + process.env.REACT_APP_COUCHDB_HOSTNAME + ":5984/smt_db",
-  {
-    auth: {
-      username: process.env.REACT_APP_COUCHDB_USER,
-      password: process.env.REACT_APP_COUCHDB_PASSWORD,
-    },
-  }
-);
+// const storage = new PouchDBStorage(
+//   "http://" + process.env.REACT_APP_COUCHDB_HOSTNAME + ":5984/smt_db",
+//   {
+//     auth: {
+//       username: process.env.REACT_APP_COUCHDB_USER,
+//       password: process.env.REACT_APP_COUCHDB_PASSWORD,
+//     },
+//   }
+// );
+
+const storage = new PouchDBStorage("smt_db");
 
 const rootReducer = combineReducers({
   team: teamReducer,
