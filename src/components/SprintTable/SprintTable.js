@@ -10,6 +10,7 @@ import {
   DropdownButton,
   Button,
   OverlayTrigger,
+  Form,
 } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
 import AddSprintModal from "../AddSprintModal/AddSprintModal";
@@ -138,6 +139,18 @@ const SprintTable = () => {
     </DropdownButton>
   ));
 
+  const handleEntryOnChange = (project, member, event) => {
+    if (event.target.value === "") return;
+    dispatch({
+      type: actionTypes.SPRINT_ADD_CAPACITY,
+      year: selectedYear,
+      weekNum: selectedSprint,
+      employee: member,
+      project: project,
+      days: event.target.value,
+    });
+  };
+
   const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
     (member, index) => {
       let altStyle = {};
@@ -153,12 +166,11 @@ const SprintTable = () => {
 
         return defaultVal;
       }
-
       return (
         <tr key={member}>
-          <td>(days)</td>
-          <td>{member}</td>
-          <td>
+          <td key={"days".member}>(days)</td>
+          <td key={"username".member}>{member}</td>
+          <td key={"units".member}>
             <NumericInput
               min={0}
               max={14}
@@ -167,17 +179,23 @@ const SprintTable = () => {
             />
           </td>
           {/* Holiday Section */}
-          <td style={altStyle}>
-            {getPropertySafely(
-              sprints[selectedYear][selectedSprint].capacity[member].OOTO,
-              "..."
-            )}
+          <td style={altStyle} key={"OOTO_" + member}>
+            <Form.Control
+              onBlur={(event) => handleEntryOnChange("OOTO", member, event)}
+              placeholder={getPropertySafely(
+                sprints[selectedYear][selectedSprint].capacity[member].OOTO,
+                "..."
+              )}
+            />
           </td>
-          <td style={altStyle}>
-            {getPropertySafely(
-              sprints[selectedYear][selectedSprint].capacity[member].Holidays,
-              "..."
-            )}
+          <td style={altStyle} key={"Holidays_" + member}>
+            <Form.Control
+              onBlur={(event) => handleEntryOnChange("Holidays", member, event)}
+              placeholder={getPropertySafely(
+                sprints[selectedYear][selectedSprint].capacity[member].Holidays,
+                "..."
+              )}
+            />
           </td>
           {/* NonProject Section */}
           {sprints[selectedYear][selectedSprint].projects
@@ -188,13 +206,18 @@ const SprintTable = () => {
             )
             .map((project) => {
               return (
-                <td>
-                  {getPropertySafely(
-                    sprints[selectedYear][selectedSprint].capacity[member][
-                      project
-                    ],
-                    "..."
-                  )}
+                <td key={project + "_" + member}>
+                  <Form.Control
+                    onBlur={(event) =>
+                      handleEntryOnChange(project, member, event)
+                    }
+                    placeholder={getPropertySafely(
+                      sprints[selectedYear][selectedSprint].capacity[member][
+                        project
+                      ],
+                      "..."
+                    )}
+                  />
                 </td>
               );
             })}
@@ -207,13 +230,18 @@ const SprintTable = () => {
             )
             .map((project) => {
               return (
-                <td style={altStyle}>
-                  {getPropertySafely(
-                    sprints[selectedYear][selectedSprint].capacity[member][
-                      project
-                    ],
-                    "..."
-                  )}
+                <td style={altStyle} key={project + "_" + member}>
+                  <Form.Control
+                    onBlur={(event) =>
+                      handleEntryOnChange(project, member, event)
+                    }
+                    placeholder={getPropertySafely(
+                      sprints[selectedYear][selectedSprint].capacity[member][
+                        project
+                      ],
+                      "..."
+                    )}
+                  />
                 </td>
               );
             })}
@@ -229,7 +257,7 @@ const SprintTable = () => {
         projects[project].active
     )
     .map((project) => {
-      return <th>{project}</th>;
+      return <th key={"header_" + project}>{project}</th>;
     });
 
   const projectTableHeaders = sprints[selectedYear][selectedSprint].projects
@@ -239,7 +267,10 @@ const SprintTable = () => {
     )
     .map((project) => {
       return (
-        <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
+        <th
+          style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}
+          key={"header_" + project}
+        >
           {project}
         </th>
       );
@@ -283,7 +314,7 @@ const SprintTable = () => {
         <Col>
           <Table striped bordered hover variant="dark">
             <thead>
-              <tr>
+              <tr key={"header"}>
                 <th>Unit</th>
                 <th style={{ textAlign: "center" }}>
                   <Row className="justify-content-md-center">
