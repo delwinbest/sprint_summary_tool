@@ -16,6 +16,7 @@ import thunk from "redux-thunk";
 import teamReducer from "./store/reducers/team";
 import sprintsReducer from "./store/reducers/sprints";
 import projectsReducer from "./store/reducers/projects";
+import uiStateReducer from "./store/reducers/ui_state";
 import { PersistGate } from "redux-persist/integration/react";
 
 const composeEnhancers =
@@ -43,12 +44,14 @@ const rootReducer = combineReducers({
   team: teamReducer,
   sprints: sprintsReducer,
   projects: projectsReducer,
+  uistate: uiStateReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
   stateReconciler: autoMergeLevel2,
+  blacklist: ["uistate"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

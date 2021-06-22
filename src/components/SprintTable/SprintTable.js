@@ -22,15 +22,33 @@ const SprintTable = () => {
   const sprints = useSelector((state) => state.sprints);
   const team = useSelector((state) => state.team);
   const projects = useSelector((state) => state.projects);
+  const uistate = useSelector((state) => state.uistate);
 
-  const [selectedYear, setSelectedYear] = useState("2021");
-  const [selectedSprint, setSelectedSprint] = useState("W01");
+  // const [selectedYear, setSelectedYear] = useState("2021");
+  // const [selectedSprint, setSelectedSprint] = useState("W01");
+  const selectedSprint = uistate.selectedSprint;
+  const setSelectedYear = (year) => {
+    dispatch({
+      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT,
+      year: year,
+      weekNum: selectedSprint.weekNum,
+    });
+  };
+
+  const setSelectedSprint = (weekNum) => {
+    dispatch({
+      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT,
+      year: selectedSprint.year,
+      weekNum: weekNum,
+    });
+  };
 
   const [showSprintAddModal, setSprintAddModal] = useState(false);
   const handleSprintAddModalClose = () => setSprintAddModal(false);
   const handleSprintAddModalShow = () => setSprintAddModal(true);
 
-  const currentSprint = sprints[selectedYear][selectedSprint];
+  const selectedSprintData =
+    sprints[selectedSprint.year][selectedSprint.weekNum];
 
   useEffect(() => {
     const year = Object.keys(sprints).pop();
@@ -47,13 +65,13 @@ const SprintTable = () => {
         key={year}
         eventKey={year}
         onClick={() => setSelectedYear(year)}
-        active={year === selectedYear ? true : false}
+        active={year === selectedSprint.year ? true : false}
       >
         {year}
       </Dropdown.Item>
     );
   });
-  const sprintWeeks = Object.keys(sprints[selectedYear]).map((week) => {
+  const sprintWeeks = Object.keys(sprints[selectedSprint.year]).map((week) => {
     return (
       <Dropdown.Item
         key={week}
@@ -69,22 +87,22 @@ const SprintTable = () => {
   const handleSprintAddProjects = () => {
     dispatch({
       type: actionTypes.SPRINT_ADD_PROJECTS,
-      year: selectedYear,
+      year: selectedSprint.year,
       weekNum: selectedSprint,
       projects: Object.keys(projects),
     });
   };
 
   const handleSprintAddTeam = () => {
-    const capacity = currentSprint.capacity;
+    const capacity = selectedSprintData.capacity;
     team.teamMembers.forEach((member) => {
-      if (currentSprint.capacity[member] === undefined) {
+      if (selectedSprintData.capacity[member] === undefined) {
         capacity[member] = {};
       }
     });
     dispatch({
       type: actionTypes.SPRINT_ADD_MEMBERS,
-      year: selectedYear,
+      year: selectedSprint.year,
       weekNum: selectedSprint,
       members: team.teamMembers,
       capacity: capacity,
@@ -143,7 +161,7 @@ const SprintTable = () => {
     if (event.target.value === "" || event.target.value === "0") {
       dispatch({
         type: actionTypes.SPRINT_REMOVE_CAPACITY,
-        year: selectedYear,
+        year: selectedSprint.year,
         weekNum: selectedSprint,
         employee: member,
         project: project,
@@ -151,7 +169,7 @@ const SprintTable = () => {
     } else {
       dispatch({
         type: actionTypes.SPRINT_ADD_CAPACITY,
-        year: selectedYear,
+        year: selectedSprint.year,
         weekNum: selectedSprint,
         employee: member,
         project: project,
@@ -160,7 +178,7 @@ const SprintTable = () => {
     }
   };
 
-  const sprintMemberRows = currentSprint.members.map((member, index) => {
+  const sprintMemberRows = selectedSprintData.members.map((member, index) => {
     let altStyle = {};
     if (index % 2 === 1) {
       altStyle = {
@@ -177,8 +195,8 @@ const SprintTable = () => {
 
     const calcMemberCapacityRemaining = (sprintCapacity, member) => {
       let memberCapacity = 0;
-      Object.keys(currentSprint.capacity[member]).forEach((project) => {
-        memberCapacity += +currentSprint.capacity[member][project];
+      Object.keys(selectedSprintData.capacity[member]).forEach((project) => {
+        memberCapacity += +selectedSprintData.capacity[member][project];
       });
       return sprintCapacity - memberCapacity;
     };
@@ -189,7 +207,7 @@ const SprintTable = () => {
         <td key={"username".member}>{member}</td>
         <td key={"days".member}>
           {calcMemberCapacityRemaining(
-            +currentSprint.sprintDurationDays,
+            +selectedSprintData.sprintDurationDays,
             member
           )}
         </td>
@@ -198,7 +216,7 @@ const SprintTable = () => {
           <Form.Control
             onBlur={(event) => handleEntryOnChange("OOTO", member, event)}
             placeholder={getPropertySafely(
-              currentSprint.capacity[member].OOTO,
+              selectedSprintData.capacity[member].OOTO,
               "..."
             )}
           />
@@ -207,13 +225,13 @@ const SprintTable = () => {
           <Form.Control
             onBlur={(event) => handleEntryOnChange("Holidays", member, event)}
             placeholder={getPropertySafely(
-              currentSprint.capacity[member].Holidays,
+              selectedSprintData.capacity[member].Holidays,
               "..."
             )}
           />
         </td>
         {/* NonProject Section */}
-        {currentSprint.projects
+        {selectedSprintData.projects
           .filter(
             (project) =>
               projects[project].type.startsWith("NON_PROJECT") &&
@@ -227,7 +245,7 @@ const SprintTable = () => {
                     handleEntryOnChange(project, member, event)
                   }
                   placeholder={getPropertySafely(
-                    currentSprint.capacity[member][project],
+                    selectedSprintData.capacity[member][project],
                     "..."
                   )}
                 />
@@ -235,7 +253,7 @@ const SprintTable = () => {
             );
           })}
         {/* Project Section */}
-        {currentSprint.projects
+        {selectedSprintData.projects
           .filter(
             (project) =>
               projects[project].type.startsWith("PROJECT") &&
@@ -249,7 +267,7 @@ const SprintTable = () => {
                     handleEntryOnChange(project, member, event)
                   }
                   placeholder={getPropertySafely(
-                    currentSprint.capacity[member][project],
+                    selectedSprintData.capacity[member][project],
                     "..."
                   )}
                 />
@@ -260,7 +278,7 @@ const SprintTable = () => {
     );
   });
 
-  const nonProjectTableHeaders = currentSprint.projects
+  const nonProjectTableHeaders = selectedSprintData.projects
     .filter(
       (project) =>
         projects[project].type.startsWith("NON_PROJECT") &&
@@ -270,7 +288,7 @@ const SprintTable = () => {
       return <th key={"header_" + project}>{project}</th>;
     });
 
-  const projectTableHeaders = currentSprint.projects
+  const projectTableHeaders = selectedSprintData.projects
     .filter(
       (project) =>
         projects[project].type.startsWith("PROJECT") && projects[project].active
@@ -296,7 +314,8 @@ const SprintTable = () => {
           &nbsp;&nbsp;
           <div style={{ display: "inline-block" }}>
             <h4>
-              {selectedYear} / {selectedSprint} - {currentSprint.name}
+              {selectedSprint.year} / {selectedSprint.weekNum} -{" "}
+              {selectedSprintData.name}
             </h4>
           </div>
         </Col>
