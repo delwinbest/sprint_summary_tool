@@ -77,9 +77,9 @@ const SprintTable = () => {
         key={week}
         eventKey={week}
         onClick={() => setSelectedSprint(week)}
-        active={week === selectedSprint ? true : false}
+        active={week === selectedSprint.weekNum ? true : false}
       >
-        {week}
+        {week + " - " + sprints[selectedSprint.year][week].name}
       </Dropdown.Item>
     );
   });

@@ -43,9 +43,7 @@ const NavBar = () => {
     if (projects[project].type.startsWith("NON_PROJECT")) {
       return (
         <NavDropdown.Item key={project}>
-          <Badge variant="danger" onClick={() => removeMemberHandler(project)}>
-            -
-          </Badge>
+          <Badge variant="danger">-</Badge>
           <span style={{ paddingLeft: "1rem" }}>{project}</span>
         </NavDropdown.Item>
       );
@@ -57,9 +55,7 @@ const NavBar = () => {
     if (projects[project].type.startsWith("PROJECT")) {
       return (
         <NavDropdown.Item key={project}>
-          <Badge variant="danger" onClick={() => removeMemberHandler(project)}>
-            -
-          </Badge>
+          <Badge variant="danger">-</Badge>
           <span style={{ paddingLeft: "1rem" }}>{project}</span>
         </NavDropdown.Item>
       );

@@ -16,3 +16,11 @@ td {
     }
   }
 }
+
+.dropdown-menu {
+  .dropdown-item {
+    &.active {
+      background-color: rgb(23, 162, 184) !important;
+    }
+  }
+}
