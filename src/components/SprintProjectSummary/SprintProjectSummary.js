@@ -6,8 +6,6 @@ import * as actionTypes from "../../store/actions/actionTypes";
 const SprintProjectSummary = () => {
   const dispatch = useDispatch();
   const sprints = useSelector((state) => state.sprints);
-  const team = useSelector((state) => state.team);
-  const projects = useSelector((state) => state.projects);
   const uistate = useSelector((state) => state.uistate);
 
   const selectedSprint = uistate.selectedSprint;

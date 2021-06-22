@@ -214,7 +214,7 @@ const SprintTable = () => {
         {/* Holiday Section */}
         <td style={altStyle} key={"OOTO_" + member}>
           <Form.Control
-            onBlur={(event) => handleEntryOnChange("OOTO", member, event)}
+            onChange={(event) => handleEntryOnChange("OOTO", member, event)}
             placeholder={getPropertySafely(
               selectedSprintData.capacity[member].OOTO,
               "..."
@@ -223,7 +223,7 @@ const SprintTable = () => {
         </td>
         <td style={altStyle} key={"Holidays_" + member}>
           <Form.Control
-            onBlur={(event) => handleEntryOnChange("Holidays", member, event)}
+            onChange={(event) => handleEntryOnChange("Holidays", member, event)}
             placeholder={getPropertySafely(
               selectedSprintData.capacity[member].Holidays,
               "..."
@@ -241,7 +241,7 @@ const SprintTable = () => {
             return (
               <td key={project + "_" + member}>
                 <Form.Control
-                  onBlur={(event) =>
+                  onChange={(event) =>
                     handleEntryOnChange(project, member, event)
                   }
                   placeholder={getPropertySafely(
@@ -263,7 +263,7 @@ const SprintTable = () => {
             return (
               <td style={altStyle} key={project + "_" + member}>
                 <Form.Control
-                  onBlur={(event) =>
+                  onChange={(event) =>
                     handleEntryOnChange(project, member, event)
                   }
                   placeholder={getPropertySafely(
