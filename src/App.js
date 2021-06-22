@@ -5,6 +5,7 @@ import "./App.css";
 import NavBar from "./components/navigation/NavBar";
 import SprintTable from "./components/SprintTable/SprintTable";
 import SelectedSprintSummary from "./components/SelectedSprintSummary/SelectedSprintSummary";
+import SprintProjectSummary from "./components/SprintProjectSummary/SprintProjectSummary";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
       <SelectedSprintSummary />
       <br />
       <SprintTable />
+      <br />
+      <SprintProjectSummary />
     </Container>
   );
 }

@@ -16,7 +16,6 @@ const AddProjectModal = (props) => {
   });
 
   const onSubmitHandler = (event) => {
-    console.log(event);
     dispatch({
       type: actionTypes.PROJECT_ADD,
       projectName: event.projectName,

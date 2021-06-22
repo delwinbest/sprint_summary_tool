@@ -1,3 +1,5 @@
-td {
+.table td {
   text-align: center;
+  align-content: center !important;
+  vertical-align: middle !important;
 }

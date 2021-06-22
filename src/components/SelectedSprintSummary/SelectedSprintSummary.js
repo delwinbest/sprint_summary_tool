@@ -17,7 +17,7 @@ const SelectedSprintSummary = () => {
       projects[project].active === true
   );
 
-  const realProjects = Object.keys(projects).filter(
+  const businessProjects = Object.keys(projects).filter(
     (project) =>
       projects[project].type.startsWith("PROJECT") &&
       projects[project].active === true
@@ -39,7 +39,7 @@ const SelectedSprintSummary = () => {
   });
 
   let projectCapacity = 0;
-  realProjects.forEach((project) => {
+  businessProjects.forEach((project) => {
     Object.keys(selectedSprintData.capacity).forEach((member) => {
       if (selectedSprintData.capacity[member][project] !== undefined) {
         projectCapacity += +selectedSprintData.capacity[member][project];

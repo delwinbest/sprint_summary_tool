@@ -9,6 +9,14 @@ const initialState = {
       sprintDurationDays: 10,
       projects: [],
       capacity: {},
+      storyData: {
+        MAPPS: {
+          tasksPlanned: 5,
+          tasksCompleted: 3,
+          pointsPlanned: 3,
+          pointsCompleted: 2,
+        },
+      },
     },
   },
 };
@@ -25,6 +33,7 @@ const addSprint = (state, action) => {
         sprintDurationDays: action.sprintDurationDays,
         projects: [],
         capacity: {},
+        storyData: {},
       },
     },
   };
@@ -45,13 +54,42 @@ const addSprintMembers = (state, action) => {
 };
 
 const addSprintProjects = (state, action) => {
+  // Expect [PROJECT1, PROJECT2, PROJECT3], we want to merge the stories
+  const allProjects = Object.keys(action.projects);
+  const businessProjects = Object.keys(action.projects)
+    .filter(
+      (project) =>
+        action.projects[project].type.startsWith("PROJECT") &&
+        action.projects[project].active === true
+    )
+    .sort();
+  const storyDataTemplate = {
+    tasksPlanned: 0,
+    tasksCompleted: 0,
+    pointsPlanned: 0,
+    pointsCompleted: 0,
+  };
+  const existingSprintStoryData = state[action.year][action.weekNum].storyData;
+  const updatedSprintStoryData = {};
+  businessProjects.forEach((project) => {
+    if (existingSprintStoryData[project] !== undefined) {
+      updatedSprintStoryData[project] = existingSprintStoryData[project];
+    } else {
+      updatedSprintStoryData[project] = storyDataTemplate;
+    }
+  });
+  // businessProjects.forEach((project) => {
+  //   updatedSprintStoryData[project] = storyDataTemplate;
+  // });
+
   return {
     ...state,
     [action.year]: {
       ...state[action.year],
       [action.weekNum]: {
         ...state[action.year][action.weekNum],
-        projects: action.projects.sort(),
+        projects: allProjects,
+        storyData: updatedSprintStoryData,
       },
     },
   };
@@ -76,13 +114,31 @@ const addSprintCapacity = (state, action) => {
   };
 };
 
+const addSprintStoryData = (state, action) => {
+  // Expect year, weekNum, project, dataType, data
+  return {
+    ...state,
+    [action.year]: {
+      ...state[action.year],
+      [action.weekNum]: {
+        ...state[action.year][action.weekNum],
+        storyData: {
+          ...state[action.year][action.weekNum].storyData,
+          [action.project]: {
+            ...state[action.year][action.weekNum].storyData[action.project],
+            [action.dataType]: action.data,
+          },
+        },
+      },
+    },
+  };
+};
+
 const removeSprintCapacity = (state, action) => {
   // We get the project only and want to remove this attribute from the users array.
   const employeeCapacity = {
     ...state[action.year][action.weekNum].capacity[action.employee],
   };
-  console.log(employeeCapacity);
-  console.log(action.project);
   const newCapacity = {};
   Object.keys(employeeCapacity)
     .filter((project) => project !== action.project)
@@ -116,6 +172,8 @@ const reducer = (state = initialState, action) => {
       return addSprintCapacity(state, action);
     case actionTypes.SPRINT_REMOVE_CAPACITY:
       return removeSprintCapacity(state, action);
+    case actionTypes.SPRINT_ADD_STORY_DATA:
+      return addSprintStoryData(state, action);
     default:
       return state;
   }

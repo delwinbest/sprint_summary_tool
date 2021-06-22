@@ -89,7 +89,7 @@ const SprintTable = () => {
       type: actionTypes.SPRINT_ADD_PROJECTS,
       year: selectedSprint.year,
       weekNum: selectedSprint.weekNum,
-      projects: Object.keys(projects),
+      projects: projects,
     });
   };
 
@@ -173,7 +173,7 @@ const SprintTable = () => {
         weekNum: selectedSprint.weekNum,
         employee: member,
         project: project,
-        days: event.target.value,
+        days: +event.target.value,
       });
     }
   };
@@ -336,36 +336,34 @@ const SprintTable = () => {
         </Col>
       </Row>
       <Row>
-        <Col>
-          <Table striped bordered hover variant="dark">
-            <thead>
-              <tr key={"header"}>
-                <th>Unit</th>
-                <th style={{ textAlign: "center" }}>
-                  <Row className="justify-content-md-center">
-                    <Col>
-                      <Button
-                        variant="outline-success"
-                        size="sm"
-                        onClick={handleSprintAddTeam}
-                        style={{ fontSize: "0.5rem" }}
-                      >
-                        Add All
-                      </Button>
-                    </Col>
-                    <Col>Alias</Col>
-                  </Row>
-                </th>
-                <th>Day Capa.</th>
-                <th style={{ backgroundColor: "#17a2b8" }}>OOTO</th>
-                <th style={{ backgroundColor: "#17a2b8" }}>Holidays</th>
-                {nonProjectTableHeaders}
-                {projectTableHeaders}
-              </tr>
-            </thead>
-            <tbody>{sprintMemberRows}</tbody>
-          </Table>
-        </Col>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr key={"header"}>
+              <th>Unit</th>
+              <th style={{ textAlign: "center" }}>
+                <Row className="justify-content-md-center">
+                  <Col>
+                    <Button
+                      variant="outline-success"
+                      size="sm"
+                      onClick={handleSprintAddTeam}
+                      style={{ fontSize: "0.5rem" }}
+                    >
+                      Add All
+                    </Button>
+                  </Col>
+                  <Col>Alias</Col>
+                </Row>
+              </th>
+              <th>Day Capa.</th>
+              <th style={{ backgroundColor: "#17a2b8" }}>OOTO</th>
+              <th style={{ backgroundColor: "#17a2b8" }}>Holidays</th>
+              {nonProjectTableHeaders}
+              {projectTableHeaders}
+            </tr>
+          </thead>
+          <tbody>{sprintMemberRows}</tbody>
+        </Table>
       </Row>
     </Container>
   );
