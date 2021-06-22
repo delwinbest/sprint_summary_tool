@@ -34,6 +34,14 @@ const initialState = {
     type: projectTypes.PROJECT_BUSINESS,
     active: true,
   },
+  OOTO: {
+    type: projectTypes.OOTO,
+    active: true,
+  },
+  Holidays: {
+    type: projectTypes.OOTO_HOLIDAY,
+    active: true,
+  },
 };
 
 const addProject = (state, action) => {

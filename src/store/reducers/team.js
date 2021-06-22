@@ -5,7 +5,6 @@ const initialState = {
     "cherylcf",
     "dongheng",
     "grattanj",
-    "hirotaka",
     "hmatsuki",
     "kensugim",
     "menoni",
@@ -15,6 +14,7 @@ const initialState = {
     "sirinthr",
     "stihahi",
     "yungyin",
+    "chengwel",
   ],
 };
 

@@ -27,6 +27,9 @@ const SprintTable = () => {
   // const [selectedYear, setSelectedYear] = useState("2021");
   // const [selectedSprint, setSelectedSprint] = useState("W01");
   const selectedSprint = uistate.selectedSprint;
+  const selectedSprintData =
+    sprints[selectedSprint.year][selectedSprint.weekNum];
+
   const setSelectedYear = (year) => {
     dispatch({
       type: actionTypes.STATE_UPDATE_SELECTED_SPRINT,
@@ -46,9 +49,6 @@ const SprintTable = () => {
   const [showSprintAddModal, setSprintAddModal] = useState(false);
   const handleSprintAddModalClose = () => setSprintAddModal(false);
   const handleSprintAddModalShow = () => setSprintAddModal(true);
-
-  const selectedSprintData =
-    sprints[selectedSprint.year][selectedSprint.weekNum];
 
   useEffect(() => {
     const year = Object.keys(sprints).pop();
@@ -88,7 +88,7 @@ const SprintTable = () => {
     dispatch({
       type: actionTypes.SPRINT_ADD_PROJECTS,
       year: selectedSprint.year,
-      weekNum: selectedSprint,
+      weekNum: selectedSprint.weekNum,
       projects: Object.keys(projects),
     });
   };
@@ -103,7 +103,7 @@ const SprintTable = () => {
     dispatch({
       type: actionTypes.SPRINT_ADD_MEMBERS,
       year: selectedSprint.year,
-      weekNum: selectedSprint,
+      weekNum: selectedSprint.weekNum,
       members: team.teamMembers,
       capacity: capacity,
     });
@@ -162,7 +162,7 @@ const SprintTable = () => {
       dispatch({
         type: actionTypes.SPRINT_REMOVE_CAPACITY,
         year: selectedSprint.year,
-        weekNum: selectedSprint,
+        weekNum: selectedSprint.weekNum,
         employee: member,
         project: project,
       });
@@ -170,7 +170,7 @@ const SprintTable = () => {
       dispatch({
         type: actionTypes.SPRINT_ADD_CAPACITY,
         year: selectedSprint.year,
-        weekNum: selectedSprint,
+        weekNum: selectedSprint.weekNum,
         employee: member,
         project: project,
         days: event.target.value,

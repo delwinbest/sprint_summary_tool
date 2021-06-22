@@ -23,6 +23,8 @@ const addSprint = (state, action) => {
         members: [],
         startDate: action.startDate,
         sprintDurationDays: action.sprintDurationDays,
+        projects: [],
+        capacity: {},
       },
     },
   };

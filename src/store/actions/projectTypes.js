@@ -5,3 +5,6 @@ export const NON_PROJECT_MEETING = "NON_PROJECT_MEETING";
 
 export const NON_PROJECT_TEAM = "NON_PROJECT_TEAM";
 export const PROJECT_BUSINESS = "PROJECT_BUSINESS";
+
+export const OOTO = "OOTO";
+export const OOTO_HOLIDAY = "OOTO_HOLIDAY";
