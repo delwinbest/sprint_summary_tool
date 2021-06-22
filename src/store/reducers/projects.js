@@ -26,6 +26,14 @@ const initialState = {
     type: projectTypes.PROJECT_BUSINESS,
     active: true,
   },
+  MAPPS: {
+    type: projectTypes.PROJECT_BUSINESS,
+    active: true,
+  },
+  MSS: {
+    type: projectTypes.PROJECT_BUSINESS,
+    active: true,
+  },
 };
 
 const addProject = (state, action) => {
