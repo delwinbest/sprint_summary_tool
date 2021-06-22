@@ -74,6 +74,34 @@ const addSprintCapacity = (state, action) => {
   };
 };
 
+const removeSprintCapacity = (state, action) => {
+  // We get the project only and want to remove this attribute from the users array.
+  const employeeCapacity = {
+    ...state[action.year][action.weekNum].capacity[action.employee],
+  };
+  console.log(employeeCapacity);
+  console.log(action.project);
+  const newCapacity = {};
+  Object.keys(employeeCapacity)
+    .filter((project) => project !== action.project)
+    .forEach((project) => {
+      newCapacity[project] = employeeCapacity[project];
+    });
+  return {
+    ...state,
+    [action.year]: {
+      ...state[action.year],
+      [action.weekNum]: {
+        ...state[action.year][action.weekNum],
+        capacity: {
+          ...state[action.year][action.weekNum].capacity,
+          [action.employee]: { ...newCapacity },
+        },
+      },
+    },
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SPRINT_ADD:
@@ -84,6 +112,8 @@ const reducer = (state = initialState, action) => {
       return addSprintProjects(state, action);
     case actionTypes.SPRINT_ADD_CAPACITY:
       return addSprintCapacity(state, action);
+    case actionTypes.SPRINT_REMOVE_CAPACITY:
+      return removeSprintCapacity(state, action);
     default:
       return state;
   }

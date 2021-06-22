@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./SprintTable.scss";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Container,
@@ -12,7 +13,6 @@ import {
   OverlayTrigger,
   Form,
 } from "react-bootstrap";
-import NumericInput from "react-numeric-input";
 import AddSprintModal from "../AddSprintModal/AddSprintModal";
 import * as actionTypes from "../../store/actions/actionTypes";
 import * as popover from "../Popovers/popoverSprintTable";
@@ -29,6 +29,8 @@ const SprintTable = () => {
   const [showSprintAddModal, setSprintAddModal] = useState(false);
   const handleSprintAddModalClose = () => setSprintAddModal(false);
   const handleSprintAddModalShow = () => setSprintAddModal(true);
+
+  const currentSprint = sprints[selectedYear][selectedSprint];
 
   useEffect(() => {
     const year = Object.keys(sprints).pop();
@@ -74,11 +76,9 @@ const SprintTable = () => {
   };
 
   const handleSprintAddTeam = () => {
-    const capacity = sprints[selectedYear][selectedSprint].capacity;
+    const capacity = currentSprint.capacity;
     team.teamMembers.forEach((member) => {
-      if (
-        sprints[selectedYear][selectedSprint].capacity[member] === undefined
-      ) {
+      if (currentSprint.capacity[member] === undefined) {
         capacity[member] = {};
       }
     });
@@ -140,117 +140,127 @@ const SprintTable = () => {
   ));
 
   const handleEntryOnChange = (project, member, event) => {
-    if (event.target.value === "") return;
-    dispatch({
-      type: actionTypes.SPRINT_ADD_CAPACITY,
-      year: selectedYear,
-      weekNum: selectedSprint,
-      employee: member,
-      project: project,
-      days: event.target.value,
-    });
+    if (event.target.value === "" || event.target.value === "0") {
+      dispatch({
+        type: actionTypes.SPRINT_REMOVE_CAPACITY,
+        year: selectedYear,
+        weekNum: selectedSprint,
+        employee: member,
+        project: project,
+      });
+    } else {
+      dispatch({
+        type: actionTypes.SPRINT_ADD_CAPACITY,
+        year: selectedYear,
+        weekNum: selectedSprint,
+        employee: member,
+        project: project,
+        days: event.target.value,
+      });
+    }
   };
 
-  const sprintMemberRows = sprints[selectedYear][selectedSprint].members.map(
-    (member, index) => {
-      let altStyle = {};
-      if (index % 2 === 1) {
-        altStyle = {
-          backgroundColor: "#FBFCFC",
-          color: "#454d55",
-        };
-      }
-
-      function getPropertySafely(object, defaultVal) {
-        if (object !== undefined) return object;
-
-        return defaultVal;
-      }
-      return (
-        <tr key={member}>
-          <td key={"days".member}>(days)</td>
-          <td key={"username".member}>{member}</td>
-          <td key={"units".member}>
-            <NumericInput
-              min={0}
-              max={14}
-              value={10}
-              style={{ input: { width: "3rem" } }}
-            />
-          </td>
-          {/* Holiday Section */}
-          <td style={altStyle} key={"OOTO_" + member}>
-            <Form.Control
-              onBlur={(event) => handleEntryOnChange("OOTO", member, event)}
-              placeholder={getPropertySafely(
-                sprints[selectedYear][selectedSprint].capacity[member].OOTO,
-                "..."
-              )}
-            />
-          </td>
-          <td style={altStyle} key={"Holidays_" + member}>
-            <Form.Control
-              onBlur={(event) => handleEntryOnChange("Holidays", member, event)}
-              placeholder={getPropertySafely(
-                sprints[selectedYear][selectedSprint].capacity[member].Holidays,
-                "..."
-              )}
-            />
-          </td>
-          {/* NonProject Section */}
-          {sprints[selectedYear][selectedSprint].projects
-            .filter(
-              (project) =>
-                projects[project].type.startsWith("NON_PROJECT") &&
-                projects[project].active
-            )
-            .map((project) => {
-              return (
-                <td key={project + "_" + member}>
-                  <Form.Control
-                    onBlur={(event) =>
-                      handleEntryOnChange(project, member, event)
-                    }
-                    placeholder={getPropertySafely(
-                      sprints[selectedYear][selectedSprint].capacity[member][
-                        project
-                      ],
-                      "..."
-                    )}
-                  />
-                </td>
-              );
-            })}
-          {/* Project Section */}
-          {sprints[selectedYear][selectedSprint].projects
-            .filter(
-              (project) =>
-                projects[project].type.startsWith("PROJECT") &&
-                projects[project].active
-            )
-            .map((project) => {
-              return (
-                <td style={altStyle} key={project + "_" + member}>
-                  <Form.Control
-                    onBlur={(event) =>
-                      handleEntryOnChange(project, member, event)
-                    }
-                    placeholder={getPropertySafely(
-                      sprints[selectedYear][selectedSprint].capacity[member][
-                        project
-                      ],
-                      "..."
-                    )}
-                  />
-                </td>
-              );
-            })}
-        </tr>
-      );
+  const sprintMemberRows = currentSprint.members.map((member, index) => {
+    let altStyle = {};
+    if (index % 2 === 1) {
+      altStyle = {
+        backgroundColor: "#17a2b8",
+        color: "#454d55",
+      };
     }
-  );
 
-  const nonProjectTableHeaders = sprints[selectedYear][selectedSprint].projects
+    function getPropertySafely(object, defaultVal) {
+      if (object !== undefined) return object;
+
+      return defaultVal;
+    }
+
+    const calcMemberCapacityRemaining = (sprintCapacity, member) => {
+      let memberCapacity = 0;
+      Object.keys(currentSprint.capacity[member]).forEach((project) => {
+        memberCapacity += +currentSprint.capacity[member][project];
+      });
+      return sprintCapacity - memberCapacity;
+    };
+
+    return (
+      <tr key={member}>
+        <td key={"units".member}>(days)</td>
+        <td key={"username".member}>{member}</td>
+        <td key={"days".member}>
+          {calcMemberCapacityRemaining(
+            +currentSprint.sprintDurationDays,
+            member
+          )}
+        </td>
+        {/* Holiday Section */}
+        <td style={altStyle} key={"OOTO_" + member}>
+          <Form.Control
+            onBlur={(event) => handleEntryOnChange("OOTO", member, event)}
+            placeholder={getPropertySafely(
+              currentSprint.capacity[member].OOTO,
+              "..."
+            )}
+          />
+        </td>
+        <td style={altStyle} key={"Holidays_" + member}>
+          <Form.Control
+            onBlur={(event) => handleEntryOnChange("Holidays", member, event)}
+            placeholder={getPropertySafely(
+              currentSprint.capacity[member].Holidays,
+              "..."
+            )}
+          />
+        </td>
+        {/* NonProject Section */}
+        {currentSprint.projects
+          .filter(
+            (project) =>
+              projects[project].type.startsWith("NON_PROJECT") &&
+              projects[project].active
+          )
+          .map((project) => {
+            return (
+              <td key={project + "_" + member}>
+                <Form.Control
+                  onBlur={(event) =>
+                    handleEntryOnChange(project, member, event)
+                  }
+                  placeholder={getPropertySafely(
+                    currentSprint.capacity[member][project],
+                    "..."
+                  )}
+                />
+              </td>
+            );
+          })}
+        {/* Project Section */}
+        {currentSprint.projects
+          .filter(
+            (project) =>
+              projects[project].type.startsWith("PROJECT") &&
+              projects[project].active
+          )
+          .map((project) => {
+            return (
+              <td style={altStyle} key={project + "_" + member}>
+                <Form.Control
+                  onBlur={(event) =>
+                    handleEntryOnChange(project, member, event)
+                  }
+                  placeholder={getPropertySafely(
+                    currentSprint.capacity[member][project],
+                    "..."
+                  )}
+                />
+              </td>
+            );
+          })}
+      </tr>
+    );
+  });
+
+  const nonProjectTableHeaders = currentSprint.projects
     .filter(
       (project) =>
         projects[project].type.startsWith("NON_PROJECT") &&
@@ -260,17 +270,14 @@ const SprintTable = () => {
       return <th key={"header_" + project}>{project}</th>;
     });
 
-  const projectTableHeaders = sprints[selectedYear][selectedSprint].projects
+  const projectTableHeaders = currentSprint.projects
     .filter(
       (project) =>
         projects[project].type.startsWith("PROJECT") && projects[project].active
     )
     .map((project) => {
       return (
-        <th
-          style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}
-          key={"header_" + project}
-        >
+        <th style={{ backgroundColor: "#17a2b8" }} key={"header_" + project}>
           {project}
         </th>
       );
@@ -289,8 +296,7 @@ const SprintTable = () => {
           &nbsp;&nbsp;
           <div style={{ display: "inline-block" }}>
             <h4>
-              {selectedYear} / {selectedSprint} -{" "}
-              {sprints[selectedYear][selectedSprint].name}
+              {selectedYear} / {selectedSprint} - {currentSprint.name}
             </h4>
           </div>
         </Col>
@@ -332,12 +338,8 @@ const SprintTable = () => {
                   </Row>
                 </th>
                 <th>Day Capa.</th>
-                <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
-                  OOTO
-                </th>
-                <th style={{ backgroundColor: "#FBFCFC", color: "#454d55" }}>
-                  Holidays
-                </th>
+                <th style={{ backgroundColor: "#17a2b8" }}>OOTO</th>
+                <th style={{ backgroundColor: "#17a2b8" }}>Holidays</th>
                 {nonProjectTableHeaders}
                 {projectTableHeaders}
               </tr>
