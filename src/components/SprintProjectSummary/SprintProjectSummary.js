@@ -84,8 +84,8 @@ const SprintProjectSummary = () => {
           <th>End Velocity</th> */}
           <td>{project}</td>
           <td>{projectDays}</td>
-          {/* FIXME: HARDCODED VELOCITY */}
-          <td>{(projectDays * 0.24).toFixed(2)}</td>
+          {/* FIXME: HARDCODED VELOCITY 0.2 */}
+          <td>{(projectDays * 0.2).toFixed(2)}</td>
           {storyDataCells}
           <td>
             {(
@@ -106,7 +106,7 @@ const SprintProjectSummary = () => {
   return (
     <Container>
       <Row>
-        Note: (Point Capacity is Optimal: 0.24 velocity hard coded)
+        Note: (Point Capacity is Optimal: 0.20 velocity hard coded)
         <Table striped bordered hover variant="dark">
           <thead>
             <tr key={"header"}>

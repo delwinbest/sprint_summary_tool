@@ -1,9 +1,22 @@
+.table td {
+  text-align: center;
+  align-content: center !important;
+  vertical-align: middle !important;
+}
+
+thead {
+  th {
+    font-size: 0.9rem !important;
+  }
+}
+
 td {
   input {
     text-align: center !important;
     color: white !important;
     background-color: transparent !important;
     border-color: transparent !important;
+    font-size: 0.9rem !important;
 
     &:hover {
       background-color: white !important;

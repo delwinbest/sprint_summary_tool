@@ -38,7 +38,7 @@ const initialState = {
     type: projectTypes.OOTO,
     active: true,
   },
-  Holidays: {
+  Holiday: {
     type: projectTypes.OOTO_HOLIDAY,
     active: true,
   },

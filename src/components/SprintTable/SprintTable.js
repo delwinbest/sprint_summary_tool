@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./SprintTable.scss";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Container,
@@ -51,8 +50,8 @@ const SprintTable = () => {
   const handleSprintAddModalShow = () => setSprintAddModal(true);
 
   useEffect(() => {
-    const year = Object.keys(sprints).pop();
-    const week = Object.keys(sprints[year]).pop();
+    const year = Object.keys(sprints).sort().pop();
+    const week = Object.keys(sprints[year]).sort().pop();
     setSelectedYear(year);
     setSelectedSprint(week);
     return () => {};
@@ -71,18 +70,20 @@ const SprintTable = () => {
       </Dropdown.Item>
     );
   });
-  const sprintWeeks = Object.keys(sprints[selectedSprint.year]).map((week) => {
-    return (
-      <Dropdown.Item
-        key={week}
-        eventKey={week}
-        onClick={() => setSelectedSprint(week)}
-        active={week === selectedSprint.weekNum ? true : false}
-      >
-        {week + " - " + sprints[selectedSprint.year][week].name}
-      </Dropdown.Item>
-    );
-  });
+  const sprintWeeks = Object.keys(sprints[selectedSprint.year])
+    .sort()
+    .map((week) => {
+      return (
+        <Dropdown.Item
+          key={week}
+          eventKey={week}
+          onClick={() => setSelectedSprint(week)}
+          active={week === selectedSprint.weekNum ? true : false}
+        >
+          {week + " - " + sprints[selectedSprint.year][week].name}
+        </Dropdown.Item>
+      );
+    });
 
   const handleSprintAddProjects = () => {
     dispatch({
@@ -221,11 +222,11 @@ const SprintTable = () => {
             )}
           />
         </td>
-        <td style={altStyle} key={"Holidays_" + member}>
+        <td style={altStyle} key={"Holiday_" + member}>
           <Form.Control
-            onChange={(event) => handleEntryOnChange("Holidays", member, event)}
+            onChange={(event) => handleEntryOnChange("Holiday", member, event)}
             placeholder={getPropertySafely(
-              selectedSprintData.capacity[member].Holidays,
+              selectedSprintData.capacity[member].Holiday,
               "..."
             )}
           />
@@ -357,7 +358,7 @@ const SprintTable = () => {
               </th>
               <th>Day Capa.</th>
               <th style={{ backgroundColor: "#17a2b8" }}>OOTO</th>
-              <th style={{ backgroundColor: "#17a2b8" }}>Holidays</th>
+              <th style={{ backgroundColor: "#17a2b8" }}>Holiday</th>
               {nonProjectTableHeaders}
               {projectTableHeaders}
             </tr>

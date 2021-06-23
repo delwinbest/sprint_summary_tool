@@ -22,7 +22,7 @@ export const calculateBusinessProjectCapacity = (sprintData, projectData) => {
 };
 
 export const calculateOOTOCapacity = (sprintData, projectData) => {
-  // I Expect to get the sprint object and the Project Data object, and then return the capacity relating to OOTO (OOTO, Holidays, Bank Holidays, Etc)
+  // I Expect to get the sprint object and the Project Data object, and then return the capacity relating to OOTO (OOTO, Holiday, Bank Holiday, Etc)
 
   // Then filter NON Projects using the Project data
   const ootoProjects = Object.keys(projectData).filter(

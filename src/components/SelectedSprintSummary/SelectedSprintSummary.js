@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, ProgressBar, Row, Table } from "react-bootstrap";
+import { Container, ProgressBar, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import * as services from "../../services/index";
 
@@ -23,42 +23,6 @@ const SelectedSprintSummary = () => {
   } = services.calculateSprintCapacity(selectedSprintData, projects);
 
   let progressbar = <div>Add members to sprint</div>;
-
-  const keySprintMetrics = (
-    <Container>
-      <Table striped bordered hover>
-        <thead>
-          <tr key={"header"}>
-            <th>week</th>
-            <th>Sprint Name</th>
-            <th>Day Capacity</th>
-            <th>Point Capacity</th>
-            <th>Points Planned</th>
-            <th>Story Count</th>
-            <th>Points Completed</th>
-            <th>Story Count Completed</th>
-            <th>Trailing Velocity</th>
-            <th>Planned Velocity</th>
-            <th>End Velocity</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>W23</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>W24</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>W25</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </Table>
-    </Container>
-  );
 
   if (totalSprintCapacity > 0) {
     progressbar = (
@@ -115,7 +79,6 @@ const SelectedSprintSummary = () => {
   }
   return (
     <React.Fragment>
-      {keySprintMetrics}
       <Container>{progressbar}</Container>
     </React.Fragment>
   );
