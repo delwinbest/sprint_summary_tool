@@ -1,5 +1,5 @@
 export const calculateTotalSprintStoryTotal = (sprintData) => {
-  // This taskes a sprint data object and returns the totals for stories and points planned + completed.
+  // This takes a sprint data object and returns the totals for stories and points planned + completed.
 
   // Get the sprint storydata
   const storyData = sprintData.storyData;
@@ -11,9 +11,9 @@ export const calculateTotalSprintStoryTotal = (sprintData) => {
   Object.keys(storyData).forEach((project) => {
     Object.keys(storyData[project]).forEach((storyAttrib) => {
       if (storyPointTotals[storyAttrib] !== undefined) {
-        storyPointTotals[storyAttrib] += storyData[project][storyAttrib];
+        storyPointTotals[storyAttrib] += +storyData[project][storyAttrib];
       } else {
-        storyPointTotals[storyAttrib] = storyData[project][storyAttrib];
+        storyPointTotals[storyAttrib] = +storyData[project][storyAttrib];
       }
     });
   });

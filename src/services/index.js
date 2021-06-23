@@ -5,4 +5,8 @@ export {
   calculateSprintCapacity,
 } from "./calculators/capacityCalculators";
 export { calculateTotalSprintStoryTotal } from "./calculators/storypointCalculator";
-export { calculateVelocity } from "./calculators/velocityCalculators";
+export {
+  calculateVelocity,
+  calculateTrailingVelocity,
+  calculateVelocityFromSprintData,
+} from "./calculators/velocityCalculators";

@@ -19,7 +19,7 @@ const SprintProjectSummary = () => {
     return defaultVal;
   }
   const handleEntryOnChange = (project, dataType, event) => {
-    // Expect year, weekNum, project, dataType, data
+    // Expect project, dataType, data
 
     if (event.target.value === "") {
       dispatch({

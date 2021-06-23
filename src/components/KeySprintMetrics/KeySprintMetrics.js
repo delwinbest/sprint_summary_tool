@@ -24,9 +24,9 @@ const KeySprintMetrics = () => {
     // Get Sprint Stats
     const {
       // nonProjectCapacity,
-      // businessProjectCapacity,
+      businessProjectCapacity,
       // ootoCapacity,
-      totalSprintCapacity,
+      //totalSprintCapacity,
     } = services.calculateSprintCapacity(sprintData, projects);
 
     const { pointsCompleted, pointsPlanned, tasksCompleted, tasksPlanned } =
@@ -34,23 +34,32 @@ const KeySprintMetrics = () => {
 
     // FIXME: HARDCODED AVG VELOCITY
     const averagevelocity = 0.2;
-    const sprintPointCapacity = totalSprintCapacity * averagevelocity;
+    const { trailingSprintVelocity } = services.calculateTrailingVelocity(
+      sprints[currentYear],
+      weekNum,
+      sprintnumbertoaverage,
+      projects
+    );
+
+    const sprintPointCapacity = (
+      businessProjectCapacity * averagevelocity
+    ).toFixed(2);
     return (
       <tr key={weekNum}>
         <td>{weekNum}</td>
         <td>{sprintData.name}</td>
-        <td>{totalSprintCapacity}</td>
+        <td>{businessProjectCapacity}</td>
         <td>{sprintPointCapacity}</td>
         <td>{pointsPlanned}</td>
         <td>{tasksPlanned}</td>
         <td>{pointsCompleted}</td>
         <td>{tasksCompleted}</td>
-        <td>tbd</td>
+        <td>{trailingSprintVelocity}</td>
         <td>
-          {services.calculateVelocity(pointsPlanned, totalSprintCapacity)}
+          {services.calculateVelocity(pointsPlanned, businessProjectCapacity)}
         </td>
         <td>
-          {services.calculateVelocity(pointsCompleted, totalSprintCapacity)}
+          {services.calculateVelocity(pointsCompleted, businessProjectCapacity)}
         </td>
       </tr>
     );
@@ -63,7 +72,7 @@ const KeySprintMetrics = () => {
           <tr key={"header"}>
             <th>week</th>
             <th>Sprint Name</th>
-            <th>Day Capacity</th>
+            <th>Proj. Day Capacity</th>
             <th>Point Capacity</th>
             <th>Points Planned</th>
             <th>Story Count</th>
