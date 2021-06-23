@@ -9,8 +9,13 @@ const SelectedSprintSummary = () => {
   const projects = useSelector((state) => state.projects);
 
   const selectedSprint = uistate.selectedSprint;
-  const selectedSprintData =
-    sprints[selectedSprint.year][selectedSprint.weekNum];
+
+  let selectedSprintData = null;
+  if (
+    sprints[selectedSprint.year] !== undefined &&
+    sprints[selectedSprint.year][selectedSprint.weekNum] !== undefined
+  )
+    selectedSprintData = sprints[selectedSprint.year][selectedSprint.weekNum];
 
   // Get the capacity assigned to Non Projects in this Sprint
   // Get the capacity assigned to Business Projects in this Sprint

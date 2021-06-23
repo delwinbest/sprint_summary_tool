@@ -10,8 +10,12 @@ const SprintProjectSummary = () => {
   const uistate = useSelector((state) => state.uistate);
 
   const selectedSprint = uistate.selectedSprint;
-  const selectedSprintData =
-    sprints[selectedSprint.year][selectedSprint.weekNum];
+  let selectedSprintData = null;
+  if (
+    sprints[selectedSprint.year] !== undefined &&
+    sprints[selectedSprint.year][selectedSprint.weekNum] !== undefined
+  )
+    selectedSprintData = sprints[selectedSprint.year][selectedSprint.weekNum];
 
   function getPropertySafely(object, defaultVal) {
     if (object !== undefined) return object;

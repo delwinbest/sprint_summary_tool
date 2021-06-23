@@ -2,8 +2,8 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   selectedSprint: {
-    year: "2021",
-    weekNum: "W01",
+    year: "",
+    weekNum: "",
   },
 };
 

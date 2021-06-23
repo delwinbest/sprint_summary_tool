@@ -25,8 +25,12 @@ const UIControls = () => {
   // const [selectedYear, setSelectedYear] = useState("2021");
   // const [selectedSprint, setSelectedSprint] = useState("W01");
   const selectedSprint = uistate.selectedSprint;
-  const selectedSprintData =
-    sprints[selectedSprint.year][selectedSprint.weekNum];
+  let selectedSprintData = null;
+  if (
+    sprints[selectedSprint.year] !== undefined &&
+    sprints[selectedSprint.year][selectedSprint.weekNum] !== undefined
+  )
+    selectedSprintData = sprints[selectedSprint.year][selectedSprint.weekNum];
 
   const setSelectedYear = (year) => {
     dispatch({
@@ -69,20 +73,23 @@ const UIControls = () => {
       </Dropdown.Item>
     );
   });
-  const sprintWeeks = Object.keys(sprints[selectedSprint.year])
-    .sort()
-    .map((week) => {
-      return (
-        <Dropdown.Item
-          key={week}
-          eventKey={week}
-          onClick={() => setSelectedSprint(week)}
-          active={week === selectedSprint.weekNum ? true : false}
-        >
-          {week + " - " + sprints[selectedSprint.year][week].name}
-        </Dropdown.Item>
-      );
-    });
+
+  let sprintWeeks = [];
+  if (sprints[selectedSprint.year] !== undefined)
+    sprintWeeks = Object.keys(sprints[selectedSprint.year])
+      .sort()
+      .map((week) => {
+        return (
+          <Dropdown.Item
+            key={week}
+            eventKey={week}
+            onClick={() => setSelectedSprint(week)}
+            active={week === selectedSprint.weekNum ? true : false}
+          >
+            {week + " - " + sprints[selectedSprint.year][week].name}
+          </Dropdown.Item>
+        );
+      });
 
   const handleSprintAddProjects = () => {
     dispatch({
@@ -170,8 +177,9 @@ const UIControls = () => {
           &nbsp;&nbsp;
           <div style={{ display: "inline-block" }}>
             <h4>
-              {selectedSprint.year} / {selectedSprint.weekNum} -{" "}
-              {selectedSprintData.name}
+              {selectedSprintData !== null && selectedSprint.year} /{" "}
+              {selectedSprintData !== null && selectedSprint.weekNum} -{" "}
+              {selectedSprintData !== null && selectedSprintData.name}
             </h4>
           </div>
         </Col>

@@ -13,9 +13,11 @@ const KeySprintMetrics = () => {
   const sprintnumbertoaverage = 6;
 
   // Let's get the $'sprintnumbertoshow' recent sprints
-  const sprintsToShow = Object.keys(sprints[currentYear])
-    .slice(-sprintnumbertoshow)
-    .sort();
+  let sprintsToShow = [];
+  if (sprints[currentYear] !== undefined)
+    sprintsToShow = Object.keys(sprints[currentYear])
+      .slice(-sprintnumbertoshow)
+      .sort();
 
   // Build the table rows for the selected sprints
   const keyMetricsData = sprintsToShow.map((weekNum) => {

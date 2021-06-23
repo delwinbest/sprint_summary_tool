@@ -1,25 +1,6 @@
 import * as actionTypes from "../actions/actionTypes";
 
-const initialState = {
-  2021: {
-    W01: {
-      name: "Sprint 01",
-      members: [],
-      startDate: "2021-01-01",
-      sprintDurationDays: 10,
-      projects: [],
-      capacity: {},
-      storyData: {
-        MAPPS: {
-          tasksPlanned: 5,
-          tasksCompleted: 3,
-          pointsPlanned: 3,
-          pointsCompleted: 2,
-        },
-      },
-    },
-  },
-};
+const initialState = {};
 
 const addSprint = (state, action) => {
   return {
