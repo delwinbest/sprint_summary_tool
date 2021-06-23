@@ -57,7 +57,7 @@ const SelectedSprintSummary = () => {
                 2
               )}
               key={2}
-              label={`KTLO ${(
+              label={`TEAM ${(
                 (nonProjectCapacity / totalSprintCapacity) *
                 100
               ).toFixed(2)}%`}

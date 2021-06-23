@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Table, Row, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
+import * as services from "../../services/index";
 
 const SprintProjectSummary = () => {
   const dispatch = useDispatch();
@@ -44,12 +45,13 @@ const SprintProjectSummary = () => {
   const projectSummmary = Object.keys(selectedSprintData.storyData).map(
     (project) => {
       let projectDays = 0;
+      const projectData = selectedSprintData.storyData[project];
+
       Object.keys(selectedSprintData.capacity).forEach((member) => {
         if (selectedSprintData.capacity[member][project] !== undefined) {
           projectDays += +selectedSprintData.capacity[member][project];
         }
       });
-
       const storyDataCells = [
         "pointsPlanned",
         "tasksPlanned",
@@ -62,10 +64,7 @@ const SprintProjectSummary = () => {
               onChange={(event) =>
                 handleEntryOnChange(project, attribute, event)
               }
-              placeholder={getPropertySafely(
-                selectedSprintData.storyData[project][attribute],
-                "..."
-              )}
+              placeholder={getPropertySafely(projectData[attribute], "...")}
             />
           </td>
         );
@@ -88,15 +87,13 @@ const SprintProjectSummary = () => {
           <td>{(projectDays * 0.2).toFixed(2)}</td>
           {storyDataCells}
           <td>
-            {(
-              selectedSprintData.storyData[project].pointsPlanned / projectDays
-            ).toFixed(2)}
+            {services.calculateVelocity(projectData.pointsPlanned, projectDays)}
           </td>
           <td>
-            {(
-              selectedSprintData.storyData[project].pointsCompleted /
+            {services.calculateVelocity(
+              projectData.pointsCompleted,
               projectDays
-            ).toFixed(2)}
+            )}
           </td>
         </tr>
       );

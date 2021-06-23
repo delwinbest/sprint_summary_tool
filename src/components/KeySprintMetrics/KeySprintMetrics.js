@@ -23,11 +23,14 @@ const KeySprintMetrics = () => {
 
     // Get Sprint Stats
     const {
-      nonProjectCapacity,
-      businessProjectCapacity,
-      ootoCapacity,
+      // nonProjectCapacity,
+      // businessProjectCapacity,
+      // ootoCapacity,
       totalSprintCapacity,
     } = services.calculateSprintCapacity(sprintData, projects);
+
+    const { pointsCompleted, pointsPlanned, tasksCompleted, tasksPlanned } =
+      services.calculateTotalSprintStoryTotal(sprintData);
 
     // FIXME: HARDCODED AVG VELOCITY
     const averagevelocity = 0.2;
@@ -37,7 +40,18 @@ const KeySprintMetrics = () => {
         <td>{weekNum}</td>
         <td>{sprintData.name}</td>
         <td>{totalSprintCapacity}</td>
-        <td> {sprintPointCapacity}</td>
+        <td>{sprintPointCapacity}</td>
+        <td>{pointsPlanned}</td>
+        <td>{tasksPlanned}</td>
+        <td>{pointsCompleted}</td>
+        <td>{tasksCompleted}</td>
+        <td>tbd</td>
+        <td>
+          {services.calculateVelocity(pointsPlanned, totalSprintCapacity)}
+        </td>
+        <td>
+          {services.calculateVelocity(pointsCompleted, totalSprintCapacity)}
+        </td>
       </tr>
     );
   });
