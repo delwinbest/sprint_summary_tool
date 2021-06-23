@@ -4,18 +4,18 @@ import "./App.scss";
 
 import NavBar from "./components/navigation/NavBar";
 import SprintTable from "./components/SprintTable/SprintTable";
-import SelectedSprintSummary from "./components/SelectedSprintSummary/SelectedSprintSummary";
 import SprintProjectSummary from "./components/SprintProjectSummary/SprintProjectSummary";
 import KeySprintMetrics from "./components/KeySprintMetrics/KeySprintMetrics";
+import UIControls from "./components/UIControls/UIControls";
 
 function App() {
   return (
     <Container>
       <NavBar />
       <br />
-      <KeySprintMetrics />
+      <UIControls />
       <br />
-      <SelectedSprintSummary />
+      <KeySprintMetrics />
       <br />
       <SprintTable />
       <br />
