@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, ProgressBar, Row, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import * as services from "../../services/index";
 
 const SelectedSprintSummary = () => {
   const sprints = useSelector((state) => state.sprints);
@@ -11,50 +12,23 @@ const SelectedSprintSummary = () => {
   const selectedSprintData =
     sprints[selectedSprint.year][selectedSprint.weekNum];
 
-  const nonProjects = Object.keys(projects).filter(
-    (project) =>
-      projects[project].type.startsWith("NON_PROJECT") &&
-      projects[project].active === true
+  // Get the capacity assigned to Non Projects in this Sprint
+  const { nonProjectCapacity } = services.calculateNonProjectCapacity(
+    selectedSprintData,
+    projects
   );
 
-  const businessProjects = Object.keys(projects).filter(
-    (project) =>
-      projects[project].type.startsWith("PROJECT") &&
-      projects[project].active === true
+  // Get the capacity assigned to Business Projects in this Sprint
+  const { businessProjectCapacity } = services.calculateBusinessProjectCapacity(
+    selectedSprintData,
+    projects
   );
 
-  const ootoProjects = Object.keys(projects).filter(
-    (project) =>
-      projects[project].type.startsWith("OOTO") &&
-      projects[project].active === true
+  // Get the capacity assigned to OOTO in this Sprint
+  const { ootoCapacity } = services.calculateOOTOCapacity(
+    selectedSprintData,
+    projects
   );
-
-  let ootoCapacity = 0;
-  ootoProjects.forEach((project) => {
-    Object.keys(selectedSprintData.capacity).forEach((member) => {
-      if (selectedSprintData.capacity[member][project] !== undefined) {
-        ootoCapacity += +selectedSprintData.capacity[member][project];
-      }
-    });
-  });
-
-  let projectCapacity = 0;
-  businessProjects.forEach((project) => {
-    Object.keys(selectedSprintData.capacity).forEach((member) => {
-      if (selectedSprintData.capacity[member][project] !== undefined) {
-        projectCapacity += +selectedSprintData.capacity[member][project];
-      }
-    });
-  });
-
-  let nonProjectCapacity = 0;
-  nonProjects.forEach((project) => {
-    Object.keys(selectedSprintData.capacity).forEach((member) => {
-      if (selectedSprintData.capacity[member][project] !== undefined) {
-        nonProjectCapacity += +selectedSprintData.capacity[member][project];
-      }
-    });
-  });
 
   const totalCapacity =
     +selectedSprintData.sprintDurationDays * selectedSprintData.members.length;
@@ -114,10 +88,10 @@ const SelectedSprintSummary = () => {
             <ProgressBar
               striped
               variant="success"
-              now={((projectCapacity / totalCapacity) * 100).toFixed(2)}
+              now={((businessProjectCapacity / totalCapacity) * 100).toFixed(2)}
               key={1}
               label={`PROJECT ${(
-                (projectCapacity / totalCapacity) *
+                (businessProjectCapacity / totalCapacity) *
                 100
               ).toFixed(2)}%`}
             />

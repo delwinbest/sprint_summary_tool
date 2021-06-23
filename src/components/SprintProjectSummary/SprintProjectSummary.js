@@ -73,7 +73,8 @@ const SprintProjectSummary = () => {
 
       return (
         <tr key={project}>
-          {/* <th>Days</th>
+          {/* HEADERS: 
+          <th>Days</th>
           <th>Point Capacity</th>
           <th>Points Planned</th>
           <th>Story Count</th>
@@ -83,6 +84,7 @@ const SprintProjectSummary = () => {
           <th>End Velocity</th> */}
           <td>{project}</td>
           <td>{projectDays}</td>
+          {/* FIXME: HARDCODED VELOCITY */}
           <td>{(projectDays * 0.24).toFixed(2)}</td>
           {storyDataCells}
           <td>
