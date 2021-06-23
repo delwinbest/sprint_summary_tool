@@ -13,25 +13,14 @@ const SelectedSprintSummary = () => {
     sprints[selectedSprint.year][selectedSprint.weekNum];
 
   // Get the capacity assigned to Non Projects in this Sprint
-  const { nonProjectCapacity } = services.calculateNonProjectCapacity(
-    selectedSprintData,
-    projects
-  );
-
   // Get the capacity assigned to Business Projects in this Sprint
-  const { businessProjectCapacity } = services.calculateBusinessProjectCapacity(
-    selectedSprintData,
-    projects
-  );
-
   // Get the capacity assigned to OOTO in this Sprint
-  const { ootoCapacity } = services.calculateOOTOCapacity(
-    selectedSprintData,
-    projects
-  );
-
-  const totalCapacity =
-    +selectedSprintData.sprintDurationDays * selectedSprintData.members.length;
+  const {
+    nonProjectCapacity,
+    businessProjectCapacity,
+    ootoCapacity,
+    totalSprintCapacity,
+  } = services.calculateSprintCapacity(selectedSprintData, projects);
 
   let progressbar = <div>Add members to sprint</div>;
 
@@ -71,7 +60,7 @@ const SelectedSprintSummary = () => {
     </Container>
   );
 
-  if (totalCapacity > 0) {
+  if (totalSprintCapacity > 0) {
     progressbar = (
       <Container>
         <Row style={{ alignItems: "center", flexBasis: "auto" }}>
@@ -88,30 +77,36 @@ const SelectedSprintSummary = () => {
             <ProgressBar
               striped
               variant="success"
-              now={((businessProjectCapacity / totalCapacity) * 100).toFixed(2)}
+              now={(
+                (businessProjectCapacity / totalSprintCapacity) *
+                100
+              ).toFixed(2)}
               key={1}
               label={`PROJECT ${(
-                (businessProjectCapacity / totalCapacity) *
+                (businessProjectCapacity / totalSprintCapacity) *
                 100
               ).toFixed(2)}%`}
             />
             <ProgressBar
               variant="warning"
-              now={((nonProjectCapacity / totalCapacity) * 100).toFixed(2)}
+              now={((nonProjectCapacity / totalSprintCapacity) * 100).toFixed(
+                2
+              )}
               key={2}
               label={`KTLO ${(
-                (nonProjectCapacity / totalCapacity) *
+                (nonProjectCapacity / totalSprintCapacity) *
                 100
               ).toFixed(2)}%`}
             />
             <ProgressBar
               striped
               variant="info"
-              now={((ootoCapacity / totalCapacity) * 100).toFixed(2)}
+              now={((ootoCapacity / totalSprintCapacity) * 100).toFixed(2)}
               key={3}
-              label={`OOTO ${((ootoCapacity / totalCapacity) * 100).toFixed(
-                2
-              )}%`}
+              label={`OOTO ${(
+                (ootoCapacity / totalSprintCapacity) *
+                100
+              ).toFixed(2)}%`}
             />
           </ProgressBar>
         </Row>

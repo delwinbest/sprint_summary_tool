@@ -66,3 +66,34 @@ export const calculateNonProjectCapacity = (sprintData, projectData) => {
 
   return { nonProjectCapacity };
 };
+
+export const calculateSprintCapacity = (sprintData, projectData) => {
+  // THIS IS ALL DAY CAPACITY
+  // I Expect to get the sprint object and the Project Data object, and then return the capacity in multiple dimentions
+
+  // Get the capacity assigned to Non Projects in this Sprint
+  const { nonProjectCapacity } = calculateNonProjectCapacity(
+    sprintData,
+    projectData
+  );
+
+  // Get the capacity assigned to Business Projects in this Sprint
+  const { businessProjectCapacity } = calculateBusinessProjectCapacity(
+    sprintData,
+    projectData
+  );
+
+  // Get the capacity assigned to OOTO in this Sprint
+  const { ootoCapacity } = calculateOOTOCapacity(sprintData, projectData);
+
+  // Get Total DAY Capacity Base on Members in Team
+  const totalSprintCapacity =
+    +sprintData.sprintDurationDays * sprintData.members.length;
+
+  return {
+    nonProjectCapacity,
+    businessProjectCapacity,
+    ootoCapacity,
+    totalSprintCapacity,
+  };
+};
