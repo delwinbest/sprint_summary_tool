@@ -34,16 +34,14 @@ const UIControls = () => {
 
   const setSelectedYear = (year) => {
     dispatch({
-      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT,
+      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT_YEAR,
       year: year,
-      weekNum: selectedSprint.weekNum,
     });
   };
 
   const setSelectedSprint = (weekNum) => {
     dispatch({
-      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT,
-      year: selectedSprint.year,
+      type: actionTypes.STATE_UPDATE_SELECTED_SPRINT_WEEK,
       weekNum: weekNum,
     });
   };
@@ -53,13 +51,18 @@ const UIControls = () => {
   const handleSprintAddModalShow = () => setSprintAddModal(true);
 
   useEffect(() => {
-    const year = Object.keys(sprints).sort().pop();
-    const week = Object.keys(sprints[year]).sort().pop();
-    setSelectedYear(year);
-    setSelectedSprint(week);
+    if (sprints !== null || sprints !== {}) {
+      const year = Object.keys(sprints).sort().pop();
+      setSelectedYear(year);
+      let week = null;
+      if (sprints[year] !== undefined) {
+        week = Object.keys(sprints[year]).sort().pop();
+        setSelectedSprint(week);
+      }
+    }
     return () => {};
     // eslint-disable-next-line
-  }, []);
+  }, [sprints]);
 
   const sprintYears = Object.keys(sprints).map((year) => {
     return (

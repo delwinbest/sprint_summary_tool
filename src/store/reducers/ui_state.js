@@ -7,11 +7,21 @@ const initialState = {
   },
 };
 
-const updateSelectedSprint = (state, action) => {
+const updateSelectedSprintYear = (state, action) => {
   return {
     ...state,
     selectedSprint: {
+      ...state.selectedSprint,
       year: action.year,
+    },
+  };
+};
+
+const updateSelectedSprintWeek = (state, action) => {
+  return {
+    ...state,
+    selectedSprint: {
+      ...state.selectedSprint,
       weekNum: action.weekNum,
     },
   };
@@ -19,8 +29,10 @@ const updateSelectedSprint = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.STATE_UPDATE_SELECTED_SPRINT:
-      return updateSelectedSprint(state, action);
+    case actionTypes.STATE_UPDATE_SELECTED_SPRINT_YEAR:
+      return updateSelectedSprintYear(state, action);
+    case actionTypes.STATE_UPDATE_SELECTED_SPRINT_WEEK:
+      return updateSelectedSprintWeek(state, action);
     default:
       return state;
   }

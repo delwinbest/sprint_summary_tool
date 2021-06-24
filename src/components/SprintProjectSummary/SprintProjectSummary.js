@@ -46,37 +46,39 @@ const SprintProjectSummary = () => {
     }
   };
 
-  const projectSummmary = Object.keys(selectedSprintData.storyData).map(
-    (project) => {
-      let projectDays = 0;
-      const projectData = selectedSprintData.storyData[project];
+  let projectSummmary = [];
+  if (selectedSprintData !== null)
+    projectSummmary = Object.keys(selectedSprintData.storyData).map(
+      (project) => {
+        let projectDays = 0;
+        const projectData = selectedSprintData.storyData[project];
 
-      Object.keys(selectedSprintData.capacity).forEach((member) => {
-        if (selectedSprintData.capacity[member][project] !== undefined) {
-          projectDays += +selectedSprintData.capacity[member][project];
-        }
-      });
-      const storyDataCells = [
-        "pointsPlanned",
-        "tasksPlanned",
-        "pointsCompleted",
-        "tasksCompleted",
-      ].map((attribute) => {
+        Object.keys(selectedSprintData.capacity).forEach((member) => {
+          if (selectedSprintData.capacity[member][project] !== undefined) {
+            projectDays += +selectedSprintData.capacity[member][project];
+          }
+        });
+        const storyDataCells = [
+          "pointsPlanned",
+          "tasksPlanned",
+          "pointsCompleted",
+          "tasksCompleted",
+        ].map((attribute) => {
+          return (
+            <td>
+              <Form.Control
+                onChange={(event) =>
+                  handleEntryOnChange(project, attribute, event)
+                }
+                placeholder={getPropertySafely(projectData[attribute], "...")}
+              />
+            </td>
+          );
+        });
+
         return (
-          <td>
-            <Form.Control
-              onChange={(event) =>
-                handleEntryOnChange(project, attribute, event)
-              }
-              placeholder={getPropertySafely(projectData[attribute], "...")}
-            />
-          </td>
-        );
-      });
-
-      return (
-        <tr key={project}>
-          {/* HEADERS: 
+          <tr key={project}>
+            {/* HEADERS: 
           <th>Days</th>
           <th>Point Capacity</th>
           <th>Points Planned</th>
@@ -85,24 +87,27 @@ const SprintProjectSummary = () => {
           <th>Story Count Completed</th>
           <th>Planned Velocity</th>
           <th>End Velocity</th> */}
-          <td>{project}</td>
-          <td>{projectDays}</td>
-          {/* FIXME: HARDCODED VELOCITY 0.2 */}
-          <td>{(projectDays * 0.2).toFixed(2)}</td>
-          {storyDataCells}
-          <td>
-            {services.calculateVelocity(projectData.pointsPlanned, projectDays)}
-          </td>
-          <td>
-            {services.calculateVelocity(
-              projectData.pointsCompleted,
-              projectDays
-            )}
-          </td>
-        </tr>
-      );
-    }
-  );
+            <td>{project}</td>
+            <td>{projectDays}</td>
+            {/* FIXME: HARDCODED VELOCITY 0.2 */}
+            <td>{(projectDays * 0.2).toFixed(2)}</td>
+            {storyDataCells}
+            <td>
+              {services.calculateVelocity(
+                projectData.pointsPlanned,
+                projectDays
+              )}
+            </td>
+            <td>
+              {services.calculateVelocity(
+                projectData.pointsCompleted,
+                projectDays
+              )}
+            </td>
+          </tr>
+        );
+      }
+    );
 
   return (
     <Container>
