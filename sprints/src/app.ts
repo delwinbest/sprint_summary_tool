@@ -4,7 +4,8 @@ import { json } from 'body-parser';
 import cookiesession from 'cookie-session';
 
 import { healthzRouter } from './routes/healthz';
-import { newSprintRouter } from './routes/sprints';
+import { newSprintRouter } from './routes/new';
+import { indexSprintRouter } from './routes';
 
 import {
   errorHandler,
@@ -24,6 +25,7 @@ app.use(
 app.use(healthzRouter);
 app.use(currentUser);
 app.use(newSprintRouter);
+app.use(indexSprintRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
