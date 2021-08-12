@@ -5,7 +5,7 @@ import {
 } from '@sprintsummarytool/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { Sprint } from '../models/sprints';
+import { Sprint } from '../models/sprint';
 
 const router = express.Router();
 

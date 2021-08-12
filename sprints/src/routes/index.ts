@@ -1,5 +1,5 @@
 import express, { Response, Request } from 'express';
-import { Sprint } from '../models/sprints';
+import { Sprint } from '../models/sprint';
 
 const router = express.Router();
 

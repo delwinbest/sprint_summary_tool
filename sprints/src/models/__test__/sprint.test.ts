@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Sprint } from '../sprints';
+import { Sprint } from '../sprint';
 import { SprintStatus } from '@sprintsummarytool/common';
 
 it('increments the version number on multiple saves', async () => {

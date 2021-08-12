@@ -6,6 +6,8 @@ import cookiesession from 'cookie-session';
 import { healthzRouter } from './routes/healthz';
 import { newSprintRouter } from './routes/new';
 import { indexSprintRouter } from './routes';
+import { showSprintRouter } from './routes/show';
+import { updateSprintRouter } from './routes/update';
 
 import {
   errorHandler,
@@ -26,6 +28,8 @@ app.use(healthzRouter);
 app.use(currentUser);
 app.use(newSprintRouter);
 app.use(indexSprintRouter);
+app.use(showSprintRouter);
+app.use(updateSprintRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
