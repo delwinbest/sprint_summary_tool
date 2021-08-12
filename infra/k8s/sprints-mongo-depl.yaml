@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sprints-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sprints-mongo
+  template:
+    metadata:
+      labels:
+        app: sprints-mongo
+    spec:
+      containers:
+        - name: sprints-mongo
+          image: mongo
+          # resources:
+          #   limits:
+          #     memory: '128Mi'
+          #     cpu: '150m'
+          ports:
+            - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sprints-mongo-srv
+spec:
+  selector:
+    app: sprints-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

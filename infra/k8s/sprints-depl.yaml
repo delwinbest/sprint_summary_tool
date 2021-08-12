@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sprints-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sprints
+  template:
+    metadata:
+      labels:
+        app: sprints
+    spec:
+      containers:
+        - name: sprints
+          image: delwinrbest/smt_sprints
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://sprints-mongo-srv:27017/sprints'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+          # resources:
+          #   limits:
+          #     memory: '128Mi'
+          #     cpu: '200m'
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /api/users/healthz
+              port: 3000
+              httpHeaders:
+                - name: Content-Type
+                  value: application/json
+            initialDelaySeconds: 120
+            periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sprints-srv
+spec:
+  selector:
+    app: sprints
+  ports:
+    - name: sprints
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

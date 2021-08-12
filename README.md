@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# Ticketing Microservices Example
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repo contains a collection of microservice code each hosted in their own dockerised containers. The entire collection is to be run on a Kubernetes cluster, using GitHub workflows for Prod and Skaffold for continuous deployment into local Docker and Kubernetes instances. Folder Structure:
 
-## Available Scripts
+- [.github] Github workflow scripts
+- [infra] Kubernetes Service Container Build and Deploy Configuration
+- [common] Common NPM module which contains Event, Publisher and Listener base components
+- [client] NextJS User Interface
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+TODO
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prerequisities
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+In order to run this container you'll need the following installed:
 
-### `npm test`
+- **Docker:** [Windows](https://docs.docker.com/windows/started), [OS X](https://docs.docker.com/mac/started/), [Linux](https://docs.docker.com/linux/started/)
+- **Kubernetes:** Accessible via 'kubectl'. This can either be enabled in Docker Desktop / Settings, or access configured to a AWS EKS or Google Kubenetes Cluster. See [Getting Started](https://kubernetes.io/docs/setup/).
+- **Ingress NGINX:** Provides access to docker containers running inside a clusters. Steps to enable for each platform can be found on the Kubernetes [NGINX Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+For Continuous Test / Development:
 
-### `npm run build`
+- Skaffold: Skaffold handles the workflow for building, pushing and deploying your application. [Install Guide](https://skaffold.dev/docs/install/). If using Mac OSX, I strgonly suggest using [Homebrew](https://brew.sh/) package management to install Skaffold.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Add Secrets to Kubernets Cluster** by running (insert the key/text win the '$' placeholders) from a local terminal:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```shell
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=$RANDOM_TEST
+```
 
-### `npm run eject`
+2. Download this repo's source code and start a terminal from with the directory.
+3. Build and Deploy the your Dev environment by running:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```shell
+skaffold dev
+```

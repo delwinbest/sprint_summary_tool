@@ -1,0 +1,27 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      # - ./infra/k8s/*
+      - ./infra/k8s-dev/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: delwinrbest/smt_sprints
+      context: sprints
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: ./src/**/*.ts
+            dest: .
+    - image: delwinrbest/smt_client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
