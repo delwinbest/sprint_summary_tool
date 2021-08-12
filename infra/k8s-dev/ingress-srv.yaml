@@ -18,4 +18,10 @@ spec:
                 name: client-srv
                 port:
                   number: 3000
-      # host: ticketing.delwinbest.com
+          - path: '/api/sprints/?(.*)'
+            pathType: Prefix
+            backend:
+              service:
+                name: sprints-srv
+                port:
+                  number: 3000

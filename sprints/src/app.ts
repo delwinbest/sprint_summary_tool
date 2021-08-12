@@ -5,7 +5,7 @@ import cookiesession from 'cookie-session';
 
 import { healthzRouter } from './routes/healthz';
 
-import { errorHandler, NotFoundError } from '@drbtickets/common';
+import { errorHandler, NotFoundError } from '@sprintsummarytool/common';
 
 const app = express();
 app.set('trust proxy', true);

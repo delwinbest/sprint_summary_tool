@@ -9,7 +9,7 @@ metadata:
     name: ingress-service
 spec:
   rules:
-    - host: ticketing.delwinbest.com
+    - host: sprintsummarytool.delwinbest.com
       http:
         paths:
           - path: '/?(.*)'
