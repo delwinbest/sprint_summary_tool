@@ -1,4 +1,4 @@
-# Ticketing Microservices Example
+# Sprint Summary Tool
 
 This repo contains a collection of microservice code each hosted in their own dockerised containers. The entire collection is to be run on a Kubernetes cluster, using GitHub workflows for Prod and Skaffold for continuous deployment into local Docker and Kubernetes instances. Folder Structure:
 
