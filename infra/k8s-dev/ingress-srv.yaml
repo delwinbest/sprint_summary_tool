@@ -33,3 +33,10 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
+          - path: '/api/teams/?(.*)'
+            pathType: Prefix
+            backend:
+              service:
+                name: teams-srv
+                port:
+                  number: 3000

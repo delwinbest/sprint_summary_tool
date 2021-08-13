@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import { app } from './app';
-import { TeamCreatedListener } from './events/listeners/team-created-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -37,8 +36,6 @@ const start = async () => {
     process.on('SIGTERM', () => {
       natsWrapper.client.close();
     });
-
-    new TeamCreatedListener(natsWrapper.client).listen();
 
     console.log('Connecting to ', process.env.MONGO_URI);
     await mongoose.connect(process.env.MONGO_URI, {
