@@ -1,4 +1,5 @@
 import {
+  HttpStatusCode,
   requireAuth,
   SprintStatus,
   validateRequest,
@@ -6,6 +7,8 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Sprint } from '../models/sprint';
+import { SprintCreatedPublisher } from '../events/publishers/sprint-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -16,7 +19,7 @@ router.post(
     body('name').not().isEmpty().withMessage('Sprint Name is required'),
     body('duration')
       .isFloat({ gt: 0 })
-      .withMessage('Sprint duration must be greater than 0'),
+      .withMessage('Sprint duration must be greater than 0.'),
     body('startDate').isDate().withMessage('Invalid start date (YYYY-MM-DD)'),
   ],
   validateRequest,
@@ -29,7 +32,15 @@ router.post(
       startDate,
     });
     await sprint.save();
-    res.status(201).send(sprint);
+    await new SprintCreatedPublisher(natsWrapper.client).publish({
+      id: sprint.id,
+      version: sprint.version,
+      name: sprint.name,
+      status: sprint.status,
+      duration: sprint.duration,
+      startDate: sprint.startDate,
+    });
+    res.status(HttpStatusCode.CREATED).send(sprint);
   },
 );
 
