@@ -6,13 +6,21 @@ import mongoose from 'mongoose';
 
 import { natsWrapper } from '../../nats-wrapper';
 import { HttpStatusCode } from '@sprintsummarytool/common';
+import { Team } from '../../models/team';
 
 const setup = async () => {
+  const team = Team.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    name: 'Team 01',
+    version: 0,
+  });
+  await team.save();
   const sprint = Sprint.build({
     name: 'Sprint 01',
     duration: 10,
     startDate: new Date(),
     status: SprintStatus.Active,
+    team: team.id,
   });
   await sprint.save();
   return { sprint };

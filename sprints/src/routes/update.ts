@@ -56,7 +56,7 @@ router.put(
       });
       res.send(sprint);
     } catch (error) {
-      throw new BadRequestError('Invalid Sprint ID or Request to DB');
+      throw new NotFoundError();
     }
   },
 );

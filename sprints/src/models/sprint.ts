@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { SprintStatus } from '@sprintsummarytool/common';
+import { TeamDoc } from './team';
 export { SprintStatus };
 
 interface SprintAttrs {
@@ -7,6 +8,7 @@ interface SprintAttrs {
   status: SprintStatus;
   startDate: Date;
   duration: number;
+  team: TeamDoc;
 }
 
 interface SprintDoc extends mongoose.Document {
@@ -15,6 +17,7 @@ interface SprintDoc extends mongoose.Document {
   startDate: Date;
   duration: number;
   version: number;
+  team: TeamDoc;
 }
 
 //Interface the describes properties that Sprint Model has
@@ -41,6 +44,11 @@ const sprintSchema = new mongoose.Schema(
     duration: {
       type: Number,
       required: true,
+    },
+    team: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Team',
     },
   },
   {

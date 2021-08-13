@@ -2,9 +2,11 @@ import request from 'supertest';
 import { app } from '../../app';
 import { signin } from '../../test/signin';
 import { Sprint, SprintStatus } from '../../models/sprint';
+import mongoose from 'mongoose';
 
 import { natsWrapper } from '../../nats-wrapper';
 import { HttpStatusCode } from '@sprintsummarytool/common';
+import { Team } from '../../models/team';
 
 it('has a route handler listening to /api/sprints for post requests', async () => {
   const response = await request(app).post('/api/sprints').send({});
@@ -27,10 +29,17 @@ it('returns a status other than 401 if the user is signed in', async () => {
 });
 
 it('saves a sprint to the database with version number 0', async () => {
+  const team = Team.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    name: 'Team 01',
+    version: 0,
+  });
+  await team.save();
   const requestData = {
     name: 'Sprint 01',
     duration: 10,
     startDate: '2021-12-31',
+    teamId: team.id,
   };
 
   const response = await request(app)
@@ -45,10 +54,17 @@ it('saves a sprint to the database with version number 0', async () => {
 });
 
 it('emits an sprint created event', async () => {
+  const team = Team.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    name: 'Team 01',
+    version: 0,
+  });
+  await team.save();
   const requestData = {
     name: 'Sprint 01',
     duration: 10,
     startDate: '2021-12-31',
+    teamId: team.id,
   };
 
   const response = await request(app)
