@@ -25,7 +25,6 @@ router.post(
     await team.save();
     await new TeamCreatedPublisher(natsWrapper.client).publish({
       id: team.id,
-      version: team.version,
       name: team.name,
     });
     res.status(HttpStatusCode.CREATED).send(team);

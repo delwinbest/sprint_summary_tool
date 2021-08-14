@@ -11,6 +11,8 @@ import {
   NotFoundError,
   currentUser,
 } from '@sprintsummarytool/common';
+import { showTeamRouter } from './routes/show';
+import { updateTeamRouter } from './routes/update';
 
 const app = express();
 app.set('trust proxy', true);
@@ -24,6 +26,8 @@ app.use(
 app.use(healthzRouter);
 app.use(currentUser);
 app.use(newTeamRouter);
+app.use(showTeamRouter);
+app.use(updateTeamRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

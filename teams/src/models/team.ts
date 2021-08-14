@@ -42,6 +42,6 @@ teamSchema.pre('save', function (done) {
   done();
 });
 
-const Team = mongoose.model<TeamDoc, TeamModel>('Sprint', teamSchema);
+const Team = mongoose.model<TeamDoc, TeamModel>('Team', teamSchema);
 
 export { Team };
