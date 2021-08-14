@@ -5,13 +5,10 @@ import {
   NotFoundError,
   requireAuth,
   SprintStatus,
-  BadRequestError,
 } from '@sprintsummarytool/common';
 import { Sprint } from '../models/sprint';
 import { natsWrapper } from '../nats-wrapper';
 import { SprintUpdatedPublisher } from '../events/publishers/sprint-updated-publisher';
-import mongoose from 'mongoose';
-import { isSpreadAssignment } from 'typescript';
 
 const router = express.Router();
 
@@ -19,7 +16,7 @@ router.put(
   '/api/sprints/:id',
   requireAuth,
   [
-    param('id').isMongoId().withMessage('Invaid Sprint ID'),
+    param('id').isMongoId().withMessage('Invalid Sprint ID'),
     body('name')
       .optional()
       .isString()
