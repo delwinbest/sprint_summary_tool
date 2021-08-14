@@ -28,7 +28,7 @@ spec:
             '-SD', 
             '-DV',
             '-cid', 
-            'sprints'
+            'sprintstool'
           ]
           ports:
             - containerPort: 4222

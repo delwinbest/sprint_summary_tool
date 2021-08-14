@@ -5,7 +5,7 @@ interface TeamAttrs {
   name: string;
 }
 
-interface TeamDoc extends mongoose.Document {
+export interface TeamDoc extends mongoose.Document {
   id: string;
   name: string;
   version: number;

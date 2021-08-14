@@ -21,7 +21,7 @@ spec:
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
-              value: sprints
+              value: sprintstool
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
@@ -44,7 +44,7 @@ spec:
               httpHeaders:
                 - name: Content-Type
                   value: application/json
-            initialDelaySeconds: 120
+            initialDelaySeconds: 30
             periodSeconds: 3
 ---
 apiVersion: v1

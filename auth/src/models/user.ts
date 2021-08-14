@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
+import { Team, TeamDoc } from './team';
 
 // An interface that descibes the new user properties
 interface UserAttrs {
   email: string;
   password: string;
   name: string;
+  team?: TeamDoc;
 }
 
 //Interface the describes properties that User Model has
@@ -19,6 +21,7 @@ interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   name: string;
+  team?: TeamDoc;
 }
 
 const userSchema = new mongoose.Schema(
@@ -34,6 +37,10 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+    },
+    team: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
     },
   },
   {

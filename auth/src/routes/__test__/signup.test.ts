@@ -52,11 +52,3 @@ it('sets a cookie after succesful signup', async () => {
     .expect(201);
   expect(response.get('Set-Cookie')).toBeDefined();
 });
-
-it('emits an user created event', async () => {
-  const response = await request(app)
-    .post('/api/users/signup')
-    .send({ email: 'test@test.com', password: 'password', name: 'Full Name' })
-    .expect(201);
-  expect(natsWrapper.client.publish).toHaveBeenCalled();
-});
