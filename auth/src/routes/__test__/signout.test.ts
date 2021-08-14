@@ -4,7 +4,7 @@ import { app } from '../../app';
 it('clears the cookie after succesful signout', async () => {
   await request(app)
     .post('/api/users/signup')
-    .send({ email: 'test@test.com', password: 'password' })
+    .send({ email: 'test@test.com', password: 'password', name: 'Name' })
     .expect(201);
   const response = await request(app)
     .post('/api/users/signout')

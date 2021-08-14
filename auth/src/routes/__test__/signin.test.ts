@@ -11,7 +11,7 @@ it('returns a 400 on signin with invalid user', async () => {
 it('returns a 400 on on signin with incorrect password', async () => {
   await request(app)
     .post('/api/users/signup')
-    .send({ email: 'test@test.com', password: 'password' })
+    .send({ email: 'test@test.com', password: 'password', name: 'Name' })
     .expect(201);
   await request(app)
     .post('/api/users/signin')
@@ -22,7 +22,7 @@ it('returns a 400 on on signin with incorrect password', async () => {
 it('returns a 200 on on signin with correct credentials', async () => {
   await request(app)
     .post('/api/users/signup')
-    .send({ email: 'test@test.com', password: 'password' })
+    .send({ email: 'test@test.com', password: 'password', name: 'Name' })
     .expect(201);
   await request(app)
     .post('/api/users/signin')
@@ -33,7 +33,7 @@ it('returns a 200 on on signin with correct credentials', async () => {
 it('sets a cookie after succesful signin', async () => {
   await request(app)
     .post('/api/users/signup')
-    .send({ email: 'test@test.com', password: 'password' })
+    .send({ email: 'test@test.com', password: 'password', name: 'Name' })
     .expect(201);
   const response = await request(app)
     .post('/api/users/signin')
