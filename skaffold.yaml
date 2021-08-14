@@ -25,8 +25,8 @@ build:
         manual:
           - src: ./src/**/*.ts
             dest: .
-    - image: delwinrbest/smt_auth
-      context: auth
+    - image: delwinrbest/smt_users
+      context: users
       docker:
         dockerfile: Dockerfile
       sync:

@@ -4,7 +4,7 @@ import { TeamCreatedListener } from './events/listeners/team-created-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
-  console.log('Auth App starting...');
+  console.log('Users App starting...');
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY is not defined');
   }

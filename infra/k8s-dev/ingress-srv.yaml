@@ -30,7 +30,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: auth-srv
+                name: users-srv
                 port:
                   number: 3000
           - path: '/api/teams/?(.*)'
