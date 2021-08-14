@@ -30,14 +30,26 @@ const setup = async () => {
 };
 
 it('finds and updates the team', async () => {
-  const { listener, data, msg } = await setup();
+  const { listener, data, msg, team } = await setup();
   // call the onMessage function with the data object and message object
   await listener.onMessage(data, msg);
   // write assertions to make sure the ticket was created
-  const updatedTeam = await Team.findById(data.id);
+  const updatedTeam = await Team.findById(team.id);
   expect(updatedTeam).toBeDefined();
   expect(updatedTeam!.version).toEqual(1);
   expect(updatedTeam!.name).toEqual(data.name);
+});
+
+it('does not call ack if the event has a skipped version number', async () => {
+  const { msg, data, team, listener } = await setup();
+
+  data.version = 10;
+  try {
+    await listener.onMessage(data, msg);
+  } catch (err) {
+    expect(err).toBeDefined;
+  }
+  expect(msg.ack).not.toHaveBeenCalled();
 });
 
 it('acks the message', async () => {

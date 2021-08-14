@@ -16,6 +16,6 @@ export const signin = async () => {
     .expect(201);
 
   const cookie = response.get('Set-Cookie');
-
-  return cookie;
+  const user = response.body;
+  return { cookie, user };
 };

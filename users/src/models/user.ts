@@ -22,6 +22,7 @@ interface UserDoc extends mongoose.Document {
   password: string;
   name: string;
   team?: TeamDoc;
+  version: number;
 }
 
 const userSchema = new mongoose.Schema(
@@ -66,16 +67,16 @@ userSchema.pre('save', async function (done) {
 
 // Required to help typsescript and mongoose work
 // Enables type checking by wrapping
+userSchema.set('versionKey', 'version');
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
 
-const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
+userSchema.pre('save', function (done) {
+  this.set('version', this.get('version') + 1);
+  done();
+});
 
-// Required to help typsescript and mongoose work
-// Enables type checking by wrapping
-// const buildUser = (attrs: UserAttrs) => {
-//   return new User(attrs);
-// };
+const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 export { User };

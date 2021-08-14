@@ -18,11 +18,11 @@ export class TeamUpdatedListener extends Listener<TeamUpdatedEvent> {
       version: data.version,
     });
     if (!team) {
-      throw new Error('Team not found');
+      console.log('Ticket ID or version dont match, ignoring');
+    } else {
+      team.set({ name, version });
+      await team.save();
+      msg.ack();
     }
-    team.set({ name, version });
-    await team.save();
-
-    msg.ack();
   }
 }
