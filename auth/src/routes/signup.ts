@@ -3,6 +3,8 @@ import { body } from 'express-validator';
 import { User } from '../models/user';
 import { BadRequestError, validateRequest } from '@sprintsummarytool/common';
 import jwt from 'jsonwebtoken';
+import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -47,13 +49,18 @@ router.post(
       {
         id: user.id,
         email: user.email,
+        name: user.name,
       },
       process.env.JWT_KEY!, // Check for key in index.js
     );
 
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: user.id,
+      name: user.name,
+    });
+
     // Store it on the session object
     req.session = { jwt: userJwt };
-
     res.status(201).send(user);
     // console.log('User succesfully created');
   },

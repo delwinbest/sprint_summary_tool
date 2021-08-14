@@ -17,7 +17,15 @@ spec:
           image: delwinrbest/smt_auth
           env:
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://sprints-mongo-srv:27017/sprints'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: sprints
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

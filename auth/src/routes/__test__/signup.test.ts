@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns a 201 on successful signup', async () => {
   await request(app)
@@ -50,4 +51,12 @@ it('sets a cookie after succesful signup', async () => {
     .send({ email: 'test@test.com', password: 'password', name: 'Full Name' })
     .expect(201);
   expect(response.get('Set-Cookie')).toBeDefined();
+});
+
+it('emits an user created event', async () => {
+  const response = await request(app)
+    .post('/api/users/signup')
+    .send({ email: 'test@test.com', password: 'password', name: 'Full Name' })
+    .expect(201);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
