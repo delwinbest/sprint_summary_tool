@@ -18,23 +18,19 @@ router.post(
   '/api/sprints',
   requireAuth,
   [
-    body('name').not().isEmpty().withMessage('Sprint Name is required'),
+    body('name').notEmpty().withMessage('Sprint Name is required'),
     body('duration')
       .isFloat({ gt: 0 })
       .withMessage('Sprint duration must be greater than 0.'),
     body('startDate').isDate().withMessage('Invalid start date (YYYY-MM-DD)'),
-    body('teamId')
-      .not()
-      .isEmpty()
-      .isString()
-      .withMessage('teamId required as a String'),
+    body('teamId').notEmpty().isMongoId().withMessage('Invalid Team ID'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
     const { name, duration, startDate, teamId } = req.body;
     const team = await Team.findById(teamId);
     if (!team) {
-      throw new Error('teamId Invalid');
+      throw new Error('Team does not exist');
     }
     const sprint = Sprint.build({
       name,

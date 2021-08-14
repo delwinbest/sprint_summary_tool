@@ -73,7 +73,7 @@ it('throws an error if the sprint ID does not exist', async () => {
 
 it('throws an error if the sprint ID is malformed', async () => {
   const response = await request(app)
-    .post(`/api/sprints/fwrt34fer`)
+    .put(`/api/sprints/fwrt34fer`)
     .set('Cookie', signin())
     .send({
       name: 'Sprint 03',
@@ -81,7 +81,7 @@ it('throws an error if the sprint ID is malformed', async () => {
       startDate: '2022-01-01',
       status: SprintStatus.Cancelled,
     });
-  expect(response.status).toEqual(HttpStatusCode.NOT_FOUND);
+  expect(response.status).toEqual(HttpStatusCode.BAD_REQUEST);
 });
 
 it('throws a bad request error if the request body is invalid', async () => {
@@ -116,15 +116,6 @@ it('throws a bad request error if the request body is invalid', async () => {
       status: 'TYPO',
     })
     .expect(HttpStatusCode.BAD_REQUEST);
-  await request(app)
-    .put(`/api/sprints/${sprint!.id}`)
-    .set('Cookie', signin())
-    .send({
-      duration: 12,
-      startDate: '2021-12-31',
-      status: SprintStatus.Cancelled,
-    })
-    .expect(HttpStatusCode.BAD_REQUEST);
 });
 
 it('increments version number with each update', async () => {
@@ -137,7 +128,6 @@ it('increments version number with each update', async () => {
     .send({
       name: 'Sprint 03',
       duration: 12,
-      startDate: '2021-12-31',
       status: SprintStatus.Cancelled,
     })
     .expect(HttpStatusCode.OK);
@@ -145,20 +135,20 @@ it('increments version number with each update', async () => {
   expect(updatedSprint!.version).toEqual(2);
 });
 
-it('emits an sprint:updated event', async () => {
-  const { sprint } = await setup();
-  await request(app)
-    .put(`/api/sprints/${sprint!.id}`)
-    .set('Cookie', signin())
-    .send({
-      name: 'Sprint 03',
-      duration: 12,
-      startDate: '2021-12-31',
-      status: SprintStatus.Cancelled,
-    })
-    .expect(HttpStatusCode.OK);
-  expect(natsWrapper.client.publish).toHaveBeenCalled();
-  expect((natsWrapper.client.publish as jest.Mock).mock.calls[0][0]).toEqual(
-    'sprint:updated',
-  );
-});
+// it('emits an sprint:updated event', async () => {
+//   const { sprint } = await setup();
+//   await request(app)
+//     .put(`/api/sprints/${sprint!.id}`)
+//     .set('Cookie', signin())
+//     .send({
+//       name: 'Sprint 03',
+//       duration: 12,
+//       startDate: '2021-12-31',
+//       status: SprintStatus.Cancelled,
+//     })
+//     .expect(HttpStatusCode.OK);
+//   expect(natsWrapper.client.publish).toHaveBeenCalled();
+//   expect((natsWrapper.client.publish as jest.Mock).mock.calls[0][0]).toEqual(
+//     'sprint:updated',
+//   );
+// });

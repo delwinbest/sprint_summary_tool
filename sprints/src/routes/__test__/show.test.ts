@@ -61,7 +61,7 @@ it('throws an error if the sprint ID is malformed', async () => {
     .get(`/api/sprints/fwrt34fer`)
     .set('Cookie', signin())
     .send({});
-  expect(response.status).toEqual(HttpStatusCode.NOT_FOUND);
+  expect(response.status).toEqual(HttpStatusCode.BAD_REQUEST);
 });
 
 it('returns the sprints details', async () => {
