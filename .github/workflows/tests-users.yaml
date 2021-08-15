@@ -1,0 +1,12 @@
+name: tests-users
+
+on:
+  pull_request:
+    paths:
+      - 'users/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd users && npm install && npm run test:ci
