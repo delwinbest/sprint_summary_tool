@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sprintsummarytool/common": "^1.0.15",
+    "@sprintsummarytool/common": "^1.0.21 ",
     "@types/express": "^4.17.12",
     "cookie-session": "^1.4.0",
     "express": "^4.17.1",

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { UserCreatedListener } from './events/listeners/user-created-listener';
+import { UserUpdatedListener } from './events/listeners/user-updated-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -43,6 +45,8 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    new UserCreatedListener(natsWrapper.client).listen();
+    new UserUpdatedListener(natsWrapper.client).listen();
   } catch (err) {
     throw new Error(err);
     return;
