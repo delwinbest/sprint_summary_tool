@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'sprints/**'
+  push:
+    paths:
+      - 'sprints/**'
 jobs:
   build:
     runs-on: ubuntu-latest

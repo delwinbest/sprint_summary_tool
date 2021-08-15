@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'users/**'
+  push:
+    paths:
+      - 'users/**'
 jobs:
   build:
     runs-on: ubuntu-latest
