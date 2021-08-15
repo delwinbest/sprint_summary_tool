@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Button, Badge, Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { Bricks } from "react-bootstrap-icons";
-import { useSelector, useDispatch } from "react-redux";
-import * as actionTypes from "../../store/actions/actionTypes";
+import React, { useState } from 'react';
+import { Button, Badge, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Bricks } from 'react-bootstrap-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actionTypes from '../../store/actions/actionTypes';
 
-import AddUserModal from "../Users/AddUserModal";
-import AddProjectModal from "../AddProjectModal/AddProjectModal";
+import AddUserModal from '../Users/AddUserModal';
+import AddProjectModal from '../AddProjectModal/AddProjectModal';
 
 const NavBar = () => {
   const team = useSelector((state) => state.team);
@@ -34,17 +34,17 @@ const NavBar = () => {
         <Badge variant="danger" onClick={() => removeMemberHandler(employee)}>
           -
         </Badge>
-        <span style={{ paddingLeft: "1rem" }}>{employee}</span>
+        <span style={{ paddingLeft: '1rem' }}>{employee}</span>
       </NavDropdown.Item>
     );
   });
 
   const nonProjectList = Object.keys(projects).map((project) => {
-    if (projects[project].type.startsWith("NON_PROJECT")) {
+    if (projects[project].type.startsWith('NON_PROJECT')) {
       return (
         <NavDropdown.Item key={project}>
           <Badge variant="danger">-</Badge>
-          <span style={{ paddingLeft: "1rem" }}>{project}</span>
+          <span style={{ paddingLeft: '1rem' }}>{project}</span>
         </NavDropdown.Item>
       );
     }
@@ -52,11 +52,11 @@ const NavBar = () => {
   });
 
   const projectList = Object.keys(projects).map((project) => {
-    if (projects[project].type.startsWith("PROJECT")) {
+    if (projects[project].type.startsWith('PROJECT')) {
       return (
         <NavDropdown.Item key={project}>
           <Badge variant="danger">-</Badge>
-          <span style={{ paddingLeft: "1rem" }}>{project}</span>
+          <span style={{ paddingLeft: '1rem' }}>{project}</span>
         </NavDropdown.Item>
       );
     }

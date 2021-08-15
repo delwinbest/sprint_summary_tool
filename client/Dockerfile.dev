@@ -9,10 +9,10 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json yarn.lock ./
-RUN yarn install --silent
+RUN npm install --silent
 
 # add app
 COPY . ./
 
 # start app
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
