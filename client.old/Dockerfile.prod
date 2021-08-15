@@ -2,10 +2,12 @@
 FROM node:alpine as builder
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY package.json yarn.lock ./
-RUN yarn ci --silent
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
 COPY . ./
-RUN yarn run build
+RUN npm run build
 
 # production environment
 FROM nginx:stable-alpine
