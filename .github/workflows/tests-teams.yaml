@@ -1,10 +1,9 @@
 name: tests-teams
 
 on:
-  pull_request:
-    paths:
-      - 'teams/**'
   push:
+    branches:
+      - master
     paths:
       - 'teams/**'
 jobs:

@@ -1,10 +1,9 @@
 name: tests-users
 
 on:
-  pull_request:
-    paths:
-      - 'users/**'
   push:
+    branches:
+      - master
     paths:
       - 'users/**'
 jobs:

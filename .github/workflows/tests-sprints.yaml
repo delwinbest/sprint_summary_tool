@@ -1,10 +1,9 @@
 name: tests-sprints
 
 on:
-  pull_request:
-    paths:
-      - 'sprints/**'
   push:
+    branches:
+      - master
     paths:
       - 'sprints/**'
 jobs:
