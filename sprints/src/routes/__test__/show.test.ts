@@ -12,7 +12,6 @@ const setup = async () => {
   const team = Team.build({
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'Team 01',
-    version: 0,
   });
   await team.save();
   const sprint = Sprint.build({
@@ -20,7 +19,7 @@ const setup = async () => {
     duration: 10,
     startDate: new Date(),
     status: SprintStatus.Active,
-    team: team.id,
+    team: team,
   });
   await sprint.save();
   return { sprint, team };

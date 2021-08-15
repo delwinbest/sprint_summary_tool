@@ -1,4 +1,4 @@
-import { TeamUpdatedEvent, UserUpdatedEvent } from '@sprintsummarytool/common';
+import { UserUpdatedEvent } from '@sprintsummarytool/common';
 import { natsWrapper } from '../../../nats-wrapper';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';

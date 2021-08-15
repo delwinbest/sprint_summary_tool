@@ -11,7 +11,6 @@ const setup = async () => {
   // create a fake data event
   const data: TeamCreatedEvent['data'] = {
     id: new mongoose.Types.ObjectId().toHexString(),
-    version: 0,
     name: 'Team 01',
   };
   // create a fake message object

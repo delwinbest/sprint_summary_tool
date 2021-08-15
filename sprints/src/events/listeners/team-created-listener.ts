@@ -11,9 +11,9 @@ export class TeamCreatedListener extends Listener<TeamCreatedEvent> {
   subject: Subjects.TeamCreated = Subjects.TeamCreated;
   queueGroupName = queueGroupName;
   async onMessage(data: TeamCreatedEvent['data'], msg: Message) {
-    const { id, version, name } = data;
+    const { id, name } = data;
 
-    const team = Team.build({ id, name, version });
+    const team = Team.build({ id, name });
     await team.save();
 
     msg.ack();

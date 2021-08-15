@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { TeamCreatedListener } from './events/listeners/team-created-listener';
+import { TeamUpdatedListener } from './events/listeners/team-updated-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -46,6 +47,7 @@ const start = async () => {
       useCreateIndex: true,
     });
     new TeamCreatedListener(natsWrapper.client).listen();
+    new TeamUpdatedListener(natsWrapper.client).listen();
   } catch (err) {
     throw new Error(err);
   }

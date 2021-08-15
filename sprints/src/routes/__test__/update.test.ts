@@ -12,7 +12,6 @@ const setup = async () => {
   const team = Team.build({
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'Team 01',
-    version: 0,
   });
   await team.save();
   const sprint = Sprint.build({
@@ -20,7 +19,7 @@ const setup = async () => {
     duration: 10,
     startDate: new Date(),
     status: SprintStatus.Active,
-    team: team.id,
+    team: team,
   });
   await sprint.save();
   return { sprint };
@@ -135,20 +134,20 @@ it('increments version number with each update', async () => {
   expect(updatedSprint!.version).toEqual(2);
 });
 
-// it('emits an sprint:updated event', async () => {
-//   const { sprint } = await setup();
-//   await request(app)
-//     .put(`/api/sprints/${sprint!.id}`)
-//     .set('Cookie', signin())
-//     .send({
-//       name: 'Sprint 03',
-//       duration: 12,
-//       startDate: '2021-12-31',
-//       status: SprintStatus.Cancelled,
-//     })
-//     .expect(HttpStatusCode.OK);
-//   expect(natsWrapper.client.publish).toHaveBeenCalled();
-//   expect((natsWrapper.client.publish as jest.Mock).mock.calls[0][0]).toEqual(
-//     'sprint:updated',
-//   );
-// });
+it('emits an sprint:updated event', async () => {
+  const { sprint } = await setup();
+  await request(app)
+    .put(`/api/sprints/${sprint!.id}`)
+    .set('Cookie', signin())
+    .send({
+      name: 'Sprint 03',
+      duration: 12,
+      startDate: '2021-12-31',
+      status: SprintStatus.Cancelled,
+    })
+    .expect(HttpStatusCode.OK);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+  expect((natsWrapper.client.publish as jest.Mock).mock.calls[0][0]).toEqual(
+    'sprint:updated',
+  );
+});

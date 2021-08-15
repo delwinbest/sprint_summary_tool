@@ -8,6 +8,14 @@ import { natsWrapper } from '../../nats-wrapper';
 import { HttpStatusCode } from '@sprintsummarytool/common';
 import { Team } from '../../models/team';
 
+const setup = async () => {
+  const team = Team.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    name: 'Team 01',
+  });
+  await team.save();
+  return { team };
+};
 it('has a route handler listening to /api/sprints for post requests', async () => {
   const response = await request(app).post('/api/sprints').send({});
   expect(response.status).not.toEqual(HttpStatusCode.NOT_FOUND);
@@ -29,12 +37,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 });
 
 it('saves a sprint to the database with version number 0', async () => {
-  const team = Team.build({
-    id: mongoose.Types.ObjectId().toHexString(),
-    name: 'Team 01',
-    version: 0,
-  });
-  await team.save();
+  const { team } = await setup();
   const requestData = {
     name: 'Sprint 01',
     duration: 10,
@@ -54,12 +57,7 @@ it('saves a sprint to the database with version number 0', async () => {
 });
 
 it('emits an sprint created event', async () => {
-  const team = Team.build({
-    id: mongoose.Types.ObjectId().toHexString(),
-    name: 'Team 01',
-    version: 0,
-  });
-  await team.save();
+  const { team } = await setup();
   const requestData = {
     name: 'Sprint 01',
     duration: 10,

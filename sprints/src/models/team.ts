@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 interface TeamAttrs {
   id: string;
   name: string;
-  version: number;
 }
 
 export interface TeamDoc extends mongoose.Document {
+  id: string;
   name: string;
   version: number;
 }
@@ -46,11 +46,6 @@ teamSchema.statics.findByEvent = (event: { id: string; version: number }) => {
     version: event.version - 1,
   });
 };
-
-teamSchema.pre('save', function (done) {
-  this.set('version', this.get('version') + 1);
-  done();
-});
 
 const Team = mongoose.model<TeamDoc, TeamModel>('Team', teamSchema);
 

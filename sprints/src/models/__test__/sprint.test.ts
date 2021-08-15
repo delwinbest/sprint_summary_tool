@@ -8,7 +8,6 @@ it('increments the version number on multiple saves', async () => {
   const team = Team.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     name: 'Team 01',
-    version: 0,
   });
   await team.save();
   // Create a Sprint
@@ -17,7 +16,7 @@ it('increments the version number on multiple saves', async () => {
     status: SprintStatus.Active,
     startDate: new Date(),
     duration: 10,
-    team: team.id,
+    team: team,
   });
   // Save the ticket to the DB
   await sprint.save();

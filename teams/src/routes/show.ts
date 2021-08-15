@@ -6,6 +6,7 @@ import {
   validateRequest,
 } from '@sprintsummarytool/common';
 import { Team } from '../models/team';
+import { User } from '../models/user';
 
 const router = express.Router();
 
@@ -19,7 +20,8 @@ router.get(
     if (!team) {
       throw new NotFoundError();
     }
-    res.send(team);
+    const members = await User.find({ team: team }).populate('team');
+    res.send({ team, members });
   },
 );
 
