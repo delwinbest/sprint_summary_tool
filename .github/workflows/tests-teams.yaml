@@ -1,9 +1,7 @@
 name: tests-teams
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
     paths:
       - 'teams/**'
 jobs:
@@ -13,4 +11,4 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Run Tests
-        run: cd sprints && npm install && npm run test:ci
+        run: cd teams && npm install && npm run test:ci
