@@ -29,13 +29,15 @@ const useStyles = makeStyles(styles);
 
 export default function LoginPage() {
   const history = useHistory();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const intialValues = { email: "", password: "" };
+  const [formValues, setFormValues] = React.useState(intialValues);
+  const [formErrors, setFormErrors] = React.useState({ error: true });
+
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const { doRequest, clearErrors, errors } = useRequest({
     url: "/api/users/signin",
     method: "POST",
-    body: { email, password },
+    body: { ...formValues },
     onSuccess: () => history.push("/"),
   });
   const { errorModal } = ErrorModal(errors, clearErrors);
@@ -53,6 +55,30 @@ export default function LoginPage() {
   const onSubmit = async (event) => {
     event.preventDefault();
     doRequest();
+  };
+
+  const onChange = (e) => {
+    const { id, value } = e.target;
+    const newFormValues = { ...formValues, [id]: value };
+    setFormValues(newFormValues);
+    const validationErrors = validate(newFormValues);
+    setFormErrors(validationErrors);
+  };
+
+  const validate = (values) => {
+    let errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!values.email) {
+      errors.email = "Cannot be blank";
+    } else if (!regex.test(values.email)) {
+      errors.email = "Invalid email format";
+    }
+    if (!values.password) {
+      errors.password = "Cannot be blank";
+    } else if (values.password.length < 4) {
+      errors.password = "Password must be more than 4 characters";
+    }
+    return errors;
   };
 
   return (
@@ -99,8 +125,9 @@ export default function LoginPage() {
                         <Email className={classes.inputAdornmentIcon} />
                       </InputAdornment>
                     ),
-                    value: email,
-                    onChange: (e) => setEmail(e.target.value),
+                    value: formValues.email,
+                    ...(formErrors.email && { error: true }),
+                    onChange: (e) => onChange(e),
                   }}
                 />
                 <CustomInput
@@ -119,17 +146,26 @@ export default function LoginPage() {
                     ),
                     type: "password",
                     autoComplete: "off",
-                    value: password,
-                    onChange: (e) => setPassword(e.target.value),
+                    value: formValues.password,
+                    ...(formErrors.password && { error: true }),
+                    onChange: (e) => onChange(e),
                   }}
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
-                <Button color="rose" simple size="lg" block type="submit">
+                <Button
+                  color="rose"
+                  simple
+                  size="lg"
+                  block
+                  type="submit"
+                  {...(Object.keys(formErrors).length !== 0 && {
+                    disabled: true,
+                  })}
+                >
                   Let{"'"}s Go
                 </Button>
               </CardFooter>
-              {errors}
             </Card>
           </form>
         </GridItem>

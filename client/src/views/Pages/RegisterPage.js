@@ -35,14 +35,14 @@ const useStyles = makeStyles(styles);
 
 export default function RegisterPage() {
   const history = useHistory();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [name, setName] = React.useState("");
+  const intialValues = { email: "", password: "", name: "" };
+  const [formValues, setFormValues] = React.useState(intialValues);
+  const [formErrors, setFormErrors] = React.useState({ error: true });
   const [checked, setChecked] = React.useState([]);
   const { doRequest, clearErrors, errors } = useRequest({
     url: "/api/users/signup",
     method: "POST",
-    body: { email, password, name },
+    body: { ...formValues },
     onSuccess: () => history.push("/"),
   });
   const { errorModal } = ErrorModal(errors, clearErrors);
@@ -63,6 +63,35 @@ export default function RegisterPage() {
   const onSubmit = async (event) => {
     event.preventDefault();
     doRequest();
+  };
+
+  const onChange = (e) => {
+    const { id, value } = e.target;
+    const newFormValues = { ...formValues, [id]: value };
+    setFormValues(newFormValues);
+    const validationErrors = validate(newFormValues);
+    setFormErrors(validationErrors);
+  };
+
+  const validate = (values) => {
+    let errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!values.email) {
+      errors.email = "Cannot be blank";
+    } else if (!regex.test(values.email)) {
+      errors.email = "Invalid email format";
+    }
+    if (!values.password) {
+      errors.password = "Cannot be blank";
+    } else if (values.password.length < 4) {
+      errors.password = "Password must be more than 4 characters";
+    }
+    if (!values.name) {
+      errors.name = "Cannot be blank";
+    } else if (values.name.length < 4) {
+      errors.name = "Name must be more than 4 characters";
+    }
+    return errors;
   };
 
   return (
@@ -112,6 +141,7 @@ export default function RegisterPage() {
                   </div>
                   <form className={classes.form} onSubmit={(e) => onSubmit(e)}>
                     <CustomInput
+                      id="name"
                       formControlProps={{
                         fullWidth: true,
                         className: classes.customFormControlClasses,
@@ -126,11 +156,13 @@ export default function RegisterPage() {
                           </InputAdornment>
                         ),
                         placeholder: "Name...",
-                        value: name,
-                        onChange: (e) => setName(e.target.value),
+                        value: formValues.name,
+                        ...(formErrors.name && { error: true }),
+                        onChange: (e) => onChange(e),
                       }}
                     />
                     <CustomInput
+                      id="email"
                       formControlProps={{
                         fullWidth: true,
                         className: classes.customFormControlClasses,
@@ -145,11 +177,13 @@ export default function RegisterPage() {
                           </InputAdornment>
                         ),
                         placeholder: "Email...",
-                        value: email,
-                        onChange: (e) => setEmail(e.target.value),
+                        value: formValues.email,
+                        ...(formErrors.email && { error: true }),
+                        onChange: (e) => onChange(e),
                       }}
                     />
                     <CustomInput
+                      id="password"
                       formControlProps={{
                         fullWidth: true,
                         className: classes.customFormControlClasses,
@@ -166,8 +200,9 @@ export default function RegisterPage() {
                           </InputAdornment>
                         ),
                         placeholder: "Password...",
-                        value: password,
-                        onChange: (e) => setPassword(e.target.value),
+                        value: formValues.password,
+                        ...(formErrors.password && { error: true }),
+                        onChange: (e) => onChange(e),
                       }}
                     />
                     <FormControlLabel
@@ -197,7 +232,14 @@ export default function RegisterPage() {
                       }
                     />
                     <div className={classes.center}>
-                      <Button round color="primary" type="submit">
+                      <Button
+                        round
+                        color="primary"
+                        type="submit"
+                        {...(Object.keys(formErrors).length !== 0 && {
+                          disabled: true,
+                        })}
+                      >
                         Get started
                       </Button>
                     </div>
