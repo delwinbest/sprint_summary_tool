@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,10 +28,24 @@ import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 
+import useRequest from "../../hooks/useRequest";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+
 const useStyles = makeStyles(styles);
 
 export default function RegisterPage() {
+  const history = useHistory();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState("");
   const [checked, setChecked] = React.useState([]);
+  const { doRequest, clearErrors, errors } = useRequest({
+    url: "/api/users/signup",
+    method: "POST",
+    body: { email, password, name },
+    onSuccess: () => history.push("/"),
+  });
+  const { errorModal } = ErrorModal(errors, clearErrors);
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -42,9 +57,17 @@ export default function RegisterPage() {
     }
     setChecked(newChecked);
   };
+
   const classes = useStyles();
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    doRequest();
+  };
+
   return (
     <div className={classes.container}>
+      {errorModal}
       <GridContainer justify="center">
         <GridItem xs={12} sm={12} md={10}>
           <Card className={classes.cardSignup}>
@@ -87,7 +110,7 @@ export default function RegisterPage() {
                     {` `}
                     <h4 className={classes.socialTitle}>or be classical</h4>
                   </div>
-                  <form className={classes.form}>
+                  <form className={classes.form} onSubmit={(e) => onSubmit(e)}>
                     <CustomInput
                       formControlProps={{
                         fullWidth: true,
@@ -102,7 +125,9 @@ export default function RegisterPage() {
                             <Face className={classes.inputAdornmentIcon} />
                           </InputAdornment>
                         ),
-                        placeholder: "First Name...",
+                        placeholder: "Name...",
+                        value: name,
+                        onChange: (e) => setName(e.target.value),
                       }}
                     />
                     <CustomInput
@@ -120,6 +145,8 @@ export default function RegisterPage() {
                           </InputAdornment>
                         ),
                         placeholder: "Email...",
+                        value: email,
+                        onChange: (e) => setEmail(e.target.value),
                       }}
                     />
                     <CustomInput
@@ -139,6 +166,8 @@ export default function RegisterPage() {
                           </InputAdornment>
                         ),
                         placeholder: "Password...",
+                        value: password,
+                        onChange: (e) => setPassword(e.target.value),
                       }}
                     />
                     <FormControlLabel
@@ -168,7 +197,7 @@ export default function RegisterPage() {
                       }
                     />
                     <div className={classes.center}>
-                      <Button round color="primary">
+                      <Button round color="primary" type="submit">
                         Get started
                       </Button>
                     </div>
@@ -178,6 +207,7 @@ export default function RegisterPage() {
                   </form>
                 </GridItem>
               </GridContainer>
+              {errors}
             </CardBody>
           </Card>
         </GridItem>

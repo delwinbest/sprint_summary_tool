@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,7 +7,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 
 // @material-ui/icons
-import Face from "@material-ui/icons/Face";
 import Email from "@material-ui/icons/Email";
 // import LockOutline from "@material-ui/icons/LockOutline";
 
@@ -22,10 +22,23 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.js";
 
+import useRequest from "../../hooks/useRequest";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+
 const useStyles = makeStyles(styles);
 
 export default function LoginPage() {
+  const history = useHistory();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const { doRequest, clearErrors, errors } = useRequest({
+    url: "/api/users/signin",
+    method: "POST",
+    body: { email, password },
+    onSuccess: () => history.push("/"),
+  });
+  const { errorModal } = ErrorModal(errors, clearErrors);
   React.useEffect(() => {
     let id = setTimeout(function () {
       setCardAnimation("");
@@ -36,11 +49,18 @@ export default function LoginPage() {
     };
   });
   const classes = useStyles();
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    doRequest();
+  };
+
   return (
     <div className={classes.container}>
+      {errorModal}
       <GridContainer justify="center">
         <GridItem xs={12} sm={6} md={4}>
-          <form>
+          <form onSubmit={(e) => onSubmit(e)}>
             <Card login className={classes[cardAnimaton]}>
               <CardHeader
                 className={`${classes.cardHeader} ${classes.textCenter}`}
@@ -68,20 +88,6 @@ export default function LoginPage() {
               </CardHeader>
               <CardBody>
                 <CustomInput
-                  labelText="First Name.."
-                  id="firstname"
-                  formControlProps={{
-                    fullWidth: true,
-                  }}
-                  inputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Face className={classes.inputAdornmentIcon} />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <CustomInput
                   labelText="Email..."
                   id="email"
                   formControlProps={{
@@ -93,6 +99,8 @@ export default function LoginPage() {
                         <Email className={classes.inputAdornmentIcon} />
                       </InputAdornment>
                     ),
+                    value: email,
+                    onChange: (e) => setEmail(e.target.value),
                   }}
                 />
                 <CustomInput
@@ -111,14 +119,17 @@ export default function LoginPage() {
                     ),
                     type: "password",
                     autoComplete: "off",
+                    value: password,
+                    onChange: (e) => setPassword(e.target.value),
                   }}
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
-                <Button color="rose" simple size="lg" block>
+                <Button color="rose" simple size="lg" block type="submit">
                   Let{"'"}s Go
                 </Button>
               </CardFooter>
+              {errors}
             </Card>
           </form>
         </GridItem>
