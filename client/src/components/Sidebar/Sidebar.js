@@ -436,18 +436,10 @@ function Sidebar(props) {
     });
   var brand = (
     <div className={logoClasses}>
-      <a
-        href="https://www.creative-tim.com?ref=mdpr-sidebar"
-        target="_blank"
-        className={logoMini}
-      >
+      <a href="/#" target="_blank" className={logoMini}>
         <img src={logo} alt="logo" className={classes.img} />
       </a>
-      <a
-        href="https://www.creative-tim.com?ref=mdpr-sidebar"
-        target="_blank"
-        className={logoNormal}
-      >
+      <a href="/#" target="_blank" className={logoNormal}>
         {logoText}
       </a>
     </div>
