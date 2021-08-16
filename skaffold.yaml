@@ -9,14 +9,14 @@ build:
   local:
     push: false
   artifacts:
-    - image: delwinrbest/smt_client
-      context: client
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: '**/*.js'
-            dest: .
+    # - image: delwinrbest/smt_client
+    #   context: client
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: '**/*.js'
+    #         dest: .
     - image: delwinrbest/smt_sprints
       context: sprints
       docker:
