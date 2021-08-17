@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import { useRequest } from "../../hooks/useRequest";
+import useRequest from "../../hooks/useRequest";
 
 // import { Manager, Target, Popper } from "react-popper";
 
