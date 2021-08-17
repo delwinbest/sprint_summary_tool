@@ -24,11 +24,14 @@ import styles from "assets/jss/material-dashboard-pro-react/views/loginPageStyle
 
 import useRequest from "../../hooks/useRequest";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { useAppDispatch } from "store";
+import { authActions } from "store/auth-slice";
 
 const useStyles = makeStyles(styles);
 
 export default function LoginPage() {
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const intialValues = { email: "", password: "" };
   const [formValues, setFormValues] = React.useState(intialValues);
   const [formErrors, setFormErrors] = React.useState({ error: true });
@@ -38,7 +41,11 @@ export default function LoginPage() {
     url: "/api/users/signin",
     method: "POST",
     body: { ...formValues },
-    onSuccess: () => history.push("/"),
+    onSuccess: (responseData) => {
+      const { email, id, name } = responseData;
+      dispatch(authActions.login({ email, id, name }));
+      history.push("/admin");
+    },
   });
   const { errorModal } = ErrorModal(errors, clearErrors);
   React.useEffect(() => {

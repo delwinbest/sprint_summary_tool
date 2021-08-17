@@ -1,6 +1,8 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
+
 // import { Manager, Target, Popper } from "react-popper";
 
 // @material-ui/core components
@@ -25,10 +27,15 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/components/adminNavbarLinksStyle.js";
+import { useAppDispatch } from "store";
+import { authActions } from "store/auth-slice";
 
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -50,6 +57,18 @@ export default function HeaderLinks(props) {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
+  };
+  const handleLogout = () => {
+    const { doRequest } = useRequest({
+      url: "/api/users/signout",
+      method: "POST",
+      body: {},
+      onSuccess: () => {
+        dispatch(authActions.logout());
+        history.push("/auth");
+      },
+    });
+    doRequest();
   };
   const classes = useStyles();
   const { rtlActive } = props;
@@ -276,10 +295,7 @@ export default function HeaderLinks(props) {
                       {rtlActive ? "الإعدادات" : "Settings"}
                     </MenuItem>
                     <Divider light />
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={dropdownItem}
-                    >
+                    <MenuItem onClick={handleLogout} className={dropdownItem}>
                       {rtlActive ? "الخروج" : "Log out"}
                     </MenuItem>
                   </MenuList>

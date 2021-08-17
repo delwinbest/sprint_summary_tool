@@ -22,6 +22,7 @@ import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
 
 import avatar from "assets/img/faces/avatar.jpg";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(sidebarStyle);
 
@@ -57,6 +58,8 @@ function SidebarWrapper({ className, user, headerLinks, links }) {
 
 function Sidebar(props) {
   const classes = useStyles();
+  const { name: userName } = useSelector((state) => state.auth);
+
   const [miniActive, setMiniActive] = React.useState(true);
   // to check for active links and opened collapses
   let location = useLocation();
@@ -342,7 +345,7 @@ function Sidebar(props) {
             onClick={() => setOpenAvatar(!openAvatar)}
           >
             <ListItemText
-              primary={rtlActive ? "تانيا أندرو" : "Tania Andrew"}
+              primary={rtlActive ? "تانيا أندرو" : userName}
               secondary={
                 <b
                   className={

@@ -10,12 +10,12 @@ import Teams from "views/Teams/Teams.js";
 // import GoogleMaps from "views/Maps/GoogleMaps.js";
 // import GridSystem from "views/Components/GridSystem.js";
 // import Icons from "views/Components/Icons.js";
-// import LoginPage from "views/Pages/LoginPage.js";
+import LoginPage from "views/Pages/LoginPage.js";
 // import Notifications from "views/Components/Notifications.js";
 // import Panels from "views/Components/Panels.js";
 // import RTLSupport from "views/Pages/RTLSupport.js";
 // import ReactTables from "views/Tables/ReactTables.js";
-// import RegisterPage from "views/Pages/RegisterPage.js";
+import RegisterPage from "views/Pages/RegisterPage.js";
 // import RegularForms from "views/Forms/RegularForms.js";
 // import RegularTables from "views/Tables/RegularTables.js";
 // import SweetAlert from "views/Components/SweetAlert.js";
@@ -81,24 +81,24 @@ var dashRoutes = [
   //       component: TimelinePage,
   //       layout: "/admin",
   //     },
-  //     {
-  //       path: "/login-page",
-  //       name: "Login Page",
-  //       rtlName: "هعذاتسجيل الدخول",
-  //       mini: "L",
-  //       rtlMini: "هعذا",
-  //       component: LoginPage,
-  //       layout: "/auth",
-  //     },
-  //     {
-  //       path: "/register-page",
-  //       name: "Register Page",
-  //       rtlName: "تسجيل",
-  //       mini: "R",
-  //       rtlMini: "صع",
-  //       component: RegisterPage,
-  //       layout: "/auth",
-  //     },
+  {
+    path: "/login-page",
+    name: "Login Page",
+    rtlName: "هعذاتسجيل الدخول",
+    mini: "L",
+    rtlMini: "هعذا",
+    component: LoginPage,
+    layout: "/auth",
+  },
+  {
+    path: "/register-page",
+    name: "Register Page",
+    rtlName: "تسجيل",
+    mini: "R",
+    rtlMini: "صع",
+    component: RegisterPage,
+    layout: "/auth",
+  },
   //     {
   //       path: "/user-page",
   //       name: "User Profile",
