@@ -3,7 +3,7 @@ FROM node:alpine as builder
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json yarn.lock ./
-RUN yarn ci --silent
+RUN yarn install --production=true --silent --non-interactive
 COPY . ./
 RUN yarn run build
 
