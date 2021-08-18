@@ -2,8 +2,8 @@ name: tests-teams
 
 on:
   pull_request:
-    paths:
-      - 'teams/**'
+    # paths:
+    #   - 'teams/**'
 jobs:
   build:
     runs-on: ubuntu-latest
