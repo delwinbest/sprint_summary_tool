@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import GoogleLogin from "react-google-login";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -100,11 +101,40 @@ export default function LoginPage() {
                 color="rose"
               >
                 <h4 className={classes.cardTitle}>Log in</h4>
-                <div className={classes.socialLine}>
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENTID}
+                  buttonText="Log in with Google"
+                  render={(renderProps) => (
+                    <div className={classes.socialLine}>
+                      <Button
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                        color="transparent"
+                        justIcon
+                        className={classes.customButtonClass}
+                      >
+                        <i className="fab fa-google" />
+                      </Button>
+                    </div>
+                  )}
+                  onSuccess={(googleData) =>
+                    doRequest({
+                      url: "/api/users/googleauth",
+                      body: {
+                        token: googleData.tokenId,
+                      },
+                    })
+                  }
+                  onFailure={(error) => {
+                    console.log(error);
+                  }}
+                  cookiePolicy={"single_host_origin"}
+                />
+                {/* <div className={classes.socialLine}>
                   {[
                     "fab fa-facebook-square",
                     "fab fa-twitter",
-                    "fab fa-google-plus",
+                    "fab fa-google",
                   ].map((prop, key) => {
                     return (
                       <Button
@@ -117,7 +147,7 @@ export default function LoginPage() {
                       </Button>
                     );
                   })}
-                </div>
+                </div> */}
               </CardHeader>
               <CardBody>
                 <CustomInput

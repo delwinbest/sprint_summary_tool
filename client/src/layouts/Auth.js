@@ -12,7 +12,7 @@ import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/authStyle.js";
 
-import bg_login from "assets/img/login.jpeg";
+import bg_login from "assets/img/bg_login.jpeg";
 
 const useStyles = makeStyles(styles);
 

@@ -40,11 +40,6 @@ export default function Footer(props) {
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="#company" className={block}>
-                {rtlActive ? "شركة" : "Company"}
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
               <a href="#portfolio" className={block}>
                 {rtlActive ? "بعدسة" : "Portfolio"}
               </a>
@@ -59,15 +54,13 @@ export default function Footer(props) {
         <p className={classes.right}>
           &copy; {1900 + new Date().getYear()}{" "}
           <a
-            href="https://www.creative-tim.com?ref=mdpr-footer"
+            href="https://www.linkedin.com/in/delwinbest/"
             className={anchor}
             target="_blank"
           >
-            {rtlActive ? "توقيت الإبداعية" : "Creative Tim"}
+            {rtlActive ? "دلوین بست" : "Delwin Best"}
           </a>
-          {rtlActive
-            ? ", مصنوعة مع الحب لشبكة الإنترنت أفضل"
-            : ", made with love for a better web"}
+          {rtlActive ? ", ساخته شده برای مردم" : ", made for the people"}
         </p>
       </div>
     </footer>

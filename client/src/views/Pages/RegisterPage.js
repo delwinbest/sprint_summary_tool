@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import GoogleLogin from "react-google-login";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,11 +31,14 @@ import styles from "assets/jss/material-dashboard-pro-react/views/registerPageSt
 
 import useRequest from "../../hooks/useRequest";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { useAppDispatch } from "store";
+import { authActions } from "store/auth-slice";
 
 const useStyles = makeStyles(styles);
 
 export default function RegisterPage() {
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const intialValues = { email: "", password: "", name: "" };
   const [formValues, setFormValues] = React.useState(intialValues);
   const [formErrors, setFormErrors] = React.useState({ error: true });
@@ -43,7 +47,11 @@ export default function RegisterPage() {
     url: "/api/users/signup",
     method: "POST",
     body: { ...formValues },
-    onSuccess: () => history.push("/"),
+    onSuccess: (responseData) => {
+      const { email, id, name } = responseData;
+      dispatch(authActions.login({ email, id, name }));
+      history.push("/admin");
+    },
   });
   const { errorModal } = ErrorModal(errors, clearErrors);
   const handleToggle = (value) => {
@@ -125,17 +133,34 @@ export default function RegisterPage() {
                 </GridItem>
                 <GridItem xs={12} sm={8} md={5}>
                   <div className={classes.center}>
-                    <Button justIcon round color="twitter">
-                      <i className="fab fa-twitter" />
-                    </Button>
-                    {` `}
-                    <Button justIcon round color="dribbble">
-                      <i className="fab fa-dribbble" />
-                    </Button>
-                    {` `}
-                    <Button justIcon round color="facebook">
-                      <i className="fab fa-facebook-f" />
-                    </Button>
+                    <GoogleLogin
+                      clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENTID}
+                      buttonText="Sign up with Google"
+                      render={(renderProps) => (
+                        <Button
+                          justIcon
+                          round
+                          color="google"
+                          onClick={renderProps.onClick}
+                          disabled={renderProps.disabled}
+                        >
+                          <i className="fab fa-google" />
+                        </Button>
+                      )}
+                      onSuccess={(googleData) =>
+                        doRequest({
+                          url: "/api/users/googleauth",
+                          body: {
+                            token: googleData.tokenId,
+                          },
+                        })
+                      }
+                      onFailure={(error) => {
+                        console.log(error);
+                      }}
+                      cookiePolicy={"single_host_origin"}
+                    />
+
                     {` `}
                     <h4 className={classes.socialTitle}>or be classical</h4>
                   </div>

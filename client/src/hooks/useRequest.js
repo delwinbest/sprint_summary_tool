@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-const useRequest = ({ url, method, body, onSuccess }) => {
+const useRequest = ({ url, method, body, onSuccess = () => {} }) => {
   const [errors, setErrors] = useState(null);
-
   const clearErrors = () => {
     setErrors(null);
   };
@@ -10,6 +9,9 @@ const useRequest = ({ url, method, body, onSuccess }) => {
   const doRequest = async (props = {}) => {
     const devUrlPrefix = "http://localhost";
     let fetchUrl = "";
+    if (props.url !== undefined) {
+      url = props.url;
+    }
     if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
       fetchUrl = devUrlPrefix + url;
     } else {
@@ -18,9 +20,10 @@ const useRequest = ({ url, method, body, onSuccess }) => {
     const requestOptions = {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...body, ...props }),
+      body: JSON.stringify({ ...body, ...props.body }),
     };
 
+    console.log(fetchUrl);
     try {
       setErrors(null);
       const response = await fetch(fetchUrl, requestOptions);

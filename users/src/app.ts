@@ -9,6 +9,7 @@ import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { healthzRouter } from './routes/healthz';
 import { updateUserRouter } from './routes/update';
+import { googleAuthRouter } from './routes/googleauth';
 
 import {
   errorHandler,
@@ -38,6 +39,7 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
+app.use(googleAuthRouter);
 app.use(updateUserRouter);
 
 app.all('*', async (req, res) => {

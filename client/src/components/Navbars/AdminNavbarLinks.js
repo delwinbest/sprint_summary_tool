@@ -36,7 +36,15 @@ const useStyles = makeStyles(styles);
 export default function HeaderLinks(props) {
   const dispatch = useAppDispatch();
   const history = useHistory();
-
+  const { doRequest } = useRequest({
+    url: "/api/users/signout",
+    method: "POST",
+    body: {},
+    onSuccess: () => {
+      dispatch(authActions.logout());
+      history.push("/auth");
+    },
+  });
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -60,15 +68,6 @@ export default function HeaderLinks(props) {
     setOpenProfile(null);
   };
   const handleLogout = () => {
-    const { doRequest } = useRequest({
-      url: "/api/users/signout",
-      method: "POST",
-      body: {},
-      onSuccess: () => {
-        dispatch(authActions.logout());
-        history.push("/auth");
-      },
-    });
     doRequest();
   };
   const classes = useStyles();
