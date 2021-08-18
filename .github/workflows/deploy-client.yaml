@@ -11,6 +11,7 @@ on:
 env:
   AWS_DEFAULT_REGION: ap-northeast-1
   K8S_CLUSER_NAME: sprint-planning-tool
+  REACT_APP_GOOGLE_OAUTH_CLIENTID: ${{secrets.REACT_APP_GOOGLE_OAUTH_CLIENTID}}
 
 jobs:
   build:
