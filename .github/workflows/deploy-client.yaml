@@ -30,10 +30,10 @@ jobs:
           password: ${{secrets.DOCKER_TOKEN}}
 
       - name: Build Container Image
-        run: cd client && docker build -t delwinrbest/smt_client .
+        run: cd client && docker build -f Dockerfile.prod -t delwinrbest/smt_client:prod .
 
       - name: Push Image to Docker Hub
-        run: docker push delwinrbest/smt_client
+        run: docker push delwinrbest/smt_client:prod
       # - name: Login doctl with Digital Ocean
       #   uses: digitalocean/action-doctl@v2
       #   with:
