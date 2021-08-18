@@ -10,14 +10,14 @@ import "assets/scss/material-dashboard-pro-react.scss?v=1.10.0";
 
 function App() {
   const { id: userId } = useSelector((state) => state.auth);
+  console.log(process.env.REACT_APP_GOOGLE_OAUTH_CLIENTID);
   return (
     <BrowserRouter>
       <Switch>
         {/* <Route path="/rtl" component={RtlLayout} /> */}
         <Route path="/auth" component={AuthLayout} />
         {userId && <Route path="/admin" component={AdminLayout} />}
-        {!userId && <Redirect from="/" to="/auth" />}
-        {userId && <Redirect from="/" to="/admin/dashboard" />}
+        {userId ? <Redirect to="/admin/dashboard" /> : <Redirect to="/auth" />}
       </Switch>
     </BrowserRouter>
   );
