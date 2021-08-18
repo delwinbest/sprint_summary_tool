@@ -1,80 +1,29 @@
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+/*!
+
+=========================================================
+* Material Dashboard PRO React - v1.10.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/material-dashboard-pro-react
+* Copyright 2021 Creative Tim (https://www.creative-tim.com)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import store from "./store/index";
 
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-
-import { createStore, applyMiddleware, compose, combineReducers } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-import PouchDBStorage from "redux-persist-pouchdb";
-
-import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-
-import teamReducer from "./store/reducers/team";
-import sprintsReducer from "./store/reducers/sprints";
-import projectsReducer from "./store/reducers/projects";
-import uiStateReducer from "./store/reducers/ui_state";
-import { PersistGate } from "redux-persist/integration/react";
-
-const composeEnhancers =
-  process.env.NODE_ENV === "development"
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        trace: true,
-        traceLimit: 50,
-        latency: 0,
-      })
-    : null || compose;
-
-// const storage = new PouchDBStorage(
-//   "http://" + process.env.REACT_APP_COUCHDB_HOSTNAME + ":5984/smt_db",
-//   {
-//     auth: {
-//       username: process.env.REACT_APP_COUCHDB_USER,
-//       password: process.env.REACT_APP_COUCHDB_PASSWORD,
-//     },
-//   }
-// );
-
-const storage = new PouchDBStorage("smt_db");
-
-const rootReducer = combineReducers({
-  team: teamReducer,
-  sprints: sprintsReducer,
-  projects: projectsReducer,
-  uistate: uiStateReducer,
-});
-
-const persistConfig = {
-  key: "root",
-  storage,
-  stateReconciler: autoMergeLevel2,
-  blacklist: ["uistate"],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-const store = createStore(
-  persistedReducer,
-  composeEnhancers(applyMiddleware(thunk))
-);
-
-const persistor = persistStore(store);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

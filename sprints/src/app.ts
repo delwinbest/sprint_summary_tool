@@ -2,7 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookiesession from 'cookie-session';
-
+import cors from 'cors';
 import { healthzRouter } from './routes/healthz';
 import { newSprintRouter } from './routes/new';
 import { indexSprintRouter } from './routes';
@@ -16,6 +16,13 @@ import {
 } from '@sprintsummarytool/common';
 
 const app = express();
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  app.use(
+    cors({
+      origin: true,
+    }),
+  );
+}
 app.set('trust proxy', true);
 app.use(json());
 app.use(

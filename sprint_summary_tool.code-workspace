@@ -2,6 +2,9 @@
   "folders": [
     {
       "path": "."
+    },
+    {
+      "path": "../../My Drive/06_SSHKeys/kubectl_secrets/sprintplanningtool"
     }
   ],
   "settings": {

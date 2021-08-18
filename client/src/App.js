@@ -1,26 +1,25 @@
 import React from "react";
-import { Container } from "react-bootstrap";
-import "./App.scss";
+import { useSelector } from "react-redux";
+import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
-import NavBar from "./components/navigation/NavBar";
-import SprintTable from "./components/SprintTable/SprintTable";
-import SprintProjectSummary from "./components/SprintProjectSummary/SprintProjectSummary";
-import KeySprintMetrics from "./components/KeySprintMetrics/KeySprintMetrics";
-import UIControls from "./components/UIControls/UIControls";
+import AuthLayout from "layouts/Auth.js";
+// import RtlLayout from "layouts/RTL.js";
+import AdminLayout from "layouts/Admin.js";
+
+import "assets/scss/material-dashboard-pro-react.scss?v=1.10.0";
 
 function App() {
+  const { id: userId } = useSelector((state) => state.auth);
   return (
-    <Container>
-      <NavBar />
-      <br />
-      <UIControls />
-      <br />
-      <KeySprintMetrics />
-      <br />
-      <SprintTable />
-      <br />
-      <SprintProjectSummary />
-    </Container>
+    <BrowserRouter>
+      <Switch>
+        {/* <Route path="/rtl" component={RtlLayout} /> */}
+        <Route path="/auth" component={AuthLayout} />
+        {userId && <Route path="/admin" component={AdminLayout} />}
+        {!userId && <Redirect from="/" to="/auth" />}
+        {userId && <Redirect from="/" to="/admin/dashboard" />}
+      </Switch>
+    </BrowserRouter>
   );
 }
 

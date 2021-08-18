@@ -12,7 +12,6 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error('MONGO_URI is not defined');
   }
-
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error('NATS_CLIENT_ID is not defined');
   }
@@ -21,6 +20,9 @@ const start = async () => {
   }
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID is not defined');
+  }
+  if (!process.env.GOOGLE_OAUTH_CLIENTID) {
+    throw new Error('GOOGLE_OAUTH_CLIENTID is not defined');
   }
   try {
     console.log('Connecting to NATS server', process.env.NATS_URL);
@@ -52,7 +54,7 @@ const start = async () => {
     throw new Error(err);
   }
   app.listen(3000, () => {
-    console.log('Listening on port 3000...');
+    console.log('Listening on port 3000....');
   });
 };
 
