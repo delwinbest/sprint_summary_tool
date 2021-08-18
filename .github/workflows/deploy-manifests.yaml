@@ -1,12 +1,17 @@
 name: deploy-manifests
 
 on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [master]
+    paths:
+      - 'infra/**'
   pull_request:
-    branches:
-      - master
-    # paths:
-    #   - 'infra/**'
-
+    branches: [master]
+    paths:
+      - 'infra/**'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 env:
   AWS_DEFAULT_REGION: ap-northeast-1
   K8S_CLUSER_NAME: sprint-planning-tool
