@@ -8,6 +8,13 @@ const useRequest = ({ url, method, body, onSuccess }) => {
   };
 
   const doRequest = async (props = {}) => {
+    const devUrlPrefix = "http://localhost";
+    let fetchUrl = "";
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+      fetchUrl = devUrlPrefix + url;
+    } else {
+      fetchUrl = url;
+    }
     const requestOptions = {
       method: method,
       headers: { "Content-Type": "application/json" },
@@ -16,7 +23,7 @@ const useRequest = ({ url, method, body, onSuccess }) => {
 
     try {
       setErrors(null);
-      const response = await fetch(url, requestOptions);
+      const response = await fetch(fetchUrl, requestOptions);
       if (!response.ok) {
         throw response;
       }
