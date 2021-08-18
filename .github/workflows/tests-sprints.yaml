@@ -2,8 +2,8 @@ name: tests-sprints
 
 on:
   pull_request:
-    paths:
-      - 'sprints/**'
+    # paths:
+    #   - 'sprints/**'
 jobs:
   build:
     runs-on: ubuntu-latest
