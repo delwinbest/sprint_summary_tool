@@ -1,11 +1,11 @@
 name: deploy-users
 
 on:
-  push:
+  pull_request:
     branches:
       - master
-    paths:
-      - 'users/**'
+    # paths:
+    #   - 'users/**'
 env:
   AWS_DEFAULT_REGION: ap-northeast-1
   K8S_CLUSER_NAME: sprint-planning-tool
