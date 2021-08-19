@@ -27,7 +27,7 @@ jobs:
           password: ${{secrets.DOCKER_TOKEN}}
       - run: echo ${{ env.REACT_APP_GOOGLE_OAUTH_CLIENTID }}
       - name: Build Container Image
-        run: cd client && docker build --build-arg REACT_APP_GOOGLE_OAUTH_CLIENTID=${{ env.REACT_APP_GOOGLE_OAUTH_CLIENTID }} -f  Dockerfile.prod -t delwinrbest/smt_client:prod .
+        run: cd client && docker build --build-arg REACT_APP_GOOGLE_OAUTH_CLIENTID=${{env.REACT_APP_GOOGLE_OAUTH_CLIENTID}} -f Dockerfile.prod -t delwinrbest/smt_client:prod .
 
       - name: Push Image to Docker Hub
         run: docker push delwinrbest/smt_client:prod
