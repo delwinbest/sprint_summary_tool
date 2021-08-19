@@ -11,6 +11,7 @@ on:
 env:
   AWS_DEFAULT_REGION: ap-northeast-1
   K8S_CLUSER_NAME: sprint-planning-tool
+  REACT_APP_GOOGLE_OAUTH_CLIENTID: 265467486812-n9nmdcuf52s0321h854tl4dg7fksjrog.apps.googleusercontent.com
 
 jobs:
   build:
@@ -26,7 +27,7 @@ jobs:
           password: ${{secrets.DOCKER_TOKEN}}
 
       - name: Build Container Image
-        run: cd client && docker build -f Dockerfile.prod -t delwinrbest/smt_client:prod .
+        run: cd client && docker build --build-arg REACT_APP_GOOGLE_OAUTH_CLIENTID=${{ env.REACT_APP_GOOGLE_OAUTH_CLIENTID }} -f  Dockerfile.prod -t delwinrbest/smt_client:prod .
 
       - name: Push Image to Docker Hub
         run: docker push delwinrbest/smt_client:prod
