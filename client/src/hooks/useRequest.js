@@ -22,8 +22,6 @@ const useRequest = ({ url, method, body, onSuccess = () => {} }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...body, ...props.body }),
     };
-
-    console.log(fetchUrl);
     try {
       setErrors(null);
       const response = await fetch(fetchUrl, requestOptions);
