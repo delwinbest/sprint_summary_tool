@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: delwinrbest/smt_client
+          image: delwinrbest/smt_client-dev
           # resources:
           #   limits:
           #     memory: '512Mi'
