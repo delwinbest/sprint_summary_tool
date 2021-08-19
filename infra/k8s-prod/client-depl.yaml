@@ -21,12 +21,6 @@ spec:
           #     cpu: '500m'
           ports:
             - containerPort: 80
-          env:
-            - name: REACT_APP_GOOGLE_OAUTH_CLIENTID
-              valueFrom:
-                secretKeyRef:
-                  name: google-oauth-clientid
-                  key: GOOGLE_OAUTH_CLIENTID
 ---
 apiVersion: v1
 kind: Service
