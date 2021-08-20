@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: client
+          imagePullPolicy: Always
           image: delwinrbest/smt_client-prod:latest
           # resources:
           #   limits:
