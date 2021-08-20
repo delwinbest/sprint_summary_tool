@@ -13,6 +13,7 @@ import {
 } from '@sprintsummarytool/common';
 import { showTeamRouter } from './routes/show';
 import { updateTeamRouter } from './routes/update';
+import { indexTeamRouter } from './routes';
 
 const app = express();
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -35,6 +36,7 @@ app.use(currentUser);
 app.use(newTeamRouter);
 app.use(showTeamRouter);
 app.use(updateTeamRouter);
+app.use(indexTeamRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

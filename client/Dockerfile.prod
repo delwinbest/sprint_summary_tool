@@ -5,7 +5,6 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . ./
-RUN echo $REACT_APP_GOOGLE_OAUTH_CLIENTID
 RUN yarn build
 
 FROM nginx:stable-alpine
