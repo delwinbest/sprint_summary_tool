@@ -22,7 +22,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/extendedTables
 
 const useStyles = makeStyles(styles);
 
-export default function ExtendedTables() {
+export default function TeamsPage() {
   const classes = useStyles();
   const fillButtons = [
     { color: "info", icon: Person },
