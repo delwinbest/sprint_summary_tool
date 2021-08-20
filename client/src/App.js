@@ -15,10 +15,9 @@ function App() {
     <BrowserRouter>
       <Switch>
         {/* <Route path="/rtl" component={RtlLayout} /> */}
-        {/* <Route path="/auth" component={AuthLayout} />
-        {userId && <Route path="/admin" component={AdminLayout} />}
-        {userId ? <Redirect to="/admin/dashboard" /> : <Redirect to="/auth" />} */}
         <Route path="/auth" component={AuthLayout} />
+        {userId && <Route path="/admin" component={AdminLayout} />}
+        {userId ? <Redirect to="/admin/dashboard" /> : <Redirect to="/auth" />}
         <Redirect to="/auth" />
       </Switch>
     </BrowserRouter>
