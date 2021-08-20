@@ -10,7 +10,6 @@ import "assets/scss/material-dashboard-pro-react.scss?v=1.10.0";
 
 function App() {
   const { id: userId } = useSelector((state) => state.auth);
-  console.log(process.env.REACT_APP_GOOGLE_OAUTH_CLIENTID);
   return (
     <BrowserRouter>
       <Switch>
