@@ -5,6 +5,7 @@ import { Message } from 'node-nats-streaming';
 import { UserUpdatedListener } from '../user-updated-listener';
 import { User } from '../../../models/user';
 import { Team } from '../../../models/team';
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 
 const setup = async () => {
   //Create first version of User
@@ -76,6 +77,7 @@ it('finds and maps team to user if provided', async () => {
   const { msg, data, user, listener } = await setup();
   const team = Team.build({
     name: 'Team 01',
+    status: TeamStatus.Active,
   });
   await team.save();
   data.team = team.id;

@@ -1,12 +1,15 @@
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 import mongoose from 'mongoose';
 
 interface TeamAttrs {
   name: string;
+  status: TeamStatus;
 }
 
 export interface TeamDoc extends mongoose.Document {
   name: string;
   version: number;
+  status: TeamStatus;
 }
 
 //Interface the describes properties that Sprint Model has
@@ -17,6 +20,10 @@ interface TeamModel extends mongoose.Model<TeamDoc> {
 const teamSchema = new mongoose.Schema(
   {
     name: {
+      type: String,
+      required: true,
+    },
+    status: {
       type: String,
       required: true,
     },
