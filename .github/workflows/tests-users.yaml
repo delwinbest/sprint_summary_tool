@@ -2,10 +2,10 @@ name: tests-users
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [master]
-    paths:
-      - 'users/**'
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - 'users/**'
   pull_request:
     branches: [master]
     paths:
