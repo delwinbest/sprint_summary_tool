@@ -13,6 +13,8 @@ import Close from "@material-ui/icons/Close";
 import Add from "@material-ui/icons/Add";
 
 // core components
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -28,6 +30,7 @@ import Fade from "@material-ui/core/Fade";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import styles from "assets/jss/material-dashboard-pro-react/views/extendedTablesStyle.js";
 import useRequest from "hooks/useRequest";
+import { TeamStatus } from "@sprintsummarytool/common/build/events/types/team-status";
 
 const useStyles = makeStyles(styles);
 
@@ -38,6 +41,7 @@ export default function TeamsPage() {
   const [loading, setLoading] = React.useState(true);
   const [popup, setPopup] = React.useState(null);
   const [activeTeam, setActiveTeam] = React.useState(null);
+  const [activeTeamArchived, setActiveTeamArchived] = React.useState(null);
 
   const { doRequest: refreshTeams } = useRequest({
     url: "/api/teams",
@@ -69,6 +73,7 @@ export default function TeamsPage() {
     method: "GET",
     body: {},
     onSuccess: (returnedTeam) => {
+      setActiveTeamArchived(returnedTeam.team.status === TeamStatus.Archived);
       setActiveTeam(returnedTeam.team);
     },
     onFailure: (errorText) => {
@@ -82,6 +87,7 @@ export default function TeamsPage() {
     body: {},
     onSuccess: () => {
       setActiveTeam(null);
+      setActiveTeamArchived(null);
       setLoading(true);
       refreshTeams();
     },
@@ -103,11 +109,14 @@ export default function TeamsPage() {
     getTeamRequest({ url: `/api/teams/${teamId}` });
   };
 
-  const fillButtons = (teamId) => {
+  const fillButtons = (teamId, teamStatus) => {
     return [
-      { color: "info", icon: Person },
+      {
+        color: "info",
+        icon: Person,
+        disabled: teamStatus !== TeamStatus.Active,
+      },
       { color: "success", icon: Edit },
-      { color: "danger", icon: Close },
     ].map((prop, key) => {
       return (
         <Button
@@ -115,6 +124,7 @@ export default function TeamsPage() {
           className={classes.actionButton}
           key={key}
           id={teamId}
+          disabled={prop.disabled}
           onClick={(e) => {
             loadTeam(teamId);
           }}
@@ -155,6 +165,18 @@ export default function TeamsPage() {
   const editTeamOnChange = (e) => {
     let team = activeTeam;
     team[e.target.id] = e.target.value;
+    setActiveTeam(team);
+  };
+
+  const setTeamStatus = (isActive) => {
+    let team = activeTeam;
+    if (isActive) {
+      setActiveTeamArchived(false);
+      team.status = TeamStatus.Active;
+    } else {
+      setActiveTeamArchived(true);
+      team.status = TeamStatus.Archived;
+    }
     setActiveTeam(team);
   };
 
@@ -201,6 +223,7 @@ export default function TeamsPage() {
                     "ID",
                     "Team Name",
                     "Members",
+                    "Status",
                     <Button color="success" className={classes.actionButton}>
                       <Add className={classes.Add} onClick={addTeamPopup} />
                     </Button>,
@@ -210,7 +233,8 @@ export default function TeamsPage() {
                       "..." + team.team.id.slice(-5),
                       team.team.name,
                       team.members.length,
-                      fillButtons(team.team.id),
+                      team.team.status,
+                      fillButtons(team.team.id, team.team.status),
                     ];
                   })}
                   customCellClasses={[
@@ -259,6 +283,28 @@ export default function TeamsPage() {
                       onChange: (e) => editTeamOnChange(e),
                     }}
                   />
+                  <div className={classes.block}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={!activeTeamArchived}
+                          value={!activeTeamArchived}
+                          onChange={(e) => setTeamStatus(e.target.checked)}
+                          classes={{
+                            switchBase: classes.switchBase,
+                            checked: classes.switchChecked,
+                            thumb: classes.switchIcon,
+                            track: classes.switchBar,
+                          }}
+                        />
+                      }
+                      classes={{
+                        label: classes.label,
+                      }}
+                      label={`Team status is ${activeTeam.status}`}
+                    />
+                  </div>
+
                   <Button color="rose" type="submit">
                     Update
                   </Button>
