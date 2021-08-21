@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -7,6 +7,7 @@ import Assignment from "@material-ui/icons/Assignment";
 import Person from "@material-ui/icons/Person";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
+import Add from "@material-ui/icons/Add";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -19,11 +20,24 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardHeader from "components/Card/CardHeader.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/extendedTablesStyle.js";
+import useRequest from "hooks/useRequest";
 
 const useStyles = makeStyles(styles);
 
 export default function TeamsPage() {
   const classes = useStyles();
+  const [teams, setTeams] = useState([]);
+  const { doRequest } = useRequest({
+    url: "/api/teams",
+    method: "GET",
+    body: {},
+    onSuccess: (returnData) => setTeams(returnData),
+  });
+  useEffect(async () => {
+    doRequest();
+    return () => {};
+  }, []);
+
   const fillButtons = [
     { color: "info", icon: Person },
     { color: "success", icon: Edit },
@@ -44,18 +58,26 @@ export default function TeamsPage() {
             <CardIcon color="rose">
               <Assignment />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Your Team</h4>
+            <h4 className={classes.cardIconTitle}>Your Teams</h4>
           </CardHeader>
           <CardBody>
             <Table
-              tableHead={["#", "Name", "Job Position", "Since", "Actions"]}
-              tableData={[
-                ["1", "Andrew Mike", "Develop", "2013", fillButtons],
-                ["2", "John Doe", "Design", "2012", fillButtons],
-                ["3", "Alex Mike", "Design", "2010", fillButtons],
-                ["4", "Mike Monday", "Marketing", "2013", fillButtons],
-                ["5", "Paul Dickens", "Communication", "2015", fillButtons],
+              tableHead={[
+                "ID",
+                "Team Name",
+                "Members",
+                <Button color="success" className={classes.actionButton}>
+                  <Add className={classes.Add} />
+                </Button>,
               ]}
+              tableData={teams.map((team) => {
+                return [
+                  "..." + team.team.id.slice(-5),
+                  team.team.name,
+                  team.members.length,
+                  fillButtons,
+                ];
+              })}
               customCellClasses={[classes.center, classes.right, classes.right]}
               customClassesForCells={[0, 4, 5]}
               customHeadCellClasses={[

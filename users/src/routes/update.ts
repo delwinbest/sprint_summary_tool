@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  BadRequestError,
 } from '@sprintsummarytool/common';
 import { User } from '../models/user';
 import { Team } from '../models/team';
@@ -41,14 +42,20 @@ router.put(
     if (req.currentUser?.id !== user.id) {
       throw new NotAuthorizedError();
     }
-
-    const team = await Team.findById(teamId);
     user.set({
       name: name ? name : user.name,
-      team: team ? team : user.team,
       email: email ? email : user.email,
       password: password ? password : user.password,
     });
+    if (teamId) {
+      const team = await Team.findById(teamId);
+      if (!team) {
+        throw new BadRequestError('Invalid Team ID');
+      }
+      user.set({
+        team: team ? team : user.team,
+      });
+    }
     await user.save();
     await new UserUpdatedPublisher(natsWrapper.client).publish({
       id: user.id,
