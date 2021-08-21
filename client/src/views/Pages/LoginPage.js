@@ -36,9 +36,10 @@ export default function LoginPage() {
   const intialValues = { email: "", password: "" };
   const [formValues, setFormValues] = React.useState(intialValues);
   const [formErrors, setFormErrors] = React.useState({ error: true });
+  const [errors, setErrors] = React.useState(null);
 
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const { doRequest, clearErrors, errors } = useRequest({
+  const { doRequest } = useRequest({
     url: "/api/users/signin",
     method: "POST",
     body: { ...formValues },
@@ -47,8 +48,13 @@ export default function LoginPage() {
       dispatch(authActions.login({ email, id, name }));
       history.push("/admin");
     },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
   });
-  const { errorModal } = ErrorModal(errors, clearErrors);
+  const errorModal = ErrorModal(errors, () => {
+    setErrors(null);
+  });
   React.useEffect(() => {
     let id = setTimeout(function () {
       setCardAnimation("");

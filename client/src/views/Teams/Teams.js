@@ -23,6 +23,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import styles from "assets/jss/material-dashboard-pro-react/views/extendedTablesStyle.js";
 import useRequest from "hooks/useRequest";
 
@@ -30,6 +31,7 @@ const useStyles = makeStyles(styles);
 
 export default function TeamsPage() {
   const classes = useStyles();
+  const [errors, setErrors] = React.useState(null);
   const [teams, setTeams] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [popup, setPopup] = React.useState(null);
@@ -42,6 +44,9 @@ export default function TeamsPage() {
       setTeams(returnData);
       setLoading(false);
     },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
   });
   const { doRequest: addTeamRequest } = useRequest({
     url: "/api/teams",
@@ -51,6 +56,13 @@ export default function TeamsPage() {
       setLoading(true);
       refreshTeams();
     },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
+  });
+
+  const errorModal = ErrorModal(errors, () => {
+    setErrors(null);
   });
   React.useEffect(async () => {
     setLoading(true);
@@ -100,6 +112,7 @@ export default function TeamsPage() {
   return (
     <div>
       {popup}
+      {errorModal}
       <GridContainer>
         <GridItem xs={12}>
           <Card>
