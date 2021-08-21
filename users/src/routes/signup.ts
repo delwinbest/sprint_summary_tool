@@ -5,6 +5,7 @@ import { BadRequestError, validateRequest } from '@sprintsummarytool/common';
 import jwt from 'jsonwebtoken';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const router = express.Router();
 
@@ -39,6 +40,7 @@ router.post(
       email,
       password,
       name,
+      status: UserStatus.Active,
     });
 
     //Save user to DB
@@ -60,7 +62,7 @@ router.post(
       id: user.id,
       name: user.name,
       email: user.email,
-      version: user.version,
+      status: UserStatus.Active,
     });
 
     res.status(201).send(user);

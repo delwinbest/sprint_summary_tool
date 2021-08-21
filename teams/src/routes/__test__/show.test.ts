@@ -6,6 +6,7 @@ import { Team } from '../../models/team';
 import { HttpStatusCode } from '@sprintsummarytool/common';
 import { User } from '../../models/user';
 import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const setup = async () => {
   const team = Team.build({
@@ -22,7 +23,7 @@ const setup = async () => {
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'User 01',
     email: 'user01.test.com',
-    version: 0,
+    status: UserStatus.Active,
     team: teamWithMembers,
   });
   await user01.save();
@@ -30,7 +31,7 @@ const setup = async () => {
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'User 02',
     email: 'user02.test.com',
-    version: 0,
+    status: UserStatus.Active,
     team: teamWithMembers,
   });
   await user02.save();
@@ -81,7 +82,7 @@ it('returns all members when present', async () => {
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'User 03',
     email: 'user02.test.com',
-    version: 0,
+    status: UserStatus.Active,
     team: teamWithMembers,
   });
   await user03.save();

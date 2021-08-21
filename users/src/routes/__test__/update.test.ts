@@ -2,9 +2,9 @@ import request from 'supertest';
 import { app } from '../../app';
 import { User } from '../../models/user';
 import { natsWrapper } from '../../nats-wrapper';
-import mongoose from 'mongoose';
 import { HttpStatusCode } from '@sprintsummarytool/common';
 import { signin } from '../../test/signin';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 it('returns a 401 if not signed in', async () => {
   const { cookie, user } = await signin();
@@ -19,6 +19,7 @@ it('returns a 401 if trying to edit another user', async () => {
     name: 'Other User',
     password: 'PASSWORD',
     email: 'user02.test.com',
+    status: UserStatus.Active,
   });
   await user02.save();
   const { cookie, user } = await signin();

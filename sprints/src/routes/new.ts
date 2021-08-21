@@ -42,7 +42,6 @@ router.post(
     await sprint.save();
     await new SprintCreatedPublisher(natsWrapper.client).publish({
       id: sprint.id,
-      version: sprint.version,
       name: sprint.name,
       status: sprint.status,
       duration: sprint.duration,

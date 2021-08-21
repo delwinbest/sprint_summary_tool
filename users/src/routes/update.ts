@@ -12,6 +12,7 @@ import { Team } from '../models/team';
 import { UserUpdatedPublisher } from '../events/publishers/user-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import jwt from 'jsonwebtoken';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const router = express.Router();
 
@@ -31,10 +32,14 @@ router.put(
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
+    body('status')
+      .optional()
+      .isIn(Object.values(UserStatus))
+      .withMessage(`Status needs to be either ${Object.values(UserStatus)}`),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, email, teamId, password } = req.body;
+    const { name, email, teamId, password, status } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) {
       throw new NotFoundError();
@@ -46,6 +51,7 @@ router.put(
       name: name ? name : user.name,
       email: email ? email : user.email,
       password: password ? password : user.password,
+      status: status ? status : user.status,
     });
     if (teamId) {
       const team = await Team.findById(teamId);
@@ -61,6 +67,7 @@ router.put(
       id: user.id,
       name: user.name,
       version: user.version,
+      status: user.status,
       email: user.email,
       team: teamId,
     });

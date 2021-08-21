@@ -4,6 +4,7 @@ import { natsWrapper } from '../../../nats-wrapper';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { User } from '../../../models/user';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const setup = async () => {
   // create instance of the listener
@@ -12,8 +13,8 @@ const setup = async () => {
   const data: UserCreatedEvent['data'] = {
     id: new mongoose.Types.ObjectId().toHexString(),
     name: 'User 01',
-    version: 0,
     email: 'test@test.com',
+    status: UserStatus.Active,
   };
   // create a fake message object
   // @ts-ignore
