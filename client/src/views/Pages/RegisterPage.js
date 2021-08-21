@@ -43,7 +43,9 @@ export default function RegisterPage() {
   const [formValues, setFormValues] = React.useState(intialValues);
   const [formErrors, setFormErrors] = React.useState({ error: true });
   const [checked, setChecked] = React.useState([]);
-  const { doRequest, clearErrors, errors } = useRequest({
+  const [errors, setErrors] = React.useState(null);
+
+  const { doRequest } = useRequest({
     url: "/api/users/signup",
     method: "POST",
     body: { ...formValues },
@@ -52,8 +54,13 @@ export default function RegisterPage() {
       dispatch(authActions.login({ email, id, name }));
       history.push("/admin");
     },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
   });
-  const { errorModal } = ErrorModal(errors, clearErrors);
+  const errorModal = ErrorModal(errors, () => {
+    setErrors(null);
+  });
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
