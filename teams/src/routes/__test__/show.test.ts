@@ -5,14 +5,17 @@ import mongoose from 'mongoose';
 import { Team } from '../../models/team';
 import { HttpStatusCode } from '@sprintsummarytool/common';
 import { User } from '../../models/user';
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 
 const setup = async () => {
   const team = Team.build({
     name: 'Team 01',
+    status: TeamStatus.Active,
   });
   await team.save();
   const teamWithMembers = Team.build({
     name: 'Team 02',
+    status: TeamStatus.Active,
   });
   await teamWithMembers.save();
   const user01 = User.build({

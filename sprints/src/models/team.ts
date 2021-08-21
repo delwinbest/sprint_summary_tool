@@ -1,14 +1,17 @@
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 import mongoose from 'mongoose';
 
 interface TeamAttrs {
   id: string;
   name: string;
+  status: TeamStatus;
 }
 
 export interface TeamDoc extends mongoose.Document {
   id: string;
   name: string;
   version: number;
+  status: TeamStatus;
 }
 
 //Interface the describes properties that Sprint Model has
@@ -20,6 +23,10 @@ interface TeamModel extends mongoose.Model<TeamDoc> {
 const teamSchema = new mongoose.Schema(
   {
     name: {
+      type: String,
+      required: true,
+    },
+    status: {
       type: String,
       required: true,
     },
@@ -37,7 +44,7 @@ const teamSchema = new mongoose.Schema(
 teamSchema.set('versionKey', 'version');
 // Statics is to add a method directly to the model itself
 teamSchema.statics.build = (attrs: TeamAttrs) => {
-  return new Team({ _id: attrs.id, name: attrs.name });
+  return new Team({ _id: attrs.id, name: attrs.name, status: attrs.status });
 };
 
 teamSchema.statics.findByEvent = (event: { id: string; version: number }) => {

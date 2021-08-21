@@ -4,6 +4,7 @@ import { natsWrapper } from '../../../nats-wrapper';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Team } from '../../../models/team';
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 
 const setup = async () => {
   // create instance of the listener
@@ -12,6 +13,7 @@ const setup = async () => {
   const data: TeamCreatedEvent['data'] = {
     id: new mongoose.Types.ObjectId().toHexString(),
     name: 'Team 01',
+    status: TeamStatus.Active,
   };
   // create a fake message object
   // @ts-ignore

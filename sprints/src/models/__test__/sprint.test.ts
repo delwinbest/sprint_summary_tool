@@ -2,12 +2,14 @@ import mongoose from 'mongoose';
 import { Sprint } from '../sprint';
 import { SprintStatus } from '@sprintsummarytool/common';
 import { Team } from '../team';
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 
 it('increments the version number on multiple saves', async () => {
   // Create a team
   const team = Team.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     name: 'Team 01',
+    status: TeamStatus.Active,
   });
   await team.save();
   // Create a Sprint

@@ -69,7 +69,7 @@ export default function TeamsPage() {
     method: "GET",
     body: {},
     onSuccess: (returnedTeam) => {
-      setActiveTeam(returnedTeam);
+      setActiveTeam(returnedTeam.team);
     },
     onFailure: (errorText) => {
       setErrors(errorText);
@@ -80,7 +80,8 @@ export default function TeamsPage() {
     url: "/api/teams",
     method: "PUT",
     body: {},
-    onSuccess: (returnedTeam) => {
+    onSuccess: () => {
+      setActiveTeam(null);
       setLoading(true);
       refreshTeams();
     },
@@ -152,16 +153,16 @@ export default function TeamsPage() {
   };
 
   const editTeamOnChange = (e) => {
-    let { team: teamData, members } = activeTeam;
-    teamData[e.target.id] = e.target.value;
-    setActiveTeam({ team: teamData, members });
+    let team = activeTeam;
+    team[e.target.id] = e.target.value;
+    setActiveTeam(team);
   };
 
   const handleTeamUpdate = (e) => {
     e.preventDefault();
     updateTeamRequest({
-      url: `/api/teams/${activeTeam.team.id}`,
-      body: activeTeam.team,
+      url: `/api/teams/${activeTeam.id}`,
+      body: activeTeam,
     });
   };
 
@@ -239,10 +240,7 @@ export default function TeamsPage() {
                 <h4 className={classes.cardIconTitle}>
                   Edit Team:{" "}
                   {activeTeam
-                    ? "[..." +
-                      activeTeam.team.id.slice(-5) +
-                      "] " +
-                      activeTeam.team.name
+                    ? "[..." + activeTeam.id.slice(-5) + "] " + activeTeam.name
                     : null}
                 </h4>
               </CardHeader>
@@ -256,8 +254,8 @@ export default function TeamsPage() {
                     }}
                     inputProps={{
                       type: "text",
-                      placeholder: activeTeam ? activeTeam.team.name : null,
-                      value: activeTeam ? activeTeam.team.name : "",
+                      placeholder: activeTeam ? activeTeam.name : null,
+                      value: activeTeam ? activeTeam.name : "",
                       onChange: (e) => editTeamOnChange(e),
                     }}
                   />

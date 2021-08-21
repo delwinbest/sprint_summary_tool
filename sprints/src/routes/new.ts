@@ -50,6 +50,7 @@ router.post(
       team: {
         id: team.id,
         name: team.name,
+        status: team.status,
       },
     });
     res.status(HttpStatusCode.CREATED).send(sprint);

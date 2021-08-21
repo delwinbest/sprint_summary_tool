@@ -4,12 +4,14 @@ import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Team } from '../../../models/team';
 import { TeamUpdatedListener } from '../team-updated-listener';
+import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 
 const setup = async () => {
   //Create first version of Team
   const team = Team.build({
     id: mongoose.Types.ObjectId().toHexString(),
     name: 'Team Name',
+    status: TeamStatus.Active,
   });
   await team.save();
   // create instance of the listener
@@ -18,6 +20,7 @@ const setup = async () => {
   const data: TeamUpdatedEvent['data'] = {
     id: team.id,
     name: 'Updated Team Name',
+    status: TeamStatus.Archived,
     version: 1,
   };
   // create a fake message object
@@ -38,6 +41,7 @@ it('finds and updates the team', async () => {
   expect(updatedTeam).toBeDefined();
   expect(updatedTeam!.version).toEqual(1);
   expect(updatedTeam!.name).toEqual(data.name);
+  expect(updatedTeam!.status).toEqual(data.status);
 });
 
 it('does not call ack if the event has a skipped version number', async () => {
