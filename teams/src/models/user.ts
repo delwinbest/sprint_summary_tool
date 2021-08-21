@@ -1,12 +1,13 @@
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 import mongoose from 'mongoose';
 import { TeamDoc } from './team';
 
 // An interface that descibes the new user properties
 interface UserAttrs {
   id: string;
-  version: number;
   email: string;
   name: string;
+  status: UserStatus;
   team?: TeamDoc | null;
 }
 
@@ -15,6 +16,7 @@ interface UserAttrs {
 interface UserDoc extends mongoose.Document {
   email: string;
   name: string;
+  status: UserStatus;
   team?: TeamDoc | null;
   version: number;
 }
@@ -57,6 +59,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     name: attrs.name,
     email: attrs.email,
     team: attrs.team,
+    status: attrs.status,
   });
 };
 

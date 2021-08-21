@@ -64,9 +64,7 @@ it('accepts a valid Team status', async () => {
     .send(requestData)
     .expect(HttpStatusCode.OK);
   const updatedTeam = await Team.findById(response.body.id);
-  console.log(updatedTeam);
   expect(updatedTeam).toBeDefined();
-  console.log(updatedTeam);
   expect(updatedTeam!.status).toEqual(requestData.status);
   expect(updatedTeam!.version).toEqual(1);
 });

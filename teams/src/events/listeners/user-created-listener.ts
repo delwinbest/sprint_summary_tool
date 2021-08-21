@@ -12,10 +12,10 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   subject: Subjects.UserCreated = Subjects.UserCreated;
   queueGroupName = queueGroupName;
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
-    const { id, name, email, team: teamId, version } = data;
+    const { id, name, email, team: teamId, status } = data;
 
     const team = await Team.findById(teamId);
-    const user = User.build({ id, name, email, team, version });
+    const user = User.build({ id, name, email, team, status });
     await user.save();
     msg.ack();
   }
