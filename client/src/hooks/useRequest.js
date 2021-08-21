@@ -26,6 +26,7 @@ const useRequest = ({ url, method, body, onSuccess = () => {} }) => {
       if (method.toUpperCase() !== "GET") {
         requestOptions.body = JSON.stringify({ ...body, ...props.body });
       }
+      // console.log(fetchUrl, requestOptions);
       const response = await fetch(fetchUrl, requestOptions);
       if (!response.ok) {
         throw response;
