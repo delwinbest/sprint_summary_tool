@@ -2,10 +2,10 @@ name: tests-sprints
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [master]
-    paths:
-      - 'sprints/**'
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - 'sprints/**'
   pull_request:
     branches: [master]
     paths:
