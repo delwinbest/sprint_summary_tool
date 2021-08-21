@@ -43,7 +43,7 @@ const useRequest = ({
       }
       return responseData;
     } catch (err) {
-      const errs = await err.json().catch(() => {});
+      const { errors: errs } = await err.json().catch(() => {});
       let errorText = "";
       if (errs) {
         errorText = (
