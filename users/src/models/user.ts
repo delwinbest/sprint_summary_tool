@@ -1,28 +1,31 @@
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
-import { Team, TeamDoc } from './team';
+import { TeamDoc } from './team';
 
 // An interface that descibes the new user properties
 interface UserAttrs {
   email: string;
   password: string;
   name: string;
+  status: UserStatus;
+  team?: TeamDoc;
+}
+
+// Interface that describes the properties that a user DOCUMENT has
+// (mongoose DB document has additional properties)
+interface UserDoc extends mongoose.Document {
+  version: number;
+  email: string;
+  password: string;
+  name: string;
+  status: UserStatus;
   team?: TeamDoc;
 }
 
 //Interface the describes properties that User Model has
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
-}
-
-// Interface that describes the properties that a user DOCUMENT has
-// (mongoose DB document has additional properties)
-interface UserDoc extends mongoose.Document {
-  email: string;
-  password: string;
-  name: string;
-  team?: TeamDoc;
-  version: number;
 }
 
 const userSchema = new mongoose.Schema(

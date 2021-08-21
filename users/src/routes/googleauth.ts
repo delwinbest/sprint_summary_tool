@@ -7,6 +7,7 @@ import { Password } from '../services/password';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { natsWrapper } from '../nats-wrapper';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const router = express.Router();
 const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENTID);
@@ -34,6 +35,7 @@ router.post(
           Math.random().toString(36).substring(2, 15) +
           Math.random().toString(36).substring(2, 15),
         name,
+        status: UserStatus.Active,
       });
 
       //Save user to DB
@@ -44,7 +46,7 @@ router.post(
         id: user.id,
         name: user.name,
         email: user.email,
-        version: user.version,
+        status: UserStatus.Active,
       });
     }
 
