@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { User } from '../../../models/user';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const setup = async () => {
   // create instance of the listener
@@ -15,6 +16,7 @@ const setup = async () => {
     name: 'User 01',
     email: 'test@test.com',
     status: UserStatus.Active,
+    role: UserRole.User,
   };
   // create a fake message object
   // @ts-ignore

@@ -7,6 +7,7 @@ import { User } from '../../../models/user';
 import { Team } from '../../../models/team';
 import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const setup = async () => {
   //Create first version of User
@@ -16,6 +17,7 @@ const setup = async () => {
     email: 'test@test.com',
     team: null,
     status: UserStatus.Active,
+    role: UserRole.Admin,
   });
   await user.save();
   // create instance of the listener
@@ -27,6 +29,7 @@ const setup = async () => {
     version: 1,
     email: 'updateDecorator.com',
     status: UserStatus.Disabled,
+    role: UserRole.User,
   };
   // create a fake message object
   // @ts-ignore

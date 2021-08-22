@@ -7,6 +7,7 @@ import { HttpStatusCode } from '@sprintsummarytool/common';
 import { User } from '../../models/user';
 import { TeamStatus } from '@sprintsummarytool/common/build/events/types/team-status';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const setup = async () => {
   const team = Team.build({
@@ -25,6 +26,7 @@ const setup = async () => {
     email: 'user01.test.com',
     status: UserStatus.Active,
     team: teamWithMembers,
+    role: UserRole.User,
   });
   await user01.save();
   const user02 = User.build({
@@ -33,6 +35,7 @@ const setup = async () => {
     email: 'user02.test.com',
     status: UserStatus.Active,
     team: teamWithMembers,
+    role: UserRole.User,
   });
   await user02.save();
   return { team, teamWithMembers, user01, user02 };
@@ -84,6 +87,7 @@ it('returns all members when present', async () => {
     email: 'user02.test.com',
     status: UserStatus.Active,
     team: teamWithMembers,
+    role: UserRole.User,
   });
   await user03.save();
   const { body: secondReturnedTeam } = await request(app)
