@@ -37,6 +37,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      required: true,
+    },
     team: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Team',

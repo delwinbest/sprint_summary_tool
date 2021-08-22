@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const router = express.Router();
 
@@ -25,15 +26,19 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password, name } = req.body;
-
+    let userRole = UserRole.User;
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new BadRequestError('Email address in use');
     }
 
-    // Hash the password before storing
-    // TODO: Has password
+    // Is this the first User, and therefore admin?
+    const totalUsers = await User.find({});
+    if (totalUsers.length === 0) {
+      // No other users, I am the first
+      userRole = UserRole.Admin;
+    }
 
     //Create user
     const user = User.build({
@@ -41,6 +46,7 @@ router.post(
       password,
       name,
       status: UserStatus.Active,
+      role: userRole,
     });
 
     //Save user to DB
@@ -52,6 +58,7 @@ router.post(
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
       process.env.JWT_KEY!, // Check for key in index.js
     );
@@ -63,6 +70,7 @@ router.post(
       name: user.name,
       email: user.email,
       status: UserStatus.Active,
+      role: user.role,
     });
 
     res.status(201).send(user);
