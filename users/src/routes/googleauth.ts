@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { natsWrapper } from '../nats-wrapper';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const router = express.Router();
 const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENTID);
@@ -18,13 +19,20 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { token } = req.body;
-
+    let userRole = UserRole.User;
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_OAUTH_CLIENTID,
     });
     //@ts-ignore
     const { name, email } = ticket.getPayload();
+
+    // Is this the first User, and therefore admin?
+    const totalUsers = await User.find({});
+    if (totalUsers.length === 0) {
+      // No other users, I am the first
+      userRole = UserRole.Admin;
+    }
 
     let existingUser = await User.findOne({ email });
     if (!existingUser) {
@@ -36,6 +44,7 @@ router.post(
           Math.random().toString(36).substring(2, 15),
         name,
         status: UserStatus.Active,
+        role: userRole,
       });
 
       //Save user to DB
@@ -47,6 +56,7 @@ router.post(
         name: user.name,
         email: user.email,
         status: UserStatus.Active,
+        role: user.role,
       });
     }
 
@@ -61,6 +71,7 @@ router.post(
         id: existingUser.id,
         email: existingUser.email,
         name: existingUser.name,
+        role: existingUser.role,
       },
       process.env.JWT_KEY!, // Check for key in index.js
     );

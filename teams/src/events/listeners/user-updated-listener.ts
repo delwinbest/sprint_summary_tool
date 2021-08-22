@@ -12,7 +12,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
   subject: Subjects.UserUpdated = Subjects.UserUpdated;
   queueGroupName = queueGroupName;
   async onMessage(data: UserUpdatedEvent['data'], msg: Message) {
-    const { id, version, name, team: teamId, email, status } = data;
+    const { id, version, name, team: teamId, email, status, role } = data;
     let team = null;
     const user = await User.findByEvent({
       id,
@@ -27,7 +27,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
     if (!user) {
       console.log('User ID or version dont match, ignoring');
     } else {
-      user.set({ name, version, team, email, status });
+      user.set({ name, version, team, email, status, role });
       await user.save();
       msg.ack();
     }

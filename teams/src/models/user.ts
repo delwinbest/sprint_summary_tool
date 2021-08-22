@@ -1,3 +1,4 @@
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 import mongoose from 'mongoose';
 import { TeamDoc } from './team';
@@ -8,17 +9,19 @@ interface UserAttrs {
   email: string;
   name: string;
   status: UserStatus;
+  role: UserRole;
   team?: TeamDoc | null;
 }
 
 // Interface that describes the properties that a user DOCUMENT has
 // (mongoose DB document has additional properties)
 interface UserDoc extends mongoose.Document {
+  version: number;
   email: string;
   name: string;
   status: UserStatus;
+  role: UserRole;
   team?: TeamDoc | null;
-  version: number;
 }
 
 //Interface the describes properties that User Model has
@@ -34,6 +37,14 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     name: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    role: {
       type: String,
       required: true,
     },
@@ -60,6 +71,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     email: attrs.email,
     team: attrs.team,
     status: attrs.status,
+    role: attrs.role,
   });
 };
 

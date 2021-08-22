@@ -5,6 +5,7 @@ import { natsWrapper } from '../../nats-wrapper';
 import { HttpStatusCode } from '@sprintsummarytool/common';
 import { signin } from '../../test/signin';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 it('returns a 401 if not signed in', async () => {
   const { cookie, user } = await signin();
@@ -20,6 +21,7 @@ it('returns a 401 if trying to edit another user', async () => {
     password: 'PASSWORD',
     email: 'user02.test.com',
     status: UserStatus.Active,
+    role: UserRole.User,
   });
   await user02.save();
   const { cookie, user } = await signin();
@@ -48,9 +50,10 @@ it('returns a 400 with an invalid password', async () => {
     .expect(HttpStatusCode.BAD_REQUEST);
 });
 
-it('sets a cookie after succesful update', async () => {
-  const { cookie, user } = await signin();
-  const response = await request(app)
+it('only a user can edit their own details, except role', async () => {
+  const { cookie: adminCookie, user: adminUser } = await signin();
+  const { cookie, user } = await signin('user@test.com');
+  await request(app)
     .put(`/api/users/${user.id}`)
     .set('Cookie', cookie)
     .send({
@@ -59,12 +62,51 @@ it('sets a cookie after succesful update', async () => {
       name: 'Full Name',
     })
     .expect(HttpStatusCode.OK);
-  expect(response.get('Set-Cookie')).toBeDefined();
+});
+
+it('standard user cannot edit their role', async () => {
+  const { cookie: adminCookie, user: adminUser } = await signin();
+  const { cookie, user } = await signin('user@test.com');
+  await request(app)
+    .put(`/api/users/${user.id}`)
+    .set('Cookie', cookie)
+    .send({
+      email: 'test@test.com',
+      password: 'NewPassword',
+      name: 'Full Name',
+      role: UserRole.Admin,
+    })
+    .expect(HttpStatusCode.UNAUTHORIZED);
+});
+
+it('only Admin user can edit role and status', async () => {
+  const { cookie: adminCookie, user: adminUser } = await signin();
+  const { cookie, user } = await signin('user@test.com');
+  await request(app)
+    .put(`/api/users/${user.id}`)
+    .set('Cookie', cookie)
+    .send({
+      email: 'test@test.com',
+      password: 'NewPassword',
+      name: 'Full Name',
+      role: UserRole.Admin,
+    })
+    .expect(HttpStatusCode.UNAUTHORIZED);
+  await request(app)
+    .put(`/api/users/${user.id}`)
+    .set('Cookie', adminCookie)
+    .send({
+      email: 'test@test.com',
+      password: 'NewPassword',
+      name: 'Full Name',
+      role: UserRole.Admin,
+    })
+    .expect(HttpStatusCode.OK);
 });
 
 it('publishes an event', async () => {
   const { cookie, user } = await signin();
-  const response = await request(app)
+  await request(app)
     .put(`/api/users/${user.id}`)
     .set('Cookie', cookie)
     .send({

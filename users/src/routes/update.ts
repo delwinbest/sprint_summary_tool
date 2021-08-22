@@ -6,13 +6,14 @@ import {
   requireAuth,
   NotAuthorizedError,
   BadRequestError,
+  HttpStatusCode,
 } from '@sprintsummarytool/common';
 import { User } from '../models/user';
 import { Team } from '../models/team';
 import { UserUpdatedPublisher } from '../events/publishers/user-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
-import jwt from 'jsonwebtoken';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 
 const router = express.Router();
 
@@ -36,15 +37,27 @@ router.put(
       .optional()
       .isIn(Object.values(UserStatus))
       .withMessage(`Status needs to be either ${Object.values(UserStatus)}`),
+    body('role')
+      .optional()
+      .isIn(Object.values(UserRole))
+      .withMessage(`Status needs to be either ${Object.values(UserRole)}`),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, email, teamId, password, status } = req.body;
+    const { name, email, teamId, password, status, role } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) {
       throw new NotFoundError();
     }
-    if (req.currentUser?.id !== user.id) {
+    // Only the user or admin can modify their user
+    if (
+      req.currentUser?.id !== user.id &&
+      req.currentUser?.role !== UserRole.Admin
+    ) {
+      throw new NotAuthorizedError();
+    }
+    // Only admin can change the role
+    if (role && req.currentUser?.role !== UserRole.Admin) {
       throw new NotAuthorizedError();
     }
     user.set({
@@ -52,6 +65,7 @@ router.put(
       email: email ? email : user.email,
       password: password ? password : user.password,
       status: status ? status : user.status,
+      role: role ? role : user.role,
     });
     if (teamId) {
       const team = await Team.findById(teamId);
@@ -68,24 +82,27 @@ router.put(
       name: user.name,
       version: user.version,
       status: user.status,
+      role: user.role,
       email: user.email,
       team: teamId,
     });
 
-    // Replace session data with updated data
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-      },
-      process.env.JWT_KEY!, // Check for key in index.js
-    );
+    // DONT UPDATE TOKEN AS ADMIN CAN BE MODIFYING USER
+    // // Replace session data with updated data
+    // // Generate JWT
+    // const userJwt = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     email: user.email,
+    //     name: user.name,
+    //     role: user.role,
+    //   },
+    //   process.env.JWT_KEY!, // Check for key in index.js
+    // );
 
-    // Store it on the session object
-    req.session = { jwt: userJwt };
-    res.send(user);
+    // // Store it on the session object
+    // req.session = { jwt: userJwt };
+    res.status(HttpStatusCode.OK).send(user);
   },
 );
 

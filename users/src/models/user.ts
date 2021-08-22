@@ -1,3 +1,4 @@
+import { UserRole } from '@sprintsummarytool/common/build/events/types/user-role';
 import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
@@ -9,6 +10,7 @@ interface UserAttrs {
   password: string;
   name: string;
   status: UserStatus;
+  role: UserRole;
   team?: TeamDoc;
 }
 
@@ -20,6 +22,7 @@ interface UserDoc extends mongoose.Document {
   password: string;
   name: string;
   status: UserStatus;
+  role: UserRole;
   team?: TeamDoc;
 }
 
@@ -39,6 +42,14 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     name: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    role: {
       type: String,
       required: true,
     },

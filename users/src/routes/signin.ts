@@ -46,7 +46,6 @@ router.post(
     req.session = { jwt: userJwt };
 
     res.status(200).send(existingUser);
-    // console.log('User succesfully logged in');
   },
 );
 
