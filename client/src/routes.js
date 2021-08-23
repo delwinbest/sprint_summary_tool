@@ -3,6 +3,8 @@
 // import Charts from "views/Charts/Charts.js";
 import Dashboard from "views/Dashboard/Dashboard.js";
 import Teams from "views/Teams/Teams.js";
+import UserProfile from "views/Pages/UserProfile";
+import UserSettings from "views/UserSettings/UserSettings";
 // import ErrorPage from "views/Pages/ErrorPage.js";
 // import ExtendedForms from "views/Forms/ExtendedForms.js";
 // import ExtendedTables from "views/Tables/ExtendedTables.js";
@@ -41,11 +43,12 @@ import GroupWork from "@material-ui/icons/GroupWork";
 var dashRoutes = [
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "Sprint Dashboard",
     rtlName: "لوحة القيادة",
     icon: DashboardIcon,
     component: Dashboard,
     layout: "/admin",
+    sidebarVisible: true,
   },
   {
     path: "/teams",
@@ -54,6 +57,7 @@ var dashRoutes = [
     icon: GroupWork,
     component: Teams,
     layout: "/admin",
+    sidebarVisible: true,
   },
 
   // {
@@ -82,6 +86,26 @@ var dashRoutes = [
   //       layout: "/admin",
   //     },
   {
+    path: "/profile",
+    name: "Edit Profile",
+    rtlName: "تعديل الملف الشخصي",
+    mini: "EP",
+    rtlMini: "هعذا",
+    component: UserProfile,
+    layout: "/admin",
+    sidebarVisible: false,
+  },
+  {
+    path: "/usersettings",
+    name: "User Settings",
+    rtlName: "تعديل الملف الشخصي",
+    mini: "US",
+    rtlMini: "هعذا",
+    component: UserSettings,
+    layout: "/admin",
+    sidebarVisible: false,
+  },
+  {
     path: "/login-page",
     name: "Login Page",
     rtlName: "هعذاتسجيل الدخول",
@@ -89,6 +113,7 @@ var dashRoutes = [
     rtlMini: "هعذا",
     component: LoginPage,
     layout: "/auth",
+    sidebarVisible: false,
   },
   {
     path: "/register-page",
@@ -98,6 +123,7 @@ var dashRoutes = [
     rtlMini: "صع",
     component: RegisterPage,
     layout: "/auth",
+    sidebarVisible: false,
   },
   //     {
   //       path: "/user-page",

@@ -106,8 +106,6 @@ function Sidebar(props) {
   };
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
-    console.log(props);
-    console.log(routes);
     const { color, rtlActive } = props;
     return routes.map((prop, key) => {
       if (prop.redirect) {
@@ -253,7 +251,7 @@ function Sidebar(props) {
         cx({
           [classes.itemIconRTL]: rtlActive,
         });
-      return (
+      return prop.sidebarVisible ? (
         <ListItem
           key={key}
           className={cx(
@@ -289,7 +287,7 @@ function Sidebar(props) {
             />
           </NavLink>
         </ListItem>
-      );
+      ) : null;
     });
   };
   const { logo, image, logoText, routes, bgColor, rtlActive } = props;
@@ -367,7 +365,7 @@ function Sidebar(props) {
             <List className={classes.list + " " + classes.collapseList}>
               <ListItem className={classes.collapseItem}>
                 <NavLink
-                  to="#"
+                  to="/admin/profile"
                   className={classes.itemLink + " " + classes.userCollapseLinks}
                 >
                   <span className={collapseItemMini}>
@@ -382,14 +380,14 @@ function Sidebar(props) {
               </ListItem>
               <ListItem className={classes.collapseItem}>
                 <NavLink
-                  to="#"
+                  to="/admin/usersettings"
                   className={classes.itemLink + " " + classes.userCollapseLinks}
                 >
                   <span className={collapseItemMini}>
                     {rtlActive ? "و" : "S"}
                   </span>
                   <ListItemText
-                    primary={rtlActive ? "إعدادات" : "Settings"}
+                    primary={rtlActive ? "إعدادات" : "User Settings"}
                     disableTypography={true}
                     className={collapseItemText}
                   />
