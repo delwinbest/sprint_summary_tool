@@ -58,7 +58,7 @@ function SidebarWrapper({ className, user, headerLinks, links }) {
 
 function Sidebar(props) {
   const classes = useStyles();
-  const { name: userName } = useSelector((state) => state.auth);
+  const { name: userName } = useSelector((state) => state.user);
 
   const [miniActive, setMiniActive] = React.useState(true);
   // to check for active links and opened collapses
@@ -251,7 +251,7 @@ function Sidebar(props) {
         cx({
           [classes.itemIconRTL]: rtlActive,
         });
-      return (
+      return prop.sidebarVisible ? (
         <ListItem
           key={key}
           className={cx(
@@ -287,7 +287,7 @@ function Sidebar(props) {
             />
           </NavLink>
         </ListItem>
-      );
+      ) : null;
     });
   };
   const { logo, image, logoText, routes, bgColor, rtlActive } = props;
@@ -365,22 +365,7 @@ function Sidebar(props) {
             <List className={classes.list + " " + classes.collapseList}>
               <ListItem className={classes.collapseItem}>
                 <NavLink
-                  to="#"
-                  className={classes.itemLink + " " + classes.userCollapseLinks}
-                >
-                  <span className={collapseItemMini}>
-                    {rtlActive ? "مع" : "MP"}
-                  </span>
-                  <ListItemText
-                    primary={rtlActive ? "ملفي" : "My Profile"}
-                    disableTypography={true}
-                    className={collapseItemText}
-                  />
-                </NavLink>
-              </ListItem>
-              <ListItem className={classes.collapseItem}>
-                <NavLink
-                  to="#"
+                  to="/admin/profile"
                   className={classes.itemLink + " " + classes.userCollapseLinks}
                 >
                   <span className={collapseItemMini}>
@@ -395,14 +380,14 @@ function Sidebar(props) {
               </ListItem>
               <ListItem className={classes.collapseItem}>
                 <NavLink
-                  to="#"
+                  to="/admin/usersettings"
                   className={classes.itemLink + " " + classes.userCollapseLinks}
                 >
                   <span className={collapseItemMini}>
                     {rtlActive ? "و" : "S"}
                   </span>
                   <ListItemText
-                    primary={rtlActive ? "إعدادات" : "Settings"}
+                    primary={rtlActive ? "إعدادات" : "User Settings"}
                     disableTypography={true}
                     className={collapseItemText}
                   />

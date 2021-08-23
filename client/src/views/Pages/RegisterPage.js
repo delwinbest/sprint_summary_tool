@@ -32,7 +32,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/registerPageSt
 import useRequest from "../../hooks/useRequest";
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
 import { useAppDispatch } from "store";
-import { authActions } from "store/auth-slice";
+import { userActions } from "store/user-slice";
 
 const useStyles = makeStyles(styles);
 
@@ -50,8 +50,8 @@ export default function RegisterPage() {
     method: "POST",
     body: { ...formValues },
     onSuccess: (responseData) => {
-      const { email, id, name } = responseData;
-      dispatch(authActions.login({ email, id, name }));
+      const { email, id, name, role } = responseData;
+      dispatch(userActions.login({ email, id, name, role }));
       history.push("/admin");
     },
     onFailure: (errorText) => {

@@ -9,7 +9,7 @@ import AdminLayout from "layouts/Admin.js";
 import "assets/scss/material-dashboard-pro-react.scss?v=1.10.0";
 
 function App() {
-  const { id: userId } = useSelector((state) => state.auth);
+  const { id: userId } = useSelector((state) => state.user);
   return (
     <BrowserRouter>
       <Switch>

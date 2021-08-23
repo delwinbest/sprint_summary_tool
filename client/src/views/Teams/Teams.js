@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // material-ui icons
 import EditIcon from "@material-ui/icons/Edit";
+import PersonAdd from "@material-ui/icons/PersonAdd";
 import Assignment from "@material-ui/icons/Assignment";
 import Person from "@material-ui/icons/Person";
 import Edit from "@material-ui/icons/Edit";
@@ -28,14 +29,16 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 
 import ErrorModal from "../../components/ErrorModal/ErrorModal";
-import styles from "assets/jss/material-dashboard-pro-react/views/extendedTablesStyle.js";
 import useRequest from "hooks/useRequest";
 import { TeamStatus } from "@sprintsummarytool/common/build/events/types/team-status";
+import { useSelector } from "react-redux";
 
+import styles from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.js";
 const useStyles = makeStyles(styles);
 
 export default function TeamsPage() {
   const classes = useStyles();
+  const { name: userName, id: userId } = useSelector((state) => state.user);
   const [errors, setErrors] = React.useState(null);
   const [teams, setTeams] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -81,6 +84,19 @@ export default function TeamsPage() {
     },
   });
 
+  const { doRequest: addUserToTeamRequest } = useRequest({
+    url: "/api/teams",
+    method: "PUT",
+    body: {},
+    onSuccess: () => {
+      setLoading(true);
+      refreshTeams();
+    },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
+  });
+
   const { doRequest: updateTeamRequest } = useRequest({
     url: "/api/teams",
     method: "PUT",
@@ -96,6 +112,10 @@ export default function TeamsPage() {
     },
   });
 
+  const loadTeam = (teamId) => {
+    getTeamRequest({ url: `/api/teams/${teamId}` });
+  };
+
   const errorModal = ErrorModal(errors, () => {
     setErrors(null);
   });
@@ -105,18 +125,23 @@ export default function TeamsPage() {
     return () => {};
   }, []);
 
-  const loadTeam = (teamId) => {
-    getTeamRequest({ url: `/api/teams/${teamId}` });
-  };
-
   const fillButtons = (teamId, teamStatus) => {
     return [
       {
         color: "info",
-        icon: Person,
+        icon: PersonAdd,
         disabled: teamStatus !== TeamStatus.Active,
+        onClick: () => {
+          handleAddMeToTeam(teamId);
+        },
       },
-      { color: "success", icon: Edit },
+      {
+        color: "success",
+        icon: Edit,
+        onClick: (e) => {
+          loadTeam(teamId);
+        },
+      },
     ].map((prop, key) => {
       return (
         <Button
@@ -125,9 +150,7 @@ export default function TeamsPage() {
           key={key}
           id={teamId}
           disabled={prop.disabled}
-          onClick={(e) => {
-            loadTeam(teamId);
-          }}
+          onClick={prop.onClick}
         >
           <prop.icon className={classes.icon} />
         </Button>
@@ -157,6 +180,44 @@ export default function TeamsPage() {
     );
   };
 
+  const handleAddMeToTeam = (teamId) => {
+    setPopup(
+      <SweetAlert
+        warning
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Are you sure?"
+        onConfirm={() => confirmAddMeToTeam(teamId)}
+        onCancel={() => clearPopup()}
+        confirmBtnCssClass={classes.button + " " + classes.success}
+        cancelBtnCssClass={classes.button + " " + classes.danger}
+        confirmBtnText="Yes, add me to this team!"
+        cancelBtnText="Cancel"
+        showCancel
+      >
+        You can only be a member of one team. This will remove you from your
+        current team.
+      </SweetAlert>
+    );
+  };
+
+  const confirmAddMeToTeam = (teamId) => {
+    addUserToTeamRequest({
+      url: `/api/users/${userId}`,
+      body: { teamId: teamId },
+    });
+    setPopup(
+      <SweetAlert
+        success
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Done!"
+        onConfirm={() => clearPopup()}
+        onCancel={() => clearPopup()}
+        confirmBtnCssClass={classes.button + " " + classes.success}
+      >
+        Welcome to your new team!
+      </SweetAlert>
+    );
+  };
   const handleAddTeam = async (e) => {
     addTeamRequest({ body: { name: e } });
     clearPopup();
