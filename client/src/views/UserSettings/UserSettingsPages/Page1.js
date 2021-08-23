@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 // @material-ui/icons
 import Face from "@material-ui/icons/Face";
 import RecordVoiceOver from "@material-ui/icons/RecordVoiceOver";
@@ -31,13 +32,23 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const Step1 = React.forwardRef((props, ref) => {
+  const { name: loggedInName, email: loggedInEmail } = useSelector(
+    (state) => state.user
+  );
   const classes = useStyles();
-  const [firstname, setfirstname] = React.useState("");
-  const [firstnameState, setfirstnameState] = React.useState("");
-  const [lastname, setlastname] = React.useState("");
-  const [lastnameState, setlastnameState] = React.useState("");
-  const [email, setemail] = React.useState("");
-  const [emailState, setemailState] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [nameState, setNameState] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [emailState, setEmailState] = React.useState("");
+
+  React.useEffect(() => {
+    setName(loggedInName);
+    setNameState("success");
+    setEmail(loggedInEmail);
+    setEmailState("success");
+    return () => {};
+  }, []);
+
   React.useImperativeHandle(ref, () => ({
     isValidated: () => {
       return isValidated();
@@ -46,20 +57,16 @@ const Step1 = React.forwardRef((props, ref) => {
       return sendState();
     },
     state: {
-      firstname,
-      firstnameState,
-      lastname,
-      lastnameState,
+      name,
+      nameState,
       email,
       emailState,
     },
   }));
   const sendState = () => {
     return {
-      firstname,
-      firstnameState,
-      lastname,
-      lastnameState,
+      name,
+      nameState,
       email,
       emailState,
     };
@@ -80,21 +87,14 @@ const Step1 = React.forwardRef((props, ref) => {
     return false;
   };
   const isValidated = () => {
-    if (
-      firstnameState === "success" &&
-      lastnameState === "success" &&
-      emailState === "success"
-    ) {
+    if (nameState === "success" && emailState === "success") {
       return true;
     } else {
-      if (firstnameState !== "success") {
-        setfirstnameState("error");
-      }
-      if (lastnameState !== "success") {
-        setlastnameState("error");
+      if (nameState !== "success") {
+        setNameState("error");
       }
       if (emailState !== "success") {
-        setemailState("error");
+        setEmailState("error");
       }
     }
     return false;
@@ -111,57 +111,30 @@ const Step1 = React.forwardRef((props, ref) => {
       </GridItem>
       <GridItem xs={12} sm={6}>
         <CustomInput
-          success={firstnameState === "success"}
-          error={firstnameState === "error"}
+          success={nameState === "success"}
+          error={nameState === "error"}
           labelText={
             <span>
-              First Name <small>(required)</small>
+              Name <small>(required)</small>
             </span>
           }
-          id="firstname"
+          id="name"
           formControlProps={{
             fullWidth: true,
           }}
           inputProps={{
+            value: name,
             onChange: (event) => {
               if (!verifyLength(event.target.value, 3)) {
-                setfirstnameState("error");
+                setNameState("error");
               } else {
-                setfirstnameState("success");
+                setNameState("success");
               }
-              setfirstname(event.target.value);
+              setName(event.target.value);
             },
             endAdornment: (
               <InputAdornment position="end" className={classes.inputAdornment}>
                 <Face className={classes.inputAdornmentIcon} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <CustomInput
-          success={lastnameState === "success"}
-          error={lastnameState === "error"}
-          labelText={
-            <span>
-              Last Name <small>(required)</small>
-            </span>
-          }
-          id="lastname"
-          formControlProps={{
-            fullWidth: true,
-          }}
-          inputProps={{
-            onChange: (event) => {
-              if (!verifyLength(event.target.value, 3)) {
-                setlastnameState("error");
-              } else {
-                setlastnameState("success");
-              }
-              setlastname(event.target.value);
-            },
-            endAdornment: (
-              <InputAdornment position="end" className={classes.inputAdornment}>
-                <RecordVoiceOver className={classes.inputAdornmentIcon} />
               </InputAdornment>
             ),
           }}
@@ -181,13 +154,14 @@ const Step1 = React.forwardRef((props, ref) => {
             fullWidth: true,
           }}
           inputProps={{
+            value: email,
             onChange: (event) => {
               if (!verifyEmail(event.target.value)) {
-                setemailState("error");
+                setEmailState("error");
               } else {
-                setemailState("success");
+                setEmailState("success");
               }
-              setemail(event.target.value);
+              setEmail(event.target.value);
             },
             endAdornment: (
               <InputAdornment position="end" className={classes.inputAdornment}>

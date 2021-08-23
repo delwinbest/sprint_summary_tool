@@ -20,7 +20,7 @@ export default function UserSettings() {
             { stepName: "Account", stepComponent: Page2, stepId: "account" },
             { stepName: "Address", stepComponent: Page3, stepId: "address" },
           ]}
-          title="Edit Your Profile"
+          title="Edit Your Settings"
           subtitle="This information will let the team know more about you."
           finishButtonClick={(e) => alert(e)}
         />
