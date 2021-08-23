@@ -106,6 +106,8 @@ function Sidebar(props) {
   };
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
+    console.log(props);
+    console.log(routes);
     const { color, rtlActive } = props;
     return routes.map((prop, key) => {
       if (prop.redirect) {
@@ -363,21 +365,6 @@ function Sidebar(props) {
           </NavLink>
           <Collapse in={openAvatar} unmountOnExit>
             <List className={classes.list + " " + classes.collapseList}>
-              <ListItem className={classes.collapseItem}>
-                <NavLink
-                  to="#"
-                  className={classes.itemLink + " " + classes.userCollapseLinks}
-                >
-                  <span className={collapseItemMini}>
-                    {rtlActive ? "مع" : "MP"}
-                  </span>
-                  <ListItemText
-                    primary={rtlActive ? "ملفي" : "My Profile"}
-                    disableTypography={true}
-                    className={collapseItemText}
-                  />
-                </NavLink>
-              </ListItem>
               <ListItem className={classes.collapseItem}>
                 <NavLink
                   to="#"

@@ -1676,10 +1676,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sprintsummarytool/common@^1.0.24":
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/@sprintsummarytool/common/-/common-1.0.24.tgz#39ba337d7305850c209bfa9ba24a5c18489c5ca2"
-  integrity sha512-vdx+naQTDCtxfPQi83MWGoHV5yrmL/D9mwFjEUqGWQ1rzC/5hc8ZvnQIawvr0CPxpqwSwEt7jF2ai8OAQka3rg==
+"@sprintsummarytool/common@^1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@sprintsummarytool/common/-/common-1.0.26.tgz#e8d8f865216411b8984c3a45dbc1927b36e42d27"
+  integrity sha512-e6ItFb4Olh0LdaXkTH2UHxAfyjzdkvHxXjFBUvzNOGzNDIgrmlepisxWJbpFWl6WffTHM6XCS+PHHqOtOEh4QQ==
   dependencies:
     "@types/cookie-session" "^2.0.43"
     "@types/express" "^4.17.13"
@@ -1979,9 +1979,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "16.6.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.6.1.tgz#aee62c7b966f55fc66c7b6dfa1d58db2a616da61"
-  integrity sha512-Sr7BhXEAer9xyGuCN3Ek9eg9xPviCF2gfu9kTfuU2HkTVAMYSDeX40fvpmo72n5nansg3nsBjuQBrsS28r+NUw==
+  version "16.7.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.1.tgz#c6b9198178da504dfca1fd0be9b2e1002f1586f0"
+  integrity sha512-ncRdc45SoYJ2H4eWU9ReDfp3vtFqDYhjOsKlFFUDEn8V1Bgr2RjYal8YT5byfadWIRluhPFU6JiDOl0H6Sl87A==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
