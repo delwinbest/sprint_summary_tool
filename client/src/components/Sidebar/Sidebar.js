@@ -58,7 +58,7 @@ function SidebarWrapper({ className, user, headerLinks, links }) {
 
 function Sidebar(props) {
   const classes = useStyles();
-  const { name: userName } = useSelector((state) => state.auth);
+  const { name: userName } = useSelector((state) => state.user);
 
   const [miniActive, setMiniActive] = React.useState(true);
   // to check for active links and opened collapses

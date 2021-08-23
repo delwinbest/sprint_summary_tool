@@ -29,7 +29,7 @@ import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/components/adminNavbarLinksStyle.js";
 import { useAppDispatch } from "store";
-import { authActions } from "store/auth-slice";
+import { userActions } from "store/user-slice";
 
 const useStyles = makeStyles(styles);
 
@@ -41,7 +41,7 @@ export default function HeaderLinks(props) {
     method: "POST",
     body: {},
     onSuccess: () => {
-      dispatch(authActions.logout());
+      dispatch(userActions.logout());
       history.push("/auth");
     },
   });
