@@ -15,8 +15,8 @@ build:
         dockerfile: Dockerfile.dev
       sync:
         manual:
-          - src: '**/*.js'
-            dest: .
+          - src: './src/**/*.js'
+            dest: src/
     - image: delwinrbest/smt_sprints
       context: sprints
       docker:
