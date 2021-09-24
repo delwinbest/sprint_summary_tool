@@ -36,7 +36,7 @@ import { useSelector } from "react-redux";
 import styles from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.js";
 const useStyles = makeStyles(styles);
 
-export default function UsersPage() {
+export default function TeamsPage() {
   const classes = useStyles();
   const { name: userName, id: userId } = useSelector((state) => state.user);
   const [errors, setErrors] = React.useState(null);
@@ -282,7 +282,7 @@ export default function UsersPage() {
                 <Table
                   tableHead={[
                     "ID",
-                    "Team Name",
+                    "User Name",
                     "Members",
                     "Status",
                     <Button color="success" className={classes.actionButton}>

@@ -23,6 +23,7 @@ import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sid
 
 import avatar from "assets/img/faces/avatar.jpg";
 import { useSelector } from "react-redux";
+import { renderRouteByRole } from "routes.js";
 
 const useStyles = makeStyles(sidebarStyle);
 
@@ -108,6 +109,9 @@ function Sidebar(props) {
   const createLinks = (routes) => {
     const { color, rtlActive } = props;
     return routes.map((prop, key) => {
+      if (renderRouteByRole(prop.userRoleRestrictions) === false) {
+        return null;
+      }
       if (prop.redirect) {
         return null;
       }

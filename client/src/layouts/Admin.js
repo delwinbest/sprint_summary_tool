@@ -14,7 +14,7 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import { routes, renderRouteByRole } from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
 
@@ -122,7 +122,10 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/admin") {
+      if (
+        renderRouteByRole(prop.userRoleRestrictions) &&
+        prop.layout === "/admin"
+      ) {
         return (
           <Route
             path={prop.layout + prop.path}
