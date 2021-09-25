@@ -16,6 +16,8 @@ import {
   NotFoundError,
   currentUser,
 } from '@sprintsummarytool/common';
+import { indexUserRouter } from './routes';
+import { showUserRouter } from './routes/show';
 
 const app = express();
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -41,6 +43,8 @@ app.use(signoutRouter);
 app.use(signupRouter);
 app.use(googleAuthRouter);
 app.use(updateUserRouter);
+app.use(indexUserRouter);
+app.use(showUserRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();

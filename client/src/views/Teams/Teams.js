@@ -76,6 +76,7 @@ export default function UsersPage() {
     method: "GET",
     body: {},
     onSuccess: (returnedTeam) => {
+      // TODO: Figure out what this does. Does not make sense to set team status on GET
       setActiveTeamArchived(returnedTeam.team.status === TeamStatus.Archived);
       setActiveTeam(returnedTeam.team);
     },

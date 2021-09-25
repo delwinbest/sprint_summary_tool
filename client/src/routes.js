@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 // import Charts from "views/Charts/Charts.js";
 import Dashboard from "views/Dashboard/Dashboard.js";
 import Teams from "views/Teams/Teams.js";
+import Users from "views/Users/Users.js";
+
 import UserProfile from "views/Pages/UserProfile";
 import UserSettings from "views/UserSettings/UserSettings";
 // import ErrorPage from "views/Pages/ErrorPage.js";
@@ -39,6 +41,7 @@ import PeopleIcon from "@material-ui/icons/People";
 // import GridOn from "@material-ui/icons/GridOn";
 // import Image from "@material-ui/icons/Image";
 import GroupWork from "@material-ui/icons/GroupWork";
+import { UserRole } from "@sprintsummarytool/common/build/events/types/user-role";
 // import Place from "@material-ui/icons/Place";
 // import Timeline from "@material-ui/icons/Timeline";
 // import WidgetsIcon from "@material-ui/icons/Widgets";
@@ -69,10 +72,10 @@ export var routes = [
     name: "Users",
     rtlName: "المستعمل",
     icon: PeopleIcon,
-    component: Teams,
+    component: Users,
     layout: "/admin",
     sidebarVisible: true,
-    userRoleRestrictions: ["admin"],
+    userRoleRestrictions: [UserRole.Admin, UserRole.Dev],
   },
   {
     path: "/profile",
