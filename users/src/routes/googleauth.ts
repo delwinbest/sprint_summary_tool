@@ -61,6 +61,9 @@ router.post(
     }
 
     existingUser = await User.findOne({ email });
+    if (existingUser.status !== UserStatus.Active) {
+      throw new BadRequestError('Account either archived or inactive.');
+    }
     if (!existingUser) {
       throw new BadRequestError('Failed to store OAuth credentials');
     }

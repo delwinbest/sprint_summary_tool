@@ -43,6 +43,7 @@
     "minify-sass": "node-sass src/assets/scss/material-dashboard-pro-react.scss src/assets/css/material-dashboard-pro-react.min.css --output-style compressed",
     "map-sass": "node-sass src/assets/scss/material-dashboard-pro-react.scss src/assets/css/material-dashboard-pro-react.css --source-map true"
   },
+  "proxy": "http://localhost",
   "optionalDependencies": {
     "@babel/core": "7.14.0",
     "typescript": "4.2.4"

@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // material-ui icons
 import EditIcon from "@material-ui/icons/Edit";
+import BlockIcon from "@material-ui/icons/Block";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Assignment from "@material-ui/icons/Assignment";
 import Person from "@material-ui/icons/Person";
@@ -47,7 +48,7 @@ export default function TeamsPage() {
   const [activeUser, setActiveUser] = React.useState(null);
   const [activeUserArchived, setActiveUserArchived] = React.useState(null);
 
-  const { doRequest: refreshTeams } = useRequest({
+  const { doRequest: refreshUsers } = useRequest({
     url: "/api/users",
     method: "GET",
     body: {},
@@ -65,6 +66,7 @@ export default function TeamsPage() {
     method: "GET",
     body: {},
     onSuccess: (returnedUser) => {
+      console.log(returnedUser);
       // setactiveUserArchived(returnedUser.team.status === TeamStatus.Archived);
       // setactiveUser(returnedUser.team);
     },
@@ -73,23 +75,28 @@ export default function TeamsPage() {
     },
   });
 
-  // const { doRequest: updateTeamRequest } = useRequest({
-  //   url: "/api/teams",
-  //   method: "PUT",
-  //   body: {},
-  //   onSuccess: () => {
-  //     setactiveUser(null);
-  //     setactiveUserArchived(null);
-  //     setLoading(true);
-  //     refreshTeams();
-  //   },
-  //   onFailure: (errorText) => {
-  //     setErrors(errorText);
-  //   },
-  // });
+  const { doRequest: updateUserRequest } = useRequest({
+    url: "/api/users",
+    method: "PUT",
+    body: {},
+    onSuccess: () => {
+      setLoading(true);
+      refreshUsers();
+    },
+    onFailure: (errorText) => {
+      setErrors(errorText);
+    },
+  });
 
   const loadUser = (userId) => {
     getUserRequest({ url: `/api/users/${userId}` });
+  };
+  const disableUser = (userId) => {
+    updateUserRequest({
+      url: `/api/users/${userId}`,
+      body: { status: UserStatus.Disabled },
+    });
+    setPopup(null);
   };
 
   const errorModal = ErrorModal(errors, () => {
@@ -97,17 +104,17 @@ export default function TeamsPage() {
   });
   React.useEffect(async () => {
     setLoading(true);
-    refreshTeams();
+    refreshUsers();
     return () => {};
   }, []);
 
   const fillButtons = (userId, teamStatus) => {
     return [
       {
-        color: "success",
-        icon: Edit,
+        color: "error",
+        icon: BlockIcon,
         onClick: (e) => {
-          loadUser(userId);
+          handleDisableUser(userId);
         },
       },
     ].map((prop, key) => {
@@ -154,6 +161,25 @@ export default function TeamsPage() {
       url: `/api/users/${activeUser.id}`,
       body: activeUser,
     });
+  };
+
+  const handleDisableUser = (userId) => {
+    setPopup(
+      <SweetAlert
+        warning
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Are you sure?"
+        onConfirm={() => disableUser(userId)}
+        onCancel={() => clearPopup()}
+        confirmBtnCssClass={classes.button + " " + classes.success}
+        cancelBtnCssClass={classes.button + " " + classes.danger}
+        confirmBtnText="Yes, disable this user"
+        cancelBtnText="Cancel"
+        showCancel
+      >
+        Are you sure you want to disable this user?
+      </SweetAlert>
+    );
   };
 
   return (

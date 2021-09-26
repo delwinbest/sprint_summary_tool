@@ -15,7 +15,7 @@ const useRequest = ({
   const doRequest = async (props = {}) => {
     try {
       setErrors(null);
-      const devUrlPrefix = "http://localhost";
+      const devUrlPrefix = "http://localhost:3000";
       let fetchUrl = "";
       if (props.url !== undefined) {
         url = props.url;

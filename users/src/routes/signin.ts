@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { validateRequest, BadRequestError } from '@sprintsummarytool/common';
 import { Password } from '../services/password';
 import jwt from 'jsonwebtoken';
+import { UserStatus } from '@sprintsummarytool/common/build/events/types/user-status';
 
 const router = express.Router();
 
@@ -23,7 +24,9 @@ router.post(
     if (!existingUser) {
       throw new BadRequestError('Invalid Credentials');
     }
-
+    if (existingUser.status !== UserStatus.Active) {
+      throw new BadRequestError('Account either archived or inactive.');
+    }
     const passwordsMatch = await Password.compare(
       existingUser.password,
       password,
